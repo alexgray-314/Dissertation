@@ -4,19 +4,24 @@ class Lexer {
   }
 
   #peek() {
-    return this.input.charAt(this.input.length - 1);
+    return this.input.charAt(0);
   }
 
   #eat(c) {
     if (this.#peek() === c) {
-      this.input = this.input.slice(0, this.input.length-1);
+      this.input = this.input.substring(1);
     } else {
-      throw "invalid character " + c;
+      throw "invalid character";
     }
+
   }
 
   #isMore() {
     return this.input.length > 0;
+  }
+
+  #init(s) {
+    this.input = s;
   }
 
   #lex_kw_or_id() {
@@ -27,12 +32,30 @@ class Lexer {
       lexeme += c;
     }
 
-
+    if (keyWords.includes(lexeme)) {
+      return {token:Token.getByValue(lexeme)};
+    } else {
+      return {token:Token.ID, value: lexeme};
+    }
 
   }
 
-  init(s) {
-    this.input = s;
+  lex(s) {
+    this.#init(s);
+    let tokens = [];
+    while (this.#isMore()) {
+      const c = this.#peek();
+      if (specialCharacters.hasOwnProperty(c)) {
+        tokens.push(specialCharacters[c]);
+        this.#eat(c);
+      } else if (/[A-Za-z]/.test(c)) {
+        tokens.push(this.#lex_kw_or_id());
+      } else if (/\s/.test(c)) {
+        this.#eat(c);
+      }
+
+    }
+    return tokens;
   }
 
 }
