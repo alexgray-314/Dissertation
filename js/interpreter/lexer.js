@@ -32,10 +32,15 @@ class Lexer {
       lexeme += c;
     }
 
-    if (keyWords.includes(lexeme)) {
-      return {token:Token.getByValue(lexeme)};
+    if (keyWords.hasOwnProperty(lexeme)) {
+      return {
+        token:lexeme
+      };
     } else {
-      return {token:Token.ID, value: lexeme};
+      return {
+        token:"ID",
+        value: lexeme
+      };
     }
 
   }
@@ -46,7 +51,9 @@ class Lexer {
     while (this.#isMore()) {
       const c = this.#peek();
       if (specialCharacters.hasOwnProperty(c)) {
-        tokens.push(specialCharacters[c]);
+        tokens.push({
+          token:specialCharacters[c],
+        });
         this.#eat(c);
       } else if (/[A-Za-z]/.test(c)) {
         tokens.push(this.#lex_kw_or_id());
@@ -55,6 +62,9 @@ class Lexer {
       }
 
     }
+    tokens.push({
+      token:"END"
+    })
     return tokens;
   }
 
