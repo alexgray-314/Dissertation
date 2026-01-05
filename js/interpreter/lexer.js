@@ -34,7 +34,7 @@ class Lexer {
 
     if (keyWords.hasOwnProperty(lexeme)) {
       return {
-        token:lexeme
+        token:keyWords[lexeme]
       };
     } else {
       return {
