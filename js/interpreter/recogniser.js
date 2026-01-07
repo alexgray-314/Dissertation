@@ -25,15 +25,10 @@ class Recogniser {
   }
 
   #Prog() {
-    switch(this.#peek().token) {
-      case "DEFINE":
-        this.#Exp();
-        this.#eat({token:"SEMI_COLON"});
-        this.#Exps();
-        break;
-        default:
-          console.log("invalid token: " + this.#peek());
-    }
+      this.#Exp();
+      this.#eat({token:"SEMI_COLON"});
+      this.#Exps();
+      this.#eat({token:"END"});
   }
 
   #Exp() {
@@ -45,7 +40,7 @@ class Recogniser {
         this.#Args();
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 
@@ -56,8 +51,6 @@ class Recogniser {
         this.#eat({token:"SEMI_COLON"});
         this.#Exps();
         break;
-      default: console.log("nullable: " + this.#peek());
-      // this is nullable
     }
   }
 
@@ -73,7 +66,7 @@ class Recogniser {
         this.#eat({token:"DECK"});
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 
@@ -84,7 +77,7 @@ class Recogniser {
         this.#ArgFirst();
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 
@@ -98,7 +91,7 @@ class Recogniser {
         this.#eat({token:"R_PAREN"});
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 
@@ -113,7 +106,7 @@ class Recogniser {
         this.#eat({token:"R_PAREN"});
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 
@@ -125,7 +118,7 @@ class Recogniser {
         this.#eat({token:"ID"});
         break;
       default:
-        console.log("invalid token: " + this.#peek());
+        throw "invalid token" + this.#peek();
     }
   }
 

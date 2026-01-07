@@ -1,11 +1,25 @@
-const lexer = new Lexer();
-const tokens = lexer.lex("define area global(facing:up); define deck primary();");
+// document.addEventListener("DOMContentLoaded", function () {
+  const input = document.getElementById("textInput");
+  const button = document.getElementById("submitBtn");
+  const output = document.getElementById("output");
 
-for (const t of tokens) {
-  console.log(t);
-}
+  button.addEventListener("click", function () {
+    const inputValue = input.value;
+    output.textContent = "You entered: " + inputValue;
 
-const recogniser = new Recogniser();
-recogniser.recognise(tokens);
+    const lexer = new Lexer();
+    const tokens = lexer.lex(inputValue);
 
-document.getElementById("output").innerText = tokens.toString();
+    const recogniser = new Recogniser();
+    try {
+      recogniser.recognise(tokens);
+      output.innerText = "Valid";
+    } catch (error) {
+      output.innerText = "Syntax Error";
+    }
+
+  });
+// });
+
+
+
