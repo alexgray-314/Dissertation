@@ -1,6 +1,7 @@
 class Lexer {
   constructor() {
     this.input = "";
+    this.line = 0;
   }
 
   #peek() {
@@ -37,6 +38,7 @@ class Lexer {
   #lex_number() {
     const digit = this.#getDigit();
     return {
+      line: this.line,
       token:"NUMBER",
       value: digit
     }
@@ -48,18 +50,21 @@ class Lexer {
       case '#':
         this.#eat('#');
         return {
+          line: this.line,
           token:"PLAYER",
           value:"MOVE"
         };
       case '/':
         this.#eat('/');
         return {
+          line: this.line,
           token:"PLAYER",
           value:"ACTION"
         };
       case '.':
         this.#eat('.');
         return {
+          line: this.line,
           token:"PLAYER",
           value:"TURN",
         };
@@ -67,6 +72,7 @@ class Lexer {
         if (/\d/.test(this.#peek())) {
           const digit = this.#getDigit();
           return {
+            line: this.line,
             token:"PLAYER",
             value:digit
           };
@@ -88,10 +94,12 @@ class Lexer {
 
     if (keyWords.hasOwnProperty(lexeme)) {
       return {
+        line: this.line,
         token:keyWords[lexeme]
       };
     } else {
       return {
+        line: this.line,
         token:"ID",
         value: lexeme
       };
@@ -104,8 +112,13 @@ class Lexer {
     let tokens = [];
     while (this.#isMore()) {
       const c = this.#peek();
-      if (specialCharacters.hasOwnProperty(c)) {
+      if (c === '\n') {
+        console.log("new line");
+        this.#eat(c);
+        this.line += 1;
+      } else if (specialCharacters.hasOwnProperty(c)) {
         tokens.push({
+          line: this.line,
           token:specialCharacters[c],
         });
         this.#eat(c);
@@ -119,6 +132,7 @@ class Lexer {
         if (this.#peek() === '<') {
           this.#eat('<')
           tokens.push({
+            line: this.line,
             token:"LESS_THAN"
           });
         } else {
@@ -132,10 +146,12 @@ class Lexer {
         if (this.#peek() === '.') {
           this.#eat('.');
           tokens.push({
+            line: this.line,
             token:"DOUBLE_DOT"
           })
         } else {
           tokens.push({
+            line: this.line,
             token:"DOT"
           })
         }
@@ -144,6 +160,7 @@ class Lexer {
 
     }
     tokens.push({
+      line: this.line,
       token:"END"
     })
     return tokens;

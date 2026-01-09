@@ -13,9 +13,9 @@
     const recogniser = new Recogniser();
     try {
       recogniser.recognise(tokens);
-      output.innerText = "Valid";
+      output.innerText = "Valid syntax";
     } catch (error) {
-      output.innerText = "Syntax Error";
+      output.innerText = error;
     }
 
   });
