@@ -8,6 +8,15 @@ class Recogniser {
     this.#Prog();
   }
 
+  #trace() {
+    if (this.#peek().hasOwnProperty("value")) {
+      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().value;
+    } else {
+      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token;
+    }
+
+  }
+
   #peek() {
     return this.tokens.at(0);
   }
@@ -16,7 +25,7 @@ class Recogniser {
     if (this.#peek().token === token.token) {
       this.tokens = this.tokens.slice(1)
     } else {
-      throw "invalid token";
+      this.#trace();
     }
   }
 
@@ -25,13 +34,13 @@ class Recogniser {
   }
 
   #Prog() {
-      this.#Exp();
+      this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
-      this.#Exps();
+      this.#Stmts();
       this.#eat({token:"END"});
   }
 
-  #Exp() {
+  #Stmt() {
     switch(this.#peek().token) {
       case "DEFINE":
         this.#eat({token:"DEFINE"});
@@ -39,18 +48,42 @@ class Recogniser {
         this.#eat({token:"ID"});
         this.#Args();
         break;
+      case "ON":
+        this.#eat({token:"ON"});
+        this.#eat({token:"ID"});
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
+        break;
+      case "IF":
+        this.#eat({token:"IF"});
+        this.#Expr();
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
+        this.#eat({token:"ELSE"});
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
+        break;
+      case "ID":
+        this.#eat({token:"ID"});
+        this.#Index();
+        this.#eat({token:"DOUBLE_DOT"});
+        this.#eat({token:"ID"});
+        this.#Args();
+        break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
     }
   }
 
-  #Exps() {
-    switch(this.#peek().token) {
-      case "DEFINE":
-        this.#Exp();
+  // this is nullable
+  #Stmts() {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID") {
+        this.#Stmt();
         this.#eat({token:"SEMI_COLON"});
-        this.#Exps();
-        break;
+        this.#Stmts();
     }
   }
 
@@ -59,14 +92,14 @@ class Recogniser {
       case "AREA":
         this.#eat({token:"AREA"});
         break;
-      case "EVENT":
-        this.#eat({token:"EVENT"});
+      case "ACTION":
+        this.#eat({token:"ACTION"});
         break;
       case "DECK":
         this.#eat({token:"DECK"});
         break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
     }
   }
 
@@ -77,7 +110,7 @@ class Recogniser {
         this.#ArgFirst();
         break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
     }
   }
 
@@ -91,7 +124,7 @@ class Recogniser {
         this.#eat({token:"R_PAREN"});
         break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
     }
   }
 
@@ -106,7 +139,7 @@ class Recogniser {
         this.#eat({token:"R_PAREN"});
         break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
     }
   }
 
@@ -118,7 +151,71 @@ class Recogniser {
         this.#eat({token:"ID"});
         break;
       default:
-        throw "invalid token" + this.#peek();
+        this.#trace();
+    }
+  }
+
+  #Expr() {
+    this.#Term();
+    this.#ExprRest();
+  }
+
+  #ExprRest() {
+    switch (this.#peek().token) {
+      case "EQUALS":
+        this.#eat({token:"EQUALS"});
+        break;
+      case "LESS_THAN":
+        this.#eat({token:"LESS_THAN"});
+        break;
+      default:
+        this.#trace();
+    }
+    this.#Term();
+  }
+
+  #Index() {
+    switch(this.#peek().token) {
+      case "L_SQUARE":
+        this.#eat({token:"L_SQUARE"});
+        this.#eat({token:"NUMBER"});
+        this.#IndexRest();
+        break;
+      // default:
+        // this is nullable
+    }
+  }
+
+  #IndexRest() {
+    switch(this.#peek().token) {
+      case "COMMA":
+        this.#eat({token:"COMMA"});
+        this.#eat({token:"NUMBER"});
+        this.#eat({token:"R_SQUARE"});
+        break;
+      case "R_CURLY":
+        this.#eat({token:"R_CURLY"});
+        break;
+      default:
+        this.#trace();
+    }
+  }
+
+  #Term() {
+    switch(this.#peek().token) {
+      case "PLAYER":
+        this.#eat({token:"PLAYER"});
+        this.#Index();
+        break;
+      case "ID":
+        this.#eat({token:"ID"});
+        this.#Index();
+        break;
+      case "NUMBER":
+        this.#eat({token:"NUMBER"});
+        break;
+      default:
+        this.#trace();
     }
   }
 
