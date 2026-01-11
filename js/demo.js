@@ -5,13 +5,12 @@
 
   button.addEventListener("click", function () {
     const inputValue = input.value;
-    output.textContent = "You entered: " + inputValue;
 
     const lexer = new Lexer();
-    const tokens = lexer.lex(inputValue);
-
     const recogniser = new Recogniser();
+
     try {
+      const tokens = lexer.lex(inputValue);
       recogniser.recognise(tokens);
       output.innerText = "Valid syntax";
     } catch (error) {

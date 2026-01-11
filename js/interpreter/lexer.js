@@ -113,7 +113,6 @@ class Lexer {
     while (this.#isMore()) {
       const c = this.#peek();
       if (c === '\n') {
-        console.log("new line");
         this.#eat(c);
         this.line += 1;
       } else if (specialCharacters.hasOwnProperty(c)) {
@@ -155,6 +154,8 @@ class Lexer {
             token:"DOT"
           })
         }
+      } else {
+        throw "Invalid Character: " + c;
       }
 
 
