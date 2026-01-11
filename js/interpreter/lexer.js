@@ -12,7 +12,7 @@ class Lexer {
     if (this.#peek() === c) {
       this.input = this.input.substring(1);
     } else {
-      throw "invalid character";
+      throw "Invalid character " + this.#peek() + ". Expected " + c;
     }
 
   }
@@ -77,7 +77,7 @@ class Lexer {
             value:digit
           };
         } else {
-          throw "invalid character";
+          throw "Invalid Character. Refer to documentation on players ";
         }
     }
 
@@ -154,6 +154,12 @@ class Lexer {
             token:"DOT"
           })
         }
+      } else if (this.#peek() === '=') {
+        this.#eat('=');
+        this.#eat('=');
+        tokens.push({
+          token:"EQUALS"
+        })
       } else {
         throw "Invalid Character: " + c;
       }

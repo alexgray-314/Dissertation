@@ -10,21 +10,13 @@ class Recogniser {
 
   #trace() {
     console.log(this.tokens);
-    if (this.#peek().hasOwnProperty("value")) {
-      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().value;
-    } else {
-      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token;
-    }
+    throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token;
 
   }
 
   #traceExpected(expected) {
     console.log(this.tokens);
-    if (this.#peek().hasOwnProperty("value")) {
-      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().value + ". Expected: " + expected.token;
-    } else {
-      throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token + ". Expected: " + expected.token;
-    }
+    throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token + ". Expected: " + expected.token;
 
   }
 
@@ -165,7 +157,7 @@ class Recogniser {
       case "ID":
         this.#eat({token:"ID"});
         this.#eat({token:"COLON"});
-        this.#eat({token:"ID"});
+        this.#Term();
         break;
       default:
         this.#trace();
@@ -214,8 +206,8 @@ class Recogniser {
         this.#eat({token:"NUMBER"});
         this.#eat({token:"R_SQUARE"});
         break;
-      case "R_CURLY":
-        this.#eat({token:"R_CURLY"});
+      case "R_SQUARE":
+        this.#eat({token:"R_SQUARE"});
         break;
       default:
         this.#trace();
