@@ -5,7 +5,7 @@ class Area {
     const cell = row.insertCell(0);
     cell.innerHTML = "<div id='" + id + "'>Example</div>";
     this.div = document.getElementById(id);
-    this.decks = [["4s", "kh", "as"], [], ["10d"]];
+    this.decks = [];
     this.id = id;
     this.suitmap = {
       "s": "♠",
