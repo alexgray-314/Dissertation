@@ -1,11 +1,11 @@
 class Recogniser {
   constructor() {
-    this.tokens = [];
   }
 
   recognise(tokens) {
     this.#init(tokens);
     this.#Prog();
+    return this.asts;
   }
 
   #trace() {
@@ -34,6 +34,7 @@ class Recogniser {
 
   #init(tokens) {
     this.tokens = tokens;
+    this.asts = [];
   }
 
   #Prog() {
@@ -47,9 +48,31 @@ class Recogniser {
     switch(this.#peek().token) {
       case "DEFINE":
         this.#eat({token:"DEFINE"});
-        this.#Type();
+        const type = this.#Type();
+        const id = this.#peek().value;
         this.#eat({token:"ID"});
+        // const args = this.#Args();
         this.#Args();
+
+        this.asts.push( {
+          node: "DEFINE",
+          children: [
+            {
+              node: "AREA",
+              children: [
+                {
+                  node: "DATA",
+                  value: {
+                    id: id,
+                    args: {
+                      "max": 5
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        });
         break;
       case "ON":
         this.#eat({token:"ON"});
@@ -93,16 +116,17 @@ class Recogniser {
 
   #Type() {
     console.log("Type");
-    switch(this.#peek().token) {
+    const tk = this.#peek().token;
+    switch(tk) {
       case "AREA":
         this.#eat({token:"AREA"});
-        break;
+        return tk;
       case "ACTION":
         this.#eat({token:"ACTION"});
-        break;
+        return tk;
       case "DECK":
         this.#eat({token:"DECK"});
-        break;
+        return tk;
       default:
         this.#trace();
     }

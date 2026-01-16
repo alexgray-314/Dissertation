@@ -10,7 +10,6 @@ const stmt = {
             id: "global",
             args: {
               "max": 5,
-              min:3
             }
           }
         }
@@ -19,7 +18,15 @@ const stmt = {
   ]
 };
 
-const asts = [stmt];
+
+const lexer = new Lexer();
+const parser = new Recogniser();
+const tokens = lexer.lex("define area yourmum();");
+
+const asts = parser.recognise(tokens);
+
+console.log(asts);
+
 const areas = [];
 const handler = new Handler(areas);
 const interpreter = new Interpreter(handler);
