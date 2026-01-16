@@ -1,4 +1,4 @@
-// document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   const input = document.getElementById("textInput");
   const button = document.getElementById("submitBtn");
   const output = document.getElementById("output");
@@ -18,7 +18,7 @@
     }
 
   });
-// });
+});
 
 
 
