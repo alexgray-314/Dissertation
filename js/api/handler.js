@@ -6,18 +6,15 @@ class Handler {
   define_area(data) {
     const area = new Area(data.id);
     const args = {
-      id: "default",
-      args: {
-        "min": 3,
-        "max": -1
-      }
+      "min": 3,
+      "max": -1
     }
-    this.#deepReplace(args, data)// merge defaults with set parameters
+    this.#deepReplace(args, data.args)// merge defaults with set parameters
 
     // Setting the args
     // min
     area.decks = [];
-    for (let i = 0; i < args.args.min; i++) {
+    for (let i = 0; i < args.min; i++) {
       area.decks.push([]);
     }
 

@@ -1,21 +1,11 @@
 const stmt = {
-  node: "DEFINE",
-  children: [
-    {
-      node: "AREA",
-      children: [
-        {
-          node: "DATA",
-          value: {
-            id: "global",
-            args: {
-              "max": 5,
-            }
-          }
-        }
-      ]
-    }
-  ]
+  type: "DEFINE",
+  valueType: "AREA",
+  id: "globalAreaName",
+  args: {
+    min: 10,
+    max: 7
+  }
 };
 
 
@@ -31,7 +21,7 @@ const areas = [];
 const handler = new Handler(areas);
 const interpreter = new Interpreter(handler);
 
-interpreter.interpret(asts);
+interpreter.interpret([stmt]);
 
 for (let area of areas) {
   area.render();

@@ -1,27 +1,25 @@
 class Interpreter {
 
   constructor(handler) {
-    this.asts = [];
     this.handler = handler;
   }
 
   interpret(asts) {
-    this.asts = asts;
 
     for (let ast of asts) {
-      switch (ast.node) {
+      switch (ast.type) {
         case "DEFINE":
-          this.#define(ast.children[0]);
+          this.#define(ast);
           break;
       }
     }
 
   }
 
-  #define(head) {
-    switch (head.node) {
+  #define(ast) {
+    switch (ast.valueType) {
       case "AREA":
-        this.handler.define_area(head.children[0].value);
+        this.handler.define_area(ast);
         break;
     }
   }
