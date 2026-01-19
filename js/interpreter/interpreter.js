@@ -33,7 +33,9 @@ class Interpreter {
         this.handler.add_card(ast.source, ast.destination);
         break;
       case "POSITION":
-        // TODO remove card from soruce position and add it to dest
+        // remove card from source position and add it to dest
+        const c = handler.remove_card(ast.source);
+        handler.add_card(c, ast.destination);
         break;
     }
   }

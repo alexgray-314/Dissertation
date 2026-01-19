@@ -25,16 +25,22 @@ class Handler {
   // N.B. This does not error-check to make sure the move is allowed
   add_card(card, dest) {
     for (let a of this.areas) {
-      console.log(a.id);
       if (a.id === dest.area) {
         const deck = a.decks[dest.index.deck];
-        a.decks[dest.index.deck] = [
-          ...deck.slice(0, dest.index.position),
-          card.value,
-          ...deck.slice(dest.index.position)
-        ]
-
+        a.decks[dest.index.deck].splice(dest.index.position, 0, card);
         return;
+      }
+    }
+  }
+
+  // Removes the card from its position in the deck and returns it
+  // source must be a position (e.g. global[0, 0])
+  remove_card(source) {
+    for (let a of this.areas) {
+      if (a.id === source.area) {
+        const c = a.decks[source.index.deck][source.index.position];
+        a.decks[source.index.deck].splice(source.index.position, 1);
+        return c;
       }
     }
   }
