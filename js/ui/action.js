@@ -5,6 +5,11 @@ class Action {
     const row = document.getElementById("actions");
     const cell = row.insertCell(0);
     cell.innerHTML = "<button id='" + id + "'>" + args.text + "</button>";
-    this.div = document.getElementById(id);
+    this.button = document.getElementById(id);
   }
+
+  addListener(prog) {
+    this.button.addEventListener("click", prog);
+  }
+
 }

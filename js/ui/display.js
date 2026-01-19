@@ -28,7 +28,11 @@ const interpreter = new Interpreter(handler);
 
 interpreter.interpret(asts);
 
-for (let area of areas) {
-  area.render();
+function render() {
+  for (let area of areas) {
+    area.render();
+  }
 }
+
+render();
 

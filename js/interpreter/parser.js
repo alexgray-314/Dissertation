@@ -59,7 +59,7 @@ class Parser {
     const subTree = (new Parser()).parse(subTokens);
 
     return {
-      type: "ACTION",
+      type: "ON",
       id: id,
       subTree: subTree,
     };

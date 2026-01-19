@@ -14,9 +14,23 @@ class Interpreter {
         case "MOVE":
           this.#move(ast);
           break;
+        case "ON":
+          this.#register_action_trigger(ast);
+          break;
       }
     }
 
+  }
+
+  #register_action_trigger(ast) {
+    for (let a of this.handler.actions) {
+      if (a.id === ast.id) {
+        a.addListener(function () {
+          interpreter.interpret(ast.subTree);
+          render();
+        });
+      }
+    }
   }
 
   #define(ast) {
@@ -35,7 +49,7 @@ class Interpreter {
       this.handler.add_card(ast.source, ast.destination);
     } else if (ast.source.type === "POSITION") {
       // remove card from source position and add it to dest
-      const c = handler.remove_card(ast.source);
+      const c = this.handler.remove_card(ast.source);
       handler.add_card(c, ast.destination);
     }
   }
