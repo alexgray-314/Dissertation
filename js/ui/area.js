@@ -8,29 +8,27 @@ class Area {
     this.decks = [];
     this.id = id;
     this.suitmap = {
-      "s": "♠",
-      "h": "♥",
-      "c": "♣",
-      "d": "♦"
+      "spades": "♠",
+      "hearts": "♥",
+      "clubs": "♣",
+      "diamonds": "♦"
     }
   }
 
   render() {
     let html = this.id + ": ";
     for (let i = 0; i < this.decks.length; i++) {
-      html += this.#renderCard(this.decks[i][this.decks[i].length - 1]);
+      html += this.#renderCard(this.decks[i][0]);
     }
     this.div.innerHTML = html;
   }
 
-  #renderCard(raw) {
+  #renderCard(card) {
     try {
-      const number = raw.slice(0, -1).toUpperCase();
-      const suit = raw.slice(-1);
-      if (/[hdHD]/.test(suit)) {
-        return "[<span style=\"color: red\">" + number + this.suitmap[suit] + "</span>] ";
+      if (card.suit === "hearts" || card.suit === "diamonds") {
+        return "[<span style=\"color: red\">" + card.number + this.suitmap[card.suit] + "</span>] ";
       } else {
-        return "[<span style=\"color: black\">" + number + this.suitmap[suit] + "</span>] ";
+        return "[<span style=\"color: black\">" + card.number + this.suitmap[card.suit] + "</span>] ";
       }
     } catch (e) {
       return "[] ";

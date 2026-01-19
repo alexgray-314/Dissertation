@@ -28,12 +28,8 @@ class Interpreter {
   }
 
   #move(ast) {
-    console.log("Moving");
-    console.log(ast.source);
-    console.log(ast.destination);
     switch (ast.source.type) {
       case "CARD":
-        console.log("This actually is reachable");
         this.handler.add_card(ast.source, ast.destination);
         break;
       case "POSITION":

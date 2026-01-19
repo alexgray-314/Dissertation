@@ -119,8 +119,25 @@ class Parser {
   #get_card() {
     const value = this.#peek().value;
     this.#eat({token: "CARD"});
+
+    const number = value.slice(0, -1).toUpperCase();
+    let suit = value.slice(-1);
+
+    // Convert the suit from a single digit to the full name
+    if (/[hH]/.test(suit)) {
+      suit = "hearts";
+    } else if (/[dD]/.test(suit)) {
+      suit = "diamonds";
+    } else if (/[cC]/.test(suit)) {
+      suit = "clubs";
+    } else if (/[sS]/.test(suit)) {
+      suit = "spades";
+    }
+
     return {
       type: "CARD",
+      suit: suit,
+      number: number,
       value: value
     }
   }
