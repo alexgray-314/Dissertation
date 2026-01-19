@@ -76,6 +76,11 @@ class Recogniser {
         this.#eat({token:"ID"});
         this.#Args();
         break;
+      case "MOVE":
+        this.#eat({token:"MOVE"});
+        this.#Term();
+        this.#Term();
+        break;
       default:
         this.#trace();
     }
@@ -84,7 +89,7 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID" || this.#peek().token === "MOVE") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();
@@ -227,6 +232,9 @@ class Recogniser {
         break;
       case "NUMBER":
         this.#eat({token:"NUMBER"});
+        break;
+      case "CARD":
+        this.#eat({token:"CARD"});
         break;
       default:
         this.#trace();

@@ -107,6 +107,19 @@ class Lexer {
 
   }
 
+  #lex_card() {
+    let card = "";
+    while(/[0-9jqkaJQKAhcsdHCSD]/.test(this.#peek())) {
+      card += this.#peek();
+      this.#eat(this.#peek());
+    }
+    return {
+      line: this.line,
+      token: "CARD",
+      value: card,
+    }
+  }
+
   lex(s) {
     this.#init(s);
     let tokens = [];
@@ -126,6 +139,9 @@ class Lexer {
       } else if (/\s/.test(c)) {
         // whitespace
         this.#eat(c);
+      } else if (c === '#') {
+        this.#eat('#');
+        tokens.push(this.#lex_card());
       } else if (this.#peek() === '<') {
         this.#eat('<');
         if (this.#peek() === '<') {
