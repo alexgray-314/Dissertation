@@ -22,7 +22,8 @@ asts = parser.parse(tokens);
 console.log(asts);
 
 const areas = [];
-const handler = new Handler(areas);
+const actions = [];
+const handler = new Handler(areas, actions);
 const interpreter = new Interpreter(handler);
 
 interpreter.interpret(asts);

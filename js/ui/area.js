@@ -1,6 +1,6 @@
 class Area {
   constructor(id) {
-    const table = document.getElementById("info");
+    const table = document.getElementById("areas");
     const row = table.insertRow(0);
     const cell = row.insertCell(0);
     cell.innerHTML = "<div id='" + id + "'>Example</div>";

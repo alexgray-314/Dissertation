@@ -1,6 +1,7 @@
 class Handler {
-  constructor(areas) {
+  constructor(areas, actions) {
     this.areas = areas;
+    this.actions = actions;
   }
 
   define_area(data) {
@@ -21,12 +22,21 @@ class Handler {
     this.areas.push(area);
   }
 
+  // This will create a new action and add a button to the screen
+  define_action(data) {
+    const args = {
+      text:"ACTION!"
+    }
+    this.#deepReplace(args, data.args)// merge defaults with set parameters
+
+    this.actions.push(new Action(data.id, args));
+  }
+
   // Will add a specified card to a position in a deck within an area
   // N.B. This does not error-check to make sure the move is allowed
   add_card(card, dest) {
     for (let a of this.areas) {
       if (a.id === dest.area) {
-        const deck = a.decks[dest.index.deck];
         a.decks[dest.index.deck].splice(dest.index.position, 0, card);
         return;
       }
