@@ -90,8 +90,7 @@ class Parser {
       this.#eat({token: "ID"});
       this.#eat({token: "COLON"});
 
-      const value = this.#peek().value;
-      this.#eat({token: "NUMBER"}); // TODO this needs to be updated to take strings or numbers
+      const value = this.#get_term();
 
       if (this.#peek().token === "COMMA") {
         this.#eat({token: "COMMA"});
@@ -108,9 +107,25 @@ class Parser {
         return this.#get_position();
       case "CARD":
         return this.#get_card();
+      case "STRING":
+        return this.#get_string();
+      case "NUMBER":
+        return this.#get_number();
       default:
         throw "Illegal TERM";
     }
+  }
+
+  #get_number() {
+    const n = this.#peek().value;
+    this.#eat({token: "NUMBER"});
+    return n;
+  }
+
+  #get_string() {
+    const s = this.#peek().value;
+    this.#eat({token: "STRING"});
+    return s;
   }
 
   #get_position() {
