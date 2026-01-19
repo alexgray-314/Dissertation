@@ -120,6 +120,21 @@ class Lexer {
     }
   }
 
+  #lex_string() {
+    this.#eat('"');
+    let lexeme = "";
+    while (this.#peek() !== '"') {
+      lexeme += this.#peek();
+      this.#eat(this.#peek());
+    }
+    this.#eat('"');
+    return {
+      line: this.line,
+      token: "STRING",
+      value: lexeme
+    }
+  }
+
   lex(s) {
     this.#init(s);
     let tokens = [];
@@ -134,6 +149,8 @@ class Lexer {
           token:specialCharacters[c],
         });
         this.#eat(c);
+      } else if (c === '"') {
+        tokens.push(this.#lex_string());
       } else if (/[A-Za-z]/.test(c)) {
         tokens.push(this.#lex_kw_or_id());
       } else if (/\s/.test(c)) {

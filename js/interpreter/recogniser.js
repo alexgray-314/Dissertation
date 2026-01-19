@@ -236,6 +236,9 @@ class Recogniser {
       case "CARD":
         this.#eat({token:"CARD"});
         break;
+      case "STRING":
+        this.#eat({token:"STRING"});
+        break;
       default:
         this.#trace();
     }
