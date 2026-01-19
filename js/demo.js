@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const tokens = lexer.lex(inputValue);
       recogniser.recognise(tokens);
       output.innerText = "Valid syntax";
+      localStorage.setItem("program", inputValue);
     } catch (error) {
       output.innerText = error;
     }

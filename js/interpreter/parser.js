@@ -4,10 +4,12 @@ class Parser {
   parse(tokens) {
     this.tokens = tokens;
     this.asts = [];
+    this.#prog();
+    return this.asts;
   }
 
   #prog() {
-    while (this.#peek().tokens === "DEFINE" || this.#peek().token === "MOVE") {
+    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE") {
       this.#Stmt();
       this.#eat({token: "SEMI_COLON"});
     }
@@ -17,10 +19,10 @@ class Parser {
   #Stmt() {
     switch (this.#peek().token) {
       case "DEFINE":
-        this.#parse_define();
+        this.asts.push(this.#parse_define());
         break;
       case "MOVE":
-        this.#parse_move();
+        this.asts.push(this.#parse_move());
         break;
       default:
         throw "Illegal statement" + this.#peek().token;
@@ -30,15 +32,97 @@ class Parser {
   /// --------- DEFINE STATEMENTS
   #parse_define() {
     this.#eat({token: "DEFINE"});
-
+    const type = this.#peek().token;
+    this.#eat(this.#peek());
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    const args = this.#get_args();
+    return {
+      type: "DEFINE",
+      valueType: type,
+      id: id,
+      args: args
+    };
   }
 
-  #type() {
-    return this.#eat(this.#peek().token);
+  #get_args() {
+    let args = {}
+    this.#eat({token: "L_PAREN"});
+    while (this.#peek().token !== "R_PAREN") {
+      const id = this.#peek().value;
+      this.#eat({token: "ID"});
+      this.#eat({token: "COLON"});
+
+      const value = this.#peek().value;
+      this.#eat({token: "NUMBER"}); // TODO this needs to be updated to take strings or numbers
+
+      if (this.#peek().token === "COMMA") {
+        this.#eat({token: "COMMA"});
+      }
+      args[id] = value;
+    }
+    this.#eat({token: "R_PAREN"});
+    return args;
   }
 
+  #get_term() {
+    switch (this.#peek().token) {
+      case "ID":
+        return this.#get_position();
+      case "CARD":
+        return this.#get_card();
+      default:
+        throw "Illegal TERM";
+    }
+  }
+
+  #get_position() {
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    const index = this.#get_index();
+    return {
+      type: "POSITION",
+      area: id,
+      index: index,
+    }
+  }
+
+  #get_index() {
+    this.#eat({token: "L_SQUARE"});
+    const deck = this.#peek().value;
+    this.#eat({token: "NUMBER"});
+    let pos = 0;
+    if (this.#peek().token !== "R_SQUARE") {
+      this.#eat({token: "COMMA"});
+      pos = this.#peek().value;
+      this.#eat({token: "NUMBER"});
+    }
+    this.#eat({token: "R_SQUARE"});
+    return {
+      deck: deck,
+      position: pos,
+    }
+  }
+
+  // MOVEMENT PARSING
   #parse_move() {
+    this.#eat({token: "MOVE"});
+    const source = this.#get_term();
+    const dest = this.#get_term();
+    return {
+      type: "MOVE",
+      source: source,
+      destination: dest
+    }
+  }
 
+  #get_card() {
+    const value = this.#peek().value;
+    this.#eat({token: "CARD"});
+    return {
+      type: "CARD",
+      value: value
+    }
   }
 
   #traceExpected(expected) {
@@ -53,7 +137,7 @@ class Parser {
 
   #eat(token) {
     const t = this.#peek();
-    if (t === token.token) {
+    if (t.token === token.token) {
       this.tokens = this.tokens.slice(1)
       return t;
     } else {
