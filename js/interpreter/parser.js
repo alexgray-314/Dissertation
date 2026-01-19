@@ -9,7 +9,7 @@ class Parser {
   }
 
   #prog() {
-    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE") {
+    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON") {
       this.#Stmt();
       this.#eat({token: "SEMI_COLON"});
     }
@@ -24,9 +24,46 @@ class Parser {
       case "MOVE":
         this.asts.push(this.#parse_move());
         break;
+      case "ON":
+        this.asts.push(this.#parse_on());
+        break;
       default:
         throw "Illegal statement" + this.#peek().token;
     }
+  }
+
+  /// --------- ACTION TRIGGERS (ON) -----------
+  #parse_on() {
+    this.#eat({token: "ON"});
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    this.#eat({token: "L_CURLY"});
+    // keeps track of how many internal nested curly brackets we go through
+    let nested = 0;
+    const subTokens = [];
+    while (nested > 0 || this.#peek().token !== "R_CURLY") {
+      const t = this.#peek();
+      if (t.token === "L_CURLY") {
+        nested++;
+      } else if (t.token === "R_CURLY") {
+        nested--;
+      }
+
+      subTokens.push(t);
+      this.#eat(t);
+
+    }
+    this.#eat({token: "R_CURLY"});
+    subTokens.push({token: "END"});
+
+    const subTree = (new Parser()).parse(subTokens);
+
+    return {
+      type: "ACTION",
+      id: id,
+      subTree: subTree,
+    };
+
   }
 
   /// --------- DEFINE STATEMENTS
