@@ -1,11 +1,11 @@
 class Recogniser {
   constructor() {
+    this.tokens = [];
   }
 
   recognise(tokens) {
     this.#init(tokens);
     this.#Prog();
-    return this.asts;
   }
 
   #trace() {
@@ -34,13 +34,12 @@ class Recogniser {
 
   #init(tokens) {
     this.tokens = tokens;
-    this.asts = [];
   }
 
   #Prog() {
-      console.log("Prog");
-      this.#Stmts();
-      this.#eat({token:"END"});
+    console.log("Prog");
+    this.#Stmts();
+    this.#eat({token:"END"});
   }
 
   #Stmt() {
@@ -48,31 +47,9 @@ class Recogniser {
     switch(this.#peek().token) {
       case "DEFINE":
         this.#eat({token:"DEFINE"});
-        const type = this.#Type();
-        const id = this.#peek().value;
+        this.#Type();
         this.#eat({token:"ID"});
-        // const args = this.#Args();
         this.#Args();
-
-        this.asts.push( {
-          node: "DEFINE",
-          children: [
-            {
-              node: "AREA",
-              children: [
-                {
-                  node: "DATA",
-                  value: {
-                    id: id,
-                    args: {
-                      "max": 5
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        });
         break;
       case "ON":
         this.#eat({token:"ON"});
@@ -108,25 +85,24 @@ class Recogniser {
   #Stmts() {
     console.log("Stmts");
     if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID") {
-        this.#Stmt();
-        this.#eat({token:"SEMI_COLON"});
-        this.#Stmts();
+      this.#Stmt();
+      this.#eat({token:"SEMI_COLON"});
+      this.#Stmts();
     }
   }
 
   #Type() {
     console.log("Type");
-    const tk = this.#peek().token;
-    switch(tk) {
+    switch(this.#peek().token) {
       case "AREA":
         this.#eat({token:"AREA"});
-        return tk;
+        break;
       case "ACTION":
         this.#eat({token:"ACTION"});
-        return tk;
+        break;
       case "DECK":
         this.#eat({token:"DECK"});
-        return tk;
+        break;
       default:
         this.#trace();
     }
@@ -218,7 +194,7 @@ class Recogniser {
         this.#IndexRest();
         break;
       // default:
-        // this is nullable
+      // this is nullable
     }
   }
 
