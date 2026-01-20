@@ -17,9 +17,26 @@ class Interpreter {
         case "ON":
           this.#register_action_trigger(ast);
           break;
+        case "IF":
+          this.#if(ast);
+          break;
       }
     }
 
+  }
+
+  #if(ast) {
+    switch (ast.comparator) {
+      case "EQUALS":
+        if (this.#object_equals(ast.left, ast.right)) {
+          this.interpret(ast.consequent);
+        } else {
+          this.interpret(ast.antecedent);
+        }
+        break;
+      default:
+        throw ast.comparator + " is not a valid comparator";
+    }
   }
 
   #register_action_trigger(ast) {
@@ -52,6 +69,22 @@ class Interpreter {
       const c = this.handler.remove_card(ast.source);
       handler.add_card(c, ast.destination);
     }
+  }
+
+  // TODO actually use a library function here, this is silly
+  #object_equals(a, b) {
+    if (a === b) return true;
+
+    if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
+      return false;
+    }
+
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+
+    if (keysA.length !== keysB.length) return false;
+
+    return keysA.every(key => keysB.includes(key) && this.#object_equals(a[key], b[key]));
   }
 
 }
