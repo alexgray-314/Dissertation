@@ -9,7 +9,7 @@ class Parser {
   }
 
   #prog() {
-    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON") {
+    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON" || this.#peek().token === "IF") {
       this.#Stmt();
       this.#eat({token: "SEMI_COLON"});
     }
@@ -27,16 +27,15 @@ class Parser {
       case "ON":
         this.asts.push(this.#parse_on());
         break;
+      case "IF":
+        this.asts.push(this.#parse_if());
+        break;
       default:
         throw "Illegal statement" + this.#peek().token;
     }
   }
 
-  /// --------- ACTION TRIGGERS (ON) -----------
-  #parse_on() {
-    this.#eat({token: "ON"});
-    const id = this.#peek().value;
-    this.#eat({token: "ID"});
+  #get_subtree() {
     this.#eat({token: "L_CURLY"});
     // keeps track of how many internal nested curly brackets we go through
     let nested = 0;
@@ -56,7 +55,39 @@ class Parser {
     this.#eat({token: "R_CURLY"});
     subTokens.push({token: "END"});
 
-    const subTree = (new Parser()).parse(subTokens);
+    return (new Parser()).parse(subTokens);
+  }
+
+  /// --------- IF STATEMENTS -------------
+  #parse_if() {
+
+    this.#eat({token: "IF"});
+
+    const a = this.#get_term();
+    const comparator = this.#peek().token;
+    this.#eat(this.#peek());
+    const b = this.#get_term();
+    const consequent = this.#get_subtree();
+    this.#eat({token: "ELSE"});
+    const antecedent = this.#get_subtree();
+    return {
+      type: "IF",
+      comparator: comparator,
+      left: a,
+      right: b,
+      consequent: consequent,
+      antecedent: antecedent,
+    };
+
+  }
+
+  /// --------- ACTION TRIGGERS (ON) -----------
+  #parse_on() {
+    this.#eat({token: "ON"});
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+
+    const subTree = this.#get_subtree();
 
     return {
       type: "ON",
