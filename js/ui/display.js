@@ -25,8 +25,7 @@ const actions = [];
 const handler = new Handler(areas, actions);
 const interpreter = new Interpreter(handler);
 
-const num_players = 2;
-for (let i = 0; i < num_players; i++) {
+for (let i = 0; i < handler.num_players; i++) {
   handler.define_area({
     type: "DEFINE",
     valueType: "AREA",

@@ -3,6 +3,7 @@ class Handler {
     this.areas = areas;
     this.actions = actions;
     this.latestActionPlayer = 0;
+    this.num_players = 2;
   }
 
   define_area(data) {
@@ -42,21 +43,40 @@ class Handler {
     }
     this.#deepReplace(args, data.args) // merge defaults with set parameters
 
+    let ar;
     // ---- Shuffle the deck
     if (args.shuffle === "true") {
       for (let a of this.areas) {
-        console.log(a.decks[0]);
         // get the deck. This is a protected ID reserved for this purpose
         if (a.id === "deck") {
           a.decks[0].sort(function (a, b) {
             return Math.random() - 0.5;
           });
+          ar = a;
         }
-        console.log(a.decks[0]);
       }
     }
 
+    // TODO actually consider the args
+
     // Deal out the cards until done
+    let player = 0;
+    for (let i=0; i < ar.decks[0].length; i++) {
+      this.add_card(ar.decks[0][i], {
+        type: "POSITION",
+        area: "hand" + player,
+        index: {
+          deck: 0,
+          position: 0
+        }
+      });
+      player++;
+      if (player >= this.num_players) {
+        player = 0;
+      }
+    }
+
+    ar.decks[0] = [];
 
   }
 
