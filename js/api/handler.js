@@ -36,6 +36,9 @@ class Handler {
   // Will add a specified card to a position in a deck within an area
   // N.B. This does not error-check to make sure the move is allowed
   add_card(card, dest) {
+    if (card === undefined) {
+      return;
+    }
     for (let a of this.areas) {
       if (a.id === dest.area) {
         a.decks[dest.index.deck].splice(dest.index.position, 0, card);
@@ -52,6 +55,14 @@ class Handler {
         const c = a.decks[source.index.deck][source.index.position];
         a.decks[source.index.deck].splice(source.index.position, 1);
         return c;
+      }
+    }
+  }
+
+  get_card(position) {
+    for (let a of this.areas) {
+      if (a.id === position.area) {
+        return a.decks[position.index.deck][position.index.position];
       }
     }
   }

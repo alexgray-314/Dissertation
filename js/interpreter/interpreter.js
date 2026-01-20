@@ -29,22 +29,43 @@ class Interpreter {
   evaluate(term) {
     switch (term.type) {
       case "PLAYER":
-        if (/^\d+$/.test(term.id)) {
-          return term;
-        } else {
-          switch (term.id) {
-            case 'ACTION':
-              return {
-                type: "PLAYER",
-                id: this.handler.latest_action_player()
-              }
-            default:
-              throw term.id + " is not a valid player tag";
-          }
-        }
+        return this.#evaluate_player(term);
+      case "POSITION":
+        return this.#evaluate_position(term);
       default:
         return term;
     }
+  }
+
+  #evaluate_player(term) {
+    if (/^\d+$/.test(term.id)) {
+      return term;
+    } else {
+      switch (term.id) {
+        case 'ACTION':
+          return {
+            type: "PLAYER",
+            id: this.handler.latest_action_player()
+          }
+        default:
+          throw term.id + " is not a valid player tag";
+      }
+    }
+  }
+
+  #evaluate_position(term) {
+    return this.handler.get_card(term);
+  }
+
+  // this needs to be run when a position is a players hand at runtime (so that </> works)
+  #evaluate_hand(term) {
+    if (term.type === "POSITION") {
+      if (term.area.type === "PLAYER") {
+        // the ids of the areas used to store player hands are hidden from the game
+        term.area = "hand" + this.#evaluate_player(term.area).id;
+      }
+    }
+    return term;
   }
 
   #if(ast) {
@@ -84,6 +105,10 @@ class Interpreter {
   }
 
   #move(ast) {
+    // If either the source or destination is a players hand, it must be evaluated
+    ast.source = this.#evaluate_hand(ast.source);
+    ast.destination = this.#evaluate_hand(ast.destination);
+
     if (ast.source.type === "CARD") {
       this.handler.add_card(ast.source, ast.destination);
     } else if (ast.source.type === "POSITION") {
@@ -97,7 +122,7 @@ class Interpreter {
   #object_equals(a, b) {
     if (a === b) return true;
 
-    if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
+    if (typeof a !== "object" || typeof b !== "object" || a === null || b === null || a === undefined || b === undefined) {
       return false;
     }
 
