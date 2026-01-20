@@ -2,6 +2,7 @@ class Handler {
   constructor(areas, actions) {
     this.areas = areas;
     this.actions = actions;
+    this.latestActionPlayer = 0;
   }
 
   define_area(data) {
@@ -53,6 +54,10 @@ class Handler {
         return c;
       }
     }
+  }
+
+  latest_action_player() {
+    return this.latestActionPlayer;
   }
 
   #deepReplace(target, source) {

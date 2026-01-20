@@ -142,9 +142,20 @@ class Parser {
         return this.#get_string();
       case "NUMBER":
         return this.#get_number();
+      case "PLAYER":
+        return this.#get_player();
       default:
         throw "Illegal TERM";
     }
+  }
+
+  #get_player() {
+    const playerID = this.#peek().value;
+    this.#eat({token: "PLAYER"});
+    return {
+      type: "PLAYER",
+      id: playerID,
+    };
   }
 
   #get_number() {

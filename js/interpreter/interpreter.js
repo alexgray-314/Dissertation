@@ -25,10 +25,32 @@ class Interpreter {
 
   }
 
+  // If a term can be evaluated to another term
+  evaluate(term) {
+    switch (term.type) {
+      case "PLAYER":
+        if (/^\d+$/.test(term.id)) {
+          return term;
+        } else {
+          switch (term.id) {
+            case 'ACTION':
+              return {
+                type: "PLAYER",
+                id: this.handler.latest_action_player()
+              }
+            default:
+              throw term.id + " is not a valid player tag";
+          }
+        }
+      default:
+        return term;
+    }
+  }
+
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
-        if (this.#object_equals(ast.left, ast.right)) {
+        if (this.#object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {
           this.interpret(ast.antecedent);
