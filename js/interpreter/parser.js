@@ -9,7 +9,7 @@ class Parser {
   }
 
   #prog() {
-    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON" || this.#peek().token === "IF") {
+    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "DEAL") {
       this.#Stmt();
       this.#eat({token: "SEMI_COLON"});
     }
@@ -29,6 +29,9 @@ class Parser {
         break;
       case "IF":
         this.asts.push(this.#parse_if());
+        break;
+      case "DEAL":
+        this.asts.push(this.#parse_deal());
         break;
       default:
         throw "Illegal statement" + this.#peek().token;
@@ -95,6 +98,17 @@ class Parser {
       subTree: subTree,
     };
 
+  }
+
+  /// --------- DEALING ---------
+  #parse_deal() {
+    this.#eat({token: "DEAL"});
+    const args = this.#get_args();
+    return {
+      type: "DEAL",
+      args: args,
+      subTree: [] // TODO add the ability to embed code here
+    }
   }
 
   /// --------- DEFINE STATEMENTS

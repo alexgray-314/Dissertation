@@ -6,6 +6,7 @@ const keyWords = {
   "if": "IF",
   "else": "ELSE",
   "move": "MOVE",
+  "deal": "DEAL"
 };
 
 const specialCharacters = {

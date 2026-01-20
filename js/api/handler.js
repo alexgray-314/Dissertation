@@ -33,6 +33,33 @@ class Handler {
     this.actions.push(new Action(data.id, args));
   }
 
+  deal(data) {
+    const args = {
+      jokers:"false",
+      distribute:"all",
+      shuffle:"true",
+      hand_max:52
+    }
+    this.#deepReplace(args, data.args) // merge defaults with set parameters
+
+    // ---- Shuffle the deck
+    if (args.shuffle === "true") {
+      for (let a of this.areas) {
+        console.log(a.decks[0]);
+        // get the deck. This is a protected ID reserved for this purpose
+        if (a.id === "deck") {
+          a.decks[0].sort(function (a, b) {
+            return Math.random() - 0.5;
+          });
+        }
+        console.log(a.decks[0]);
+      }
+    }
+
+    // Deal out the cards until done
+
+  }
+
   // Will add a specified card to a position in a deck within an area
   // N.B. This does not error-check to make sure the move is allowed
   add_card(card, dest) {

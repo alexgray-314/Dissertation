@@ -81,6 +81,10 @@ class Recogniser {
         this.#Term();
         this.#Term();
         break;
+      case "DEAL":
+        this.#eat({token:"DEAL"});
+        this.#Args();
+        break;
       default:
         this.#trace();
     }
@@ -89,7 +93,7 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID" || this.#peek().token === "MOVE") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();

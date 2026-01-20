@@ -20,6 +20,9 @@ class Interpreter {
         case "IF":
           this.#if(ast);
           break;
+        case "DEAL":
+          this.handler.deal(ast);
+          break;
       }
     }
 
