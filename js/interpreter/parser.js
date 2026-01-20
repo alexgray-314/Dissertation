@@ -143,19 +143,32 @@ class Parser {
       case "NUMBER":
         return this.#get_number();
       case "PLAYER":
-        return this.#get_player();
+        return this.#get_player_or_hand();
       default:
         throw "Illegal TERM";
     }
   }
 
-  #get_player() {
+  #get_player_or_hand() {
     const playerID = this.#peek().value;
     this.#eat({token: "PLAYER"});
-    return {
+    const player =  {
       type: "PLAYER",
       id: playerID,
     };
+
+    // this is actually referencing a player's hand (which is a position)
+    if (this.#peek().token === "L_SQUARE") {
+      const index = this.#get_index();
+      return {
+        type: "POSITION",
+        area: player,
+        index: index,
+      }
+    }
+
+    return player;
+
   }
 
   #get_number() {
