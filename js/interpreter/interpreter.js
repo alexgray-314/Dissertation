@@ -48,7 +48,7 @@ class Interpreter {
         case 'ACTION':
           return {
             type: "PLAYER",
-            id: this.handler.latest_action_player()
+            id: handler.active_player_id()
           }
         default:
           throw term.id + " is not a valid player tag";
@@ -65,7 +65,12 @@ class Interpreter {
     if (term.type === "POSITION") {
       if (term.area.type === "PLAYER") {
         // the ids of the areas used to store player hands are hidden from the game
-        term.area = "hand" + this.#evaluate_player(term.area).id;
+        const areaId = "hand" + this.#evaluate_player(term.area).id;
+        return {
+          type: "POSITION",
+          area: areaId,
+          index: term.index,
+        };
       }
     }
     return term;
@@ -89,6 +94,8 @@ class Interpreter {
     for (let a of this.handler.actions) {
       if (a.id === ast.id) {
         a.addListener(function () {
+          handler.action();
+          console.log(ast.subTree);
           interpreter.interpret(ast.subTree);
           render();
         });
@@ -109,15 +116,15 @@ class Interpreter {
 
   #move(ast) {
     // If either the source or destination is a players hand, it must be evaluated
-    ast.source = this.#evaluate_hand(ast.source);
-    ast.destination = this.#evaluate_hand(ast.destination);
+    const source = this.#evaluate_hand(ast.source);
+    const destination = this.#evaluate_hand(ast.destination);
 
-    if (ast.source.type === "CARD") {
-      this.handler.add_card(ast.source, ast.destination);
-    } else if (ast.source.type === "POSITION") {
+    if (source.type === "CARD") {
+      this.handler.add_card(source, destination);
+    } else if (source.type === "POSITION") {
       // remove card from source position and add it to dest
-      const c = this.handler.remove_card(ast.source);
-      handler.add_card(c, ast.destination);
+      const c = this.handler.remove_card(source);
+      handler.add_card(c, destination);
     }
   }
 

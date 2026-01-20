@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const output = document.getElementById("output");
 
   button.addEventListener("click", function () {
-    const inputValue = lib + input.value;
+    const inputValue = input.value;
 
     const lexer = new Lexer();
     const recogniser = new Recogniser();

@@ -4,6 +4,15 @@ class Handler {
     this.actions = actions;
     this.latestActionPlayer = 0;
     this.num_players = 2;
+    this.playerSelector = document.getElementById("playerSelector");
+  }
+
+  active_player_id() {
+    return Number(this.playerSelector.value);
+  }
+
+  action() {
+    this.latestActionPlayer = this.active_player_id();
   }
 
   define_area(data) {
@@ -112,10 +121,6 @@ class Handler {
         return a.decks[position.index.deck][position.index.position];
       }
     }
-  }
-
-  latest_action_player() {
-    return this.latestActionPlayer;
   }
 
   #deepReplace(target, source) {
