@@ -1,4 +1,4 @@
-const lib = `define area deck(min:1, max:1, take:"never", place:"never");
+define area deck(min:1, max:1, take:"never", place:"never");
 
 move #2S deck[0,0];
 move #3S deck[0,0];
@@ -55,30 +55,3 @@ move #JC deck[0,0];
 move #QC deck[0,0];
 move #KC deck[0,0];
 move #AC deck[0,0];
-`
-
-document.addEventListener("DOMContentLoaded", function () {
-  const input = document.getElementById("textInput");
-  const button = document.getElementById("submitBtn");
-  const output = document.getElementById("output");
-
-  button.addEventListener("click", function () {
-    const inputValue = lib + input.value;
-
-    const lexer = new Lexer();
-    const recogniser = new Recogniser();
-
-    try {
-      const tokens = lexer.lex(inputValue);
-      recogniser.recognise(tokens);
-      output.innerText = "Valid syntax";
-      localStorage.setItem("program", inputValue);
-    } catch (error) {
-      output.innerText = error;
-    }
-
-  });
-});
-
-
-

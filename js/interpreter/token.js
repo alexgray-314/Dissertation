@@ -2,7 +2,6 @@ const keyWords = {
   "define": "DEFINE",
   "area": "AREA",
   "action": "ACTION",
-  "deck": "DECK",
   "on": "ON",
   "if": "IF",
   "else": "ELSE",
