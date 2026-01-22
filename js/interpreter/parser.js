@@ -79,8 +79,8 @@ class Parser {
             type: "UPDATE_TURN",
             player: "NEXT"
           };
-        case "EQUALS":
-          this.#eat({token: "EQUALS"});
+        case "SET":
+          this.#eat({token: "SET"});
           const player = this.#get_player();
           return {
             type: "UPDATE_TURN",

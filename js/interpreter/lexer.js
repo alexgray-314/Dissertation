@@ -12,9 +12,9 @@ class Lexer {
     if (this.#peek() === c) {
       this.input = this.input.substring(1);
     } else {
-      throw "Invalid character " + this.#peek() + ". Expected " + c;
+      console.log(this.input)
+      throw "Invalid character |" + this.#peek() + "|. Expected " + c;
     }
-
   }
 
   #isMore() {
@@ -86,6 +86,7 @@ class Lexer {
   }
 
   #lex_kw_or_id() {
+
     let lexeme = "";
     while(/[A-Za-z]/.test(this.#peek())) {
       const c = this.#peek();
@@ -190,14 +191,22 @@ class Lexer {
         }
       } else if (this.#peek() === '=') {
         this.#eat('=');
-        this.#eat('=');
-        tokens.push({
-          token:"EQUALS"
-        })
+        if (this.#peek() === '=') {
+          this.#eat('=');
+          tokens.push({
+            line: this.line,
+            token:"EQUALS"
+          })
+        } else {
+          tokens.push({
+            line:this.line,
+            token:"SET"
+          })
+        }
+
       } else {
         throw "Invalid Character: " + c;
       }
-
 
     }
     tokens.push({

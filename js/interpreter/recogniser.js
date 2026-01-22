@@ -80,8 +80,7 @@ class Recogniser {
         break;
       case "PLAYER":
         this.#eat({token:"PLAYER"});
-        this.#eat({token:"PLUS"});
-        this.#eat({token:"PLUS"});
+        this.#Update();
         break;
       default:
         this.#trace();
@@ -253,6 +252,21 @@ class Recogniser {
       this.#eat({token:"DOT"});
       this.#eat({token:"ID"});
       this.#TermProperty();
+    }
+  }
+
+  #Update() {
+    switch(this.#peek().token) {
+      case "PLUS":
+        this.#eat({token:"PLUS"});
+        this.#eat({token:"PLUS"});
+        break;
+      case "SET":
+        this.#eat({token:"SET"});
+        this.#Term();
+        break;
+      default:
+        this.#trace();
     }
   }
 
