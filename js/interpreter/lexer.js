@@ -1,7 +1,7 @@
 class Lexer {
   constructor() {
     this.input = "";
-    this.line = 0;
+    this.line = 1;
   }
 
   #peek() {
@@ -23,6 +23,7 @@ class Lexer {
 
   #init(s) {
     this.input = s;
+    this.line = 1;
   }
 
   #getDigit() {

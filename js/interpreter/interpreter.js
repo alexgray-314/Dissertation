@@ -101,7 +101,6 @@ class Interpreter {
       if (a.id === ast.id) {
         a.addListener(function () {
           handler.action();
-          console.log(ast.subTree);
           interpreter.interpret(ast.subTree);
           render();
         });
