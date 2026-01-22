@@ -23,6 +23,9 @@ class Interpreter {
         case "DEAL":
           this.handler.deal(ast);
           break;
+        case "UPDATE_TURN":
+          this.#update_player(ast);
+          break;
       }
     }
 
@@ -43,7 +46,11 @@ class Interpreter {
   }
 
   #evaluate_property(term) {
-    return this.evaluate(term.term)[term.property];
+    const subTerm = this.evaluate(term.term);
+    if (subTerm === undefined) {
+      return undefined;
+    }
+    return subTerm[term.property];
   }
 
   #evaluate_player(term) {
@@ -55,6 +62,11 @@ class Interpreter {
           return {
             type: "PLAYER",
             id: handler.active_player_id()
+          };
+        case "TURN":
+          return {
+            type: "PLAYER",
+            id: handler.turn
           }
         default:
           throw term.id + " is not a valid player tag";
@@ -80,6 +92,16 @@ class Interpreter {
       }
     }
     return term;
+  }
+
+  #update_player(ast) {
+    let player = ast.player;
+    if (player === "NEXT"){
+      handler.next_turn();
+    } else {
+      player = this.#evaluate_player(player);
+      handler.set_turn(player.id);
+    }
   }
 
   #if(ast) {

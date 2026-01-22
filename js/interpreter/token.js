@@ -19,4 +19,5 @@ const specialCharacters = {
   ']': "R_SQUARE",
   '{': "L_CURLY",
   '}': "R_CURLY",
+  '+': "PLUS",
 };

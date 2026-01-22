@@ -5,6 +5,18 @@ class Handler {
     this.latestActionPlayer = 0;
     this.num_players = 2;
     this.playerSelector = document.getElementById("playerSelector");
+    this.turn = 0;
+  }
+
+  next_turn() {
+    this.turn++;
+    if (this.turn >= this.num_players) {
+      this.turn = 0;
+    }
+  }
+
+  set_turn(turn) {
+    this.turn = turn;
   }
 
   active_player_id() {

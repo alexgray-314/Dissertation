@@ -10,8 +10,9 @@ const asts = parser.parse(lexer.lex(lib));
 recogniser.recognise(tokens);
 console.log("Valid Syntax");
 
-asts.push(...parser.parse(tokens));
-console.log(asts);
+const programASTS = parser.parse(tokens);
+asts.push(...programASTS);
+console.log(programASTS);
 
 const areas = [];
 const actions = [];

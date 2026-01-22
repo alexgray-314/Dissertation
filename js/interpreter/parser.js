@@ -9,7 +9,7 @@ class Parser {
   }
 
   #prog() {
-    while (this.#peek().token === "DEFINE" || this.#peek().token === "MOVE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "DEAL") {
+    while(this.#peek().token !== "END") {
       this.#Stmt();
       this.#eat({token: "SEMI_COLON"});
     }
@@ -33,8 +33,11 @@ class Parser {
       case "DEAL":
         this.asts.push(this.#parse_deal());
         break;
+      case "PLAYER":
+        this.asts.push(this.#set_turn());
+        break;
       default:
-        throw "Illegal statement" + this.#peek().token;
+        throw "Illegal statement " + this.#peek().token;
     }
   }
 
@@ -59,6 +62,34 @@ class Parser {
     subTokens.push({token: "END"});
 
     return (new Parser()).parse(subTokens);
+  }
+
+  // ---- SPECIAL CASE: setting players -------
+  // A statement can only being with a player if they are setting a players turn
+  #set_turn() {
+    if (this.#peek().value !== "TURN") {
+      throw "You can only set the player who's turn it is using <.>";
+    } else {
+      this.#eat({token: "PLAYER"});
+      switch (this.#peek().token) {
+        case "PLUS":
+          this.#eat({token: "PLUS"});
+          this.#eat({token: "PLUS"});
+          return {
+            type: "UPDATE_TURN",
+            player: "NEXT"
+          };
+        case "EQUALS":
+          this.#eat({token: "EQUALS"});
+          const player = this.#get_player();
+          return {
+            type: "UPDATE_TURN",
+            player: player,
+          };
+        default:
+          throw "You haven't set the turn to anything"
+      }
+    }
   }
 
   /// --------- IF STATEMENTS -------------
@@ -184,13 +215,17 @@ class Parser {
     return term;
   }
 
-  #get_player_or_hand() {
+  #get_player() {
     const playerID = this.#peek().value;
     this.#eat({token: "PLAYER"});
-    const player =  {
+    return {
       type: "PLAYER",
       id: playerID,
     };
+  }
+
+  #get_player_or_hand() {
+    const player = this.#get_player();
 
     // this is actually referencing a player's hand (which is a position)
     if (this.#peek().token === "L_SQUARE") {
