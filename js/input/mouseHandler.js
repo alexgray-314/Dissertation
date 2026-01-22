@@ -1,78 +1,54 @@
 class MouseHandler {
+  constructor(canvas) {
 
-  constructor(canvas, cards) {
-    this.canvas = canvas;
-    this.cards = cards;
-    this.active = -1;
-    this.mouse = {
-      x: 0,
-      y: 0,
-      down: false,
-      dragOffsetX: 0,
-      dragOffsetY: 0
-    };
+    this.draggedCard = null;
+    this.sourceStack = null;
+    this.mouseX = 0;
+    this.mouseY = 0;
 
-    // Listeners
     canvas.addEventListener("mousedown", (e) => {
-      this.mouse.down = true;
-      this.updateMousePosition(e);
+      const rect = canvas.getBoundingClientRect();
+      this.mouseX = e.clientX - rect.left;
+      this.mouseY = e.clientY - rect.top;
 
-      this.checkCollision();
-      if (this.active >= 0) {
-        this.mouse.dragOffsetX = this.mouse.x - this.rect.x;
-        this.mouse.dragOffsetY = this.mouse.y - this.rect.y;
+      for (const a of areas) {
+        for (const stack of a.stacks) {
+          if (stack.cards.length && stack.contains(this.mouseX, this.mouseY)) {
+            this.draggedCard = stack.get_top();
+            this.sourceStack = stack;
+            stack.remove({position: 0});
+            break;
+          }
+        }
       }
-    });
-
-    canvas.addEventListener("mouseup", () => {
-      this.mouse.down = false;
-      this.active = -1;
-    });
-
-    canvas.addEventListener("mouseleave", () => {
-      this.mouse.down = false;
-      this.active = -1;
     });
 
     canvas.addEventListener("mousemove", (e) => {
-      this.updateMousePosition();
+      const rect = canvas.getBoundingClientRect();
+      this.mouseX = e.clientX - rect.left;
+      this.mouseY = e.clientY - rect.top;
     });
 
-  }
+    canvas.addEventListener("mouseup", () => {
+      if (!this.draggedCard) return;
 
-  updateMousePosition(e) {
-    const rectCanvas = canvas.getBoundingClientRect();
-    this.mouse.x = e.clientX - rectCanvas.left;
-    this.mouse.y = e.clientY - rectCanvas.top;
-  }
-
-  checkCollision() {
-
-    let collided = false;
-
-    for (let i = 0; i < this.cards.length; i++) {
-      if (
-        this.mouse.x >= this.cards[i].rect.x &&
-        this.mouse.x <= this.cards[i].rect.x + this.cards[i].rect.width &&
-        this.mouse.y >= this.cards[i].rect.y &&
-        this.mouse.y <= this.cards[i].rect.y + this.cards[i].rect.height
-      ) {
-        this.active = true;
-        collided = true;
-      } else {
-        if (!collided) {
-          this.active = -1;
+      for (const a of areas) {
+        for (const stack of a.stacks) {
+          if (stack.contains(this.mouseX, this.mouseY)) {
+            stack.push(this.draggedCard, {position: 0});
+            this.draggedCard = null;
+            this.sourceStack = null;
+            return;
+          }
         }
       }
-    }
 
-  }
+      // if dropped nowhere → return to original stack
+      this.sourceStack.push(this.draggedCard, {position:0});
+      this.draggedCard = null;
+      this.sourceStack = null;
+    });
 
-  tick() {
-    if (this.active >= 0) {
-      cards[this.active].rect.x = this.mouse.x - this.mouse.dragOffsetX;
-      cards[this.active].rect.y = this.mouse.y - this.mouse.dragOffsetY;
-    }
   }
 
 }

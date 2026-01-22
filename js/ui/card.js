@@ -1,20 +1,32 @@
+const CARD_WIDTH = 70;
+const CARD_HEIGHT = 100;
+const SUIT_MAP = {
+  "spades": "♠",
+  "hearts": "♥",
+  "clubs": "♣",
+  "diamonds": "♦"
+}
+
 class Card {
 
-  constructor(x, y) {
-    this.rect = {
-      width: 50*1.5,
-      height: 70*1.5,
-      x: x,
-      y: y
-    };
+  constructor(card) {
+    Object.assign(this, card);
   }
 
-  draw(context) {
-    context.fillStyle = "red";
-    context.beginPath();
-    context.roundRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height, [10]);
-    context.fill();
+  render(ctx, x, y) {
+    ctx.fillStyle = "white";
+    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+
+    if (this.suit === "hearts" || this.suit === "diamonds") {
+      ctx.fillStyle = "red";
+    } else {
+      ctx.fillStyle = "black";
+    }
+
+    ctx.font = "16px Arial";
+    ctx.fillText(this.number + " " + SUIT_MAP[this.suit], x + CARD_WIDTH/7, y + CARD_HEIGHT/4);
   }
-
-
 }

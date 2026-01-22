@@ -6,12 +6,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <table id="areas">
-  </table>
-  <table>
-    <tr id="actions">
-    </tr>
-  </table>
+
+  <canvas id="canvas" width="1000" height="600"></canvas>
+
   <label for="playerSelector">Current Player:</label>
   <select name="Player" id="playerSelector">
     <option value="0">Alex</option>
@@ -23,10 +20,14 @@
   <script src="js/interpreter/lexer.js"></script>
   <script src="js/interpreter/recogniser.js"></script>
   <script src="js/interpreter/parser.js"></script>
-  <script src="js/ui/area.js"></script>
   <script src="js/ui/action.js"></script>
   <script src="js/api/handler.js"></script>
   <script src="js/interpreter/interpreter.js"></script>
-  <script src="js/ui/display.js"></script>
+  <script src="js/input/mouseHandler.js"></script>
+<!--  <script src="js/ui/display.js"></script>-->
+  <script src="js/ui/card.js"></script>
+  <script src="js/ui/stack.js"></script>
+  <script src="js/ui/area.js"></script>
+  <script src="js/ui/canvas.js"></script>
 </body>
 </html>
