@@ -69,13 +69,6 @@ class Recogniser {
         this.#Stmts();
         this.#eat({token:"R_CURLY"});
         break;
-      case "ID":
-        this.#eat({token:"ID"});
-        this.#Index();
-        this.#eat({token:"DOUBLE_DOT"});
-        this.#eat({token:"ID"});
-        this.#Args();
-        break;
       case "MOVE":
         this.#eat({token:"MOVE"});
         this.#Term();
@@ -93,7 +86,7 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "ID" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();
@@ -245,6 +238,16 @@ class Recogniser {
         break;
       default:
         this.#trace();
+    }
+    this.#TermProperty();
+  }
+
+  #TermProperty() {
+    console.log("TermProperty");
+    if (this.#peek().token === "DOT") {
+      this.#eat({token:"DOT"});
+      this.#eat({token:"ID"});
+      this.#TermProperty();
     }
   }
 

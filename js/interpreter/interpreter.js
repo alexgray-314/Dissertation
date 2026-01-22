@@ -35,9 +35,15 @@ class Interpreter {
         return this.#evaluate_player(term);
       case "POSITION":
         return this.#evaluate_position(term);
+      case "PROPERTY":
+        return this.#evaluate_property(term);
       default:
         return term;
     }
+  }
+
+  #evaluate_property(term) {
+    return this.evaluate(term.term[term.property]);
   }
 
   #evaluate_player(term) {
