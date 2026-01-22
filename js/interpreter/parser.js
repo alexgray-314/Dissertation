@@ -147,20 +147,41 @@ class Parser {
   }
 
   #get_term() {
+    let term;
     switch (this.#peek().token) {
       case "ID":
-        return this.#get_position();
+        term = this.#get_position();
+        break;
       case "CARD":
-        return this.#get_card();
+        term = this.#get_card();
+        break;
       case "STRING":
-        return this.#get_string();
+        term = this.#get_string();
+        break;
       case "NUMBER":
-        return this.#get_number();
+        term = this.#get_number();
+        break;
       case "PLAYER":
-        return this.#get_player_or_hand();
+        term = this.#get_player_or_hand();
+        break;
       default:
         throw "Illegal TERM";
     }
+    return this.#check_for_properties(term);
+  }
+
+  #check_for_properties(term) {
+    if (this.#peek().token === "DOT") {
+      this.#eat({token: "DOT"});
+      const property = this.#peek().value;
+      this.#eat({token: "ID"});
+      return this.#check_for_properties({
+        type: "PROPERTY",
+        property: property,
+        term: term
+      });
+    }
+    return term;
   }
 
   #get_player_or_hand() {
@@ -264,7 +285,7 @@ class Parser {
   }
 
   #traceExpected(expected) {
-    console.log(this.tokens);
+    console.log(this.asts);
     throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token + ". Expected: " + expected.token;
 
   }
