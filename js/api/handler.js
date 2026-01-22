@@ -28,7 +28,7 @@ class Handler {
   }
 
   define_area(data) {
-    const area = new Area(data.id);
+    this.areas[data.id] = [];
     const args = {
       "min": 3,
       "max": -1
@@ -37,12 +37,10 @@ class Handler {
 
     // Setting the args
     // min
-    area.decks = [];
     for (let i = 0; i < args.min; i++) {
-      area.decks.push([]);
+      this.areas[data.id].push([]);
     }
 
-    this.areas.push(area);
   }
 
   // This will create a new action and add a button to the screen
@@ -64,26 +62,20 @@ class Handler {
     }
     this.#deepReplace(args, data.args) // merge defaults with set parameters
 
-    let ar;
+    const a = this.areas["deck"];
     // ---- Shuffle the deck
     if (args.shuffle === "true") {
-      for (let a of this.areas) {
-        // get the deck. This is a protected ID reserved for this purpose
-        if (a.id === "deck") {
-          a.decks[0].sort(function (a, b) {
-            return Math.random() - 0.5;
-          });
-          ar = a;
-        }
-      }
+      a[0].sort(function (a, b) {
+        return Math.random() - 0.5;
+      });
     }
 
     // TODO actually consider the args
 
     // Deal out the cards until done
     let player = 0;
-    for (let i=0; i < ar.decks[0].length; i++) {
-      this.add_card(ar.decks[0][i], {
+    for (let i=0; i < a[0].length; i++) {
+      this.add_card(a[0][i], {
         type: "POSITION",
         area: "hand" + player,
         index: {
@@ -97,7 +89,7 @@ class Handler {
       }
     }
 
-    ar.decks[0] = [];
+    a[0] = [];
 
   }
 
@@ -107,32 +99,35 @@ class Handler {
     if (card === undefined) {
       return;
     }
-    for (let a of this.areas) {
-      if (a.id === dest.area) {
-        a.decks[dest.index.deck].splice(dest.index.position, 0, card);
-        return;
-      }
+    if (!this.areas.hasOwnProperty(dest.area)) {
+      throw "Invalid area id " + dest.area;
     }
+    const a = this.areas[dest.area];
+    a[dest.index.deck].splice(dest.index.position, 0, card);
+
   }
 
   // Removes the card from its position in the deck and returns it
   // source must be a position (e.g. global[0, 0])
   remove_card(source) {
-    for (let a of this.areas) {
-      if (a.id === source.area) {
-        const c = a.decks[source.index.deck][source.index.position];
-        a.decks[source.index.deck].splice(source.index.position, 1);
-        return c;
-      }
+
+    if (!this.areas.hasOwnProperty(source.area)) {
+      throw "Invalid area id " + source.area;
     }
+    const a = this.areas[source.area];
+    const c = a[source.index.deck][source.index.position];
+    a[source.index.deck].splice(source.index.position, 1);
+    return c;
   }
 
   get_card(position) {
-    for (let a of this.areas) {
-      if (a.id === position.area) {
-        return a.decks[position.index.deck][position.index.position];
-      }
+
+    if (!this.areas.hasOwnProperty(position.area)) {
+      throw "Invalid area id " + position.area;
     }
+    const a = this.areas[position.area];
+    return a[position.index.deck][position.index.position];
+
   }
 
   #deepReplace(target, source) {
