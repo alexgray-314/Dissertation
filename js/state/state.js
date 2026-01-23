@@ -12,10 +12,11 @@ class State {
         this.turn = 0;
         this.latestAction;
 
-        // Setup the player hands
-        for (let i = 0; i < this.num_players; i++) {
+        // Set up the player hands
+        for (let i = 0; i < num_players; i++) {
+
             this.define_area({
-                id: i.toString,
+                id: i.toString(),
                 args: {
                     min:1,
                     text:"Player " + i + "'s hand",
@@ -26,8 +27,8 @@ class State {
         const interpreter = new Interpreter(this);
         interpreter.interpret(this.program);
 
-        console.log(this.areas);
-        console.log(this.actions);
+        console.log("areas", this.areas);
+        console.log("actions", this.actions);
 
     }
 
@@ -106,7 +107,7 @@ class State {
             return false;
         }
 
-        const stack = areas.stacks[source.index.stack];
+        const stack = area.stacks[source.index.stack];
 
         stack.cards.splice(source.index.position, 1);
 
@@ -190,9 +191,7 @@ class State {
         }
         Object.assign(defaultArgs, data.args) // merge defaults with set parameters
 
-        console.log(this.areas["deck"])
-
-        const deckArray = this.areas["deck"].stacks[0].cards;
+        let deckArray = this.areas["deck"].stacks[0].cards;
         // ---- Shuffle the deck
         if (defaultArgs.shuffle === "true") {
             deckArray.sort(function (a, b) {
@@ -204,28 +203,34 @@ class State {
 
         // Deal out the cards until done
         let player = 0;
-        for (let i=0; i < deckArray.length; i++) {
-        this.add_card(deckArray[i], {
+        for (let i= 0; i < deckArray.length; i++) {
+          this.add_card(deckArray[i], {
+              type: "POSITION",
+              area: player.toString(),
+              index: {
+                  stack: 0,
+                  position: 0
+              }
+          });
+          this.remove_card({
             type: "POSITION",
-            area: player.toString,
+            area: "deck",
             index: {
-                stack: 0,
-                position: 0
+              stack: 0,
+              position: 0
             }
-        });
-        player++;
-        if (player >= this.num_players) {
-            player = 0;
+          });
+          player++;
+          if (player >= this.num_players) {
+              player = 0;
+          }
         }
-        }
-
-        deckArray = [];
 
   }
 
     // Load the program and all library files
     #loadProgram(soureCode) {
-        
+
         const lexer = new Lexer();
         const recogniser = new Recogniser();
         const parser = new Parser();
@@ -240,7 +245,7 @@ class State {
 
         const programASTS = parser.parse(tokens);
         asts.push(...programASTS);
-        console.log(programASTS);
+        console.log("asts", programASTS);
 
         return asts;
 

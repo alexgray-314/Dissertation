@@ -5,9 +5,9 @@ fileSelector.addEventListener('change', (event) => {
     const reader = new FileReader();
 
     reader.addEventListener("load", () => {
-        state = new State(reader.result);
+        state = new State(reader.result, 2);
     });
 
     reader.readAsText(file);
-    
+
 });
