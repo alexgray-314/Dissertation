@@ -191,7 +191,7 @@ class State {
         }
         Object.assign(defaultArgs, data.args) // merge defaults with set parameters
 
-        let deckArray = this.areas["deck"].stacks[0].cards;
+        const deckArray = this.areas["deck"].stacks[0].cards;
         // ---- Shuffle the deck
         if (defaultArgs.shuffle === "true") {
             deckArray.sort(function (a, b) {
@@ -203,8 +203,8 @@ class State {
 
         // Deal out the cards until done
         let player = 0;
-        for (let i= 0; i < deckArray.length; i++) {
-          this.add_card(deckArray[i], {
+        for (let i= 0; deckArray.length > 0; i++) {
+          this.add_card(deckArray[0], {
               type: "POSITION",
               area: player.toString(),
               index: {
@@ -229,12 +229,12 @@ class State {
   }
 
     // Load the program and all library files
-    #loadProgram(soureCode) {
+    #loadProgram(sourceCode) {
 
         const lexer = new Lexer();
         const recogniser = new Recogniser();
         const parser = new Parser();
-        const tokens = lexer.lex(soureCode);
+        const tokens = lexer.lex(sourceCode);
 
         // Check that the user code has valid syntax
         recogniser.recognise(tokens);

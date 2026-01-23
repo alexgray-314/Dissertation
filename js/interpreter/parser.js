@@ -314,8 +314,7 @@ class Parser {
     return {
       type: "CARD",
       suit: suit,
-      number: number,
-      value: value
+      number: number, // TODO rename to rank
     }
   }
 
