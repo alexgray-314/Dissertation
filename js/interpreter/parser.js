@@ -266,7 +266,7 @@ class Parser {
 
   #get_index() {
     this.#eat({token: "L_SQUARE"});
-    const deck = this.#peek().value;
+    const stack = this.#peek().value;
     this.#eat({token: "NUMBER"});
     let pos = 0;
     if (this.#peek().token !== "R_SQUARE") {
@@ -276,7 +276,7 @@ class Parser {
     }
     this.#eat({token: "R_SQUARE"});
     return {
-      deck: deck,
+      stack: stack,
       position: pos,
     }
   }

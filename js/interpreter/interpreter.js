@@ -83,7 +83,7 @@ class Interpreter {
     if (term.type === "POSITION") {
       if (term.area.type === "PLAYER") {
         // the ids of the areas used to store player hands are hidden from the game
-        const areaId = "hand" + this.#evaluate_player(term.area).id;
+        const areaId = this.#evaluate_player(term.area).id.toString();
         return {
           type: "POSITION",
           area: areaId,

@@ -1,4 +1,4 @@
-define area deck(min:1, max:1, take:"never", place:"never");
+const lib = `define area deck(min:1, max:1, take:"never", place:"never");
 
 move #2S deck[0,0];
 move #3S deck[0,0];
@@ -55,3 +55,4 @@ move #JC deck[0,0];
 move #QC deck[0,0];
 move #KC deck[0,0];
 move #AC deck[0,0];
+`;

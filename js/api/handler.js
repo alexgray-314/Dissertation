@@ -8,50 +8,6 @@ class Handler {
     this.turn = 0;
   }
 
-  next_turn() {
-    this.turn++;
-    if (this.turn >= this.num_players) {
-      this.turn = 0;
-    }
-  }
-
-  set_turn(turn) {
-    this.turn = turn;
-  }
-
-  active_player_id() {
-    return Number(this.playerSelector.value);
-  }
-
-  action() {
-    this.latestActionPlayer = this.active_player_id();
-  }
-
-  define_area(data) {
-    this.areas[data.id] = [];
-    const args = {
-      "min": 3,
-      "max": -1
-    }
-    this.#deepReplace(args, data.args)// merge defaults with set parameters
-
-    // Setting the args
-    // min
-    for (let i = 0; i < args.min; i++) {
-      this.areas[data.id].push([]);
-    }
-
-  }
-
-  // This will create a new action and add a button to the screen
-  define_action(data) {
-    const args = {
-      text:"ACTION!"
-    }
-    this.#deepReplace(args, data.args)// merge defaults with set parameters
-
-    this.actions.push(new Action(data.id, args));
-  }
 
   deal(data) {
     const args = {
@@ -104,7 +60,6 @@ class Handler {
     }
     const a = this.areas[dest.area];
     a[dest.index.deck].splice(dest.index.position, 0, card);
-
   }
 
   // Removes the card from its position in the deck and returns it

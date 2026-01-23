@@ -9,13 +9,13 @@ class Recogniser {
   }
 
   #trace() {
-    console.log(this.tokens);
+    //console.log(this.tokens);
     throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token;
 
   }
 
   #traceExpected(expected) {
-    console.log(this.tokens);
+    //console.log(this.tokens);
     throw "Invalid token on line " + this.#peek().line + ": " + this.#peek().token + ". Expected: " + expected.token;
 
   }
@@ -37,13 +37,13 @@ class Recogniser {
   }
 
   #Prog() {
-    console.log("Prog");
+    //console.log("Prog");
     this.#Stmts();
     this.#eat({token:"END"});
   }
 
   #Stmt() {
-    console.log("Stmt");
+    //console.log("Stmt");
     switch(this.#peek().token) {
       case "DEFINE":
         this.#eat({token:"DEFINE"});
@@ -89,7 +89,7 @@ class Recogniser {
 
   // this is nullable
   #Stmts() {
-    console.log("Stmts");
+    //console.log("Stmts");
     if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
@@ -98,7 +98,7 @@ class Recogniser {
   }
 
   #Type() {
-    console.log("Type");
+    //console.log("Type");
     switch(this.#peek().token) {
       case "AREA":
         this.#eat({token:"AREA"});
@@ -106,16 +106,13 @@ class Recogniser {
       case "ACTION":
         this.#eat({token:"ACTION"});
         break;
-      case "DECK":
-        this.#eat({token:"DECK"});
-        break;
       default:
         this.#trace();
     }
   }
 
   #Args() {
-    console.log("Args");
+    //console.log("Args");
     switch(this.#peek().token) {
       case "L_PAREN":
         this.#eat({token:"L_PAREN"});
@@ -127,7 +124,7 @@ class Recogniser {
   }
 
   #ArgFirst() {
-    console.log("ArgFirst");
+    //console.log("ArgFirst");
     switch(this.#peek().token) {
       case "ID":
         this.#Arg();
@@ -142,7 +139,7 @@ class Recogniser {
   }
 
   #ArgRest() {
-    console.log("ArgRest");
+    //console.log("ArgRest");
     switch(this.#peek().token) {
       case "COMMA":
         this.#eat({token:"COMMA"});
@@ -158,7 +155,7 @@ class Recogniser {
   }
 
   #Arg() {
-    console.log("Arg");
+    //console.log("Arg");
     switch(this.#peek().token) {
       case "ID":
         this.#eat({token:"ID"});
@@ -171,13 +168,13 @@ class Recogniser {
   }
 
   #Expr() {
-    console.log("Expr");
+    //console.log("Expr");
     this.#Term();
     this.#ExprRest();
   }
 
   #ExprRest() {
-    console.log("ExprRest");
+    //console.log("ExprRest");
     switch (this.#peek().token) {
       case "EQUALS":
         this.#eat({token:"EQUALS"});
@@ -192,7 +189,7 @@ class Recogniser {
   }
 
   #Index() {
-    console.log("Index");
+    //console.log("Index");
     switch(this.#peek().token) {
       case "L_SQUARE":
         this.#eat({token:"L_SQUARE"});
@@ -205,7 +202,7 @@ class Recogniser {
   }
 
   #IndexRest() {
-    console.log("IndexRest");
+    //console.log("IndexRest");
     switch(this.#peek().token) {
       case "COMMA":
         this.#eat({token:"COMMA"});
@@ -221,7 +218,7 @@ class Recogniser {
   }
 
   #Term() {
-    console.log("Term");
+    //console.log("Term");
     switch(this.#peek().token) {
       case "PLAYER":
         this.#eat({token:"PLAYER"});
@@ -247,7 +244,7 @@ class Recogniser {
   }
 
   #TermProperty() {
-    console.log("TermProperty");
+    //console.log("TermProperty");
     if (this.#peek().token === "DOT") {
       this.#eat({token:"DOT"});
       this.#eat({token:"ID"});
