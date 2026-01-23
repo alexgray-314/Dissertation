@@ -194,7 +194,7 @@ class State {
 
         const deckArray = this.areas["deck"].stacks[0].cards;
         // ---- Shuffle the deck
-        if (args.shuffle === "true") {
+        if (defaultArgs.shuffle === "true") {
             deckArray.sort(function (a, b) {
                 return Math.random() - 0.5;
             });
