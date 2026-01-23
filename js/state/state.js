@@ -24,7 +24,10 @@ class State {
         }
 
         const interpreter = new Interpreter(this);
-        interpreter.interpret(program);
+        interpreter.interpret(this.program);
+
+        console.log(this.areas);
+        console.log(this.actions);
 
     }
 
@@ -70,7 +73,7 @@ class State {
         // Create the stack if it does not exists
         if (dest.index.stack >= stacks.length) {
             // check the max is not too large
-            if (dest.index.stack < area.args.max) {
+            if (dest.index.stack >= area.args.max) {
                 console.log("Stack index exceeds maximum for area");
                 return false;
             }
@@ -154,7 +157,7 @@ class State {
 
     define_action(data) {
 
-        const args = {
+        const defaultArgs = {
         text:"ACTION!"
         }
         Object.assign(defaultArgs, data.args)// merge defaults with set parameters
@@ -174,18 +177,20 @@ class State {
             throw "There is no such action " + data.id;
         }
 
-        actions[data.id].subTree = data.subTree;
+        this.actions[data.id].subTree = data.subTree;
 
     }
 
     deal(data) {
-        const defualtArgs = {
+        const defaultArgs = {
             jokers:"false",
             distribute:"all",
             shuffle:"true",
             hand_max:52
         }
         Object.assign(defaultArgs, data.args) // merge defaults with set parameters
+
+        console.log(this.areas["deck"])
 
         const deckArray = this.areas["deck"].stacks[0].cards;
         // ---- Shuffle the deck
