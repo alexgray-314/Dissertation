@@ -10,9 +10,10 @@ class State {
         this.actions = {};
         this.num_players = num_players;
         this.turn = 0;
+        this.latestAction;
 
         // Setup the player hands
-        for (let i = 0; i < handler.num_players; i++) {
+        for (let i = 0; i < this.num_players; i++) {
             this.define_area({
                 id: i.toString,
                 args: {
@@ -27,6 +28,15 @@ class State {
 
     }
 
+    trigger_action(data) {
+        new Interpreter(this).interpret(this.actions[data.id].subTree);
+        this.latestAction = data.player;
+    }
+
+    get_latest_action_player() {
+        return this.latestAction;
+    }
+
     next_turn() {
         this.turn++;
         if (this.turn >= this.num_players) {
@@ -39,6 +49,10 @@ class State {
             throw "Player id [" + turn + "] is out of bounds";
         }
         this.turn = turn;
+    }
+
+    get_turn() {
+        return this.turn;
     }
 
     // This does not check for programmer-defined blocks on movement

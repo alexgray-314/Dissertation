@@ -1,7 +1,7 @@
 class Interpreter {
 
-  constructor(handler) {
-    this.handler = handler;
+  constructor(state) {
+    this.state = state;
   }
 
   interpret(asts) {
@@ -21,7 +21,7 @@ class Interpreter {
           this.#if(ast);
           break;
         case "DEAL":
-          this.handler.deal(ast);
+          this.state.deal(ast);
           break;
         case "UPDATE_TURN":
           this.#update_player(ast);
@@ -61,12 +61,12 @@ class Interpreter {
         case 'ACTION':
           return {
             type: "PLAYER",
-            id: handler.active_player_id()
+            id: this.state.get_latest_action_player()
           };
         case "TURN":
           return {
             type: "PLAYER",
-            id: handler.turn
+            id: this.state.get_turn()
           }
         default:
           throw term.id + " is not a valid player tag";
@@ -75,7 +75,7 @@ class Interpreter {
   }
 
   #evaluate_position(term) {
-    return this.handler.get_card(term);
+    return this.state.get_card(term);
   }
 
   // this needs to be run when a position is a players hand at runtime (so that </> works)
@@ -97,10 +97,10 @@ class Interpreter {
   #update_player(ast) {
     let player = ast.player;
     if (player === "NEXT"){
-      handler.next_turn();
+      state.next_turn();
     } else {
       player = this.#evaluate_player(player);
-      handler.set_turn(player.id);
+      state.set_turn(player.id);
     }
   }
 
@@ -119,24 +119,16 @@ class Interpreter {
   }
 
   #register_action_trigger(ast) {
-    for (let a of this.handler.actions) {
-      if (a.id === ast.id) {
-        a.addListener(function () {
-          handler.action();
-          interpreter.interpret(ast.subTree);
-          render();
-        });
-      }
-    }
+    this.state.assign_action_subtree(ast);
   }
 
   #define(ast) {
     switch (ast.valueType) {
       case "AREA":
-        this.handler.define_area(ast);
+        this.state.define_area(ast);
         break;
       case "ACTION":
-        this.handler.define_action(ast);
+        this.state.define_action(ast);
         break;
     }
   }
@@ -147,11 +139,11 @@ class Interpreter {
     const destination = this.#evaluate_hand(ast.destination);
 
     if (source.type === "CARD") {
-      this.handler.add_card(source, destination);
+      this.state.add_card(source, destination);
     } else if (source.type === "POSITION") {
       // remove card from source position and add it to dest
-      const c = this.handler.remove_card(source);
-      handler.add_card(c, destination);
+      const c = this.state.remove_card(source);
+      state.add_card(c, destination);
     }
   }
 
