@@ -54,7 +54,7 @@ class State {
         const stacks = area.stacks;
 
         // Create the stack if it does not exists
-        if (dest.index.stack > stacks.length) {
+        if (dest.index.stack >= stacks.length) {
             // check the max is not too large
             if (dest.index.stack < area.args.max) {
                 console.log("Stack index exceeds maximum for area");
@@ -74,6 +74,49 @@ class State {
         // add the card to the deck
         stacks[dest.index.stack].cards.splice(dest.index.position, 0, card);
         return true;
+    }
+
+    remove_card(source) {
+
+        if (!this.areas.hasOwnProperty(source.area)) {
+            throw "Invalid area id " + source.area;
+        }
+
+        const area = this.areas[source.area];
+
+        if (source.index.stack >= area.stacks.length) {
+            console.log("Stack index " + source.index.stack + " out of bounds");
+            return false;
+        }
+
+        const stack = areas.stacks[source.index.stack];
+
+        stack.cards.splice(source.index.position, 1);
+
+    }
+
+    get_card(source) {
+
+        if (!this.areas.hasOwnProperty(source.area)) {
+            throw "Invalid area id " + source.area;
+        }
+
+        const area = this.areas[source.area];
+
+        if (source.index.stack >= area.stacks.length) {
+            console.log("Stack index " + source.index.stack + " out of bounds");
+            return undefined;
+        }
+
+        const stack = area.stacks[source.index.stack];
+
+        if (source.index.position >= stack.cards.length) {
+            console.log("Card index " + source.index.position + " out of bounds");
+            return undefined;
+        }
+
+        return stack.cards[source.index.position];
+
     }
 
     define_area(data) {
@@ -120,6 +163,46 @@ class State {
         actions[data.id].subTree = data.subTree;
 
     }
+
+    deal(data) {
+        const defualtArgs = {
+            jokers:"false",
+            distribute:"all",
+            shuffle:"true",
+            hand_max:52
+        }
+        Object.assign(defaultArgs, data.args) // merge defaults with set parameters
+
+        const deckArray = this.areas["deck"].stacks[0].cards;
+        // ---- Shuffle the deck
+        if (args.shuffle === "true") {
+            deckArray.sort(function (a, b) {
+                return Math.random() - 0.5;
+            });
+        }
+
+        // TODO actually consider the args
+
+        // Deal out the cards until done
+        let player = 0;
+        for (let i=0; i < deckArray.length; i++) {
+        this.add_card(deckArray[i], {
+            type: "POSITION",
+            area: player.toString,
+            index: {
+                stack: 0,
+                position: 0
+            }
+        });
+        player++;
+        if (player >= this.num_players) {
+            player = 0;
+        }
+        }
+
+        deckArray = [];
+
+  }
 
     // Load the program and all library files
     #loadProgram(soureCode) {
