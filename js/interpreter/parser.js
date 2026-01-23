@@ -297,7 +297,7 @@ class Parser {
     const value = this.#peek().value;
     this.#eat({token: "CARD"});
 
-    const number = value.slice(0, -1).toUpperCase();
+    const rank = value.slice(0, -1).toUpperCase();
     let suit = value.slice(-1);
 
     // Convert the suit from a single digit to the full name
@@ -314,7 +314,7 @@ class Parser {
     return {
       type: "CARD",
       suit: suit,
-      number: number, // TODO rename to rank
+      rank: rank,
     }
   }
 
