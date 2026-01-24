@@ -1,5 +1,3 @@
-let state; // this is initialised in the file handler, once a file is selected
-
 // This is not to be accessed directly from clients, they must go through the API to validate
 class State {
     constructor (sourceCode, num_players) {

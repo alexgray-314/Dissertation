@@ -5,7 +5,10 @@ fileSelector.addEventListener('change', (event) => {
     const reader = new FileReader();
 
     reader.addEventListener("load", () => {
-        state = new State(reader.result, 2);
+        // LOAD THE GAME!!!!
+        const state = new State(reader.result, 2);
+        const handler = new Handler(state);
+        const canvas = new Canvas(state);
     });
 
     reader.readAsText(file);
