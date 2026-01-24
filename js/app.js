@@ -1,6 +1,8 @@
 let state;
 let handler;
 let canvas;
+let actions;
+let activePlayer = 0;
 
 function init(sourceCode) {
   state = new State(sourceCode, 2);
@@ -8,8 +10,8 @@ function init(sourceCode) {
   handler = new Handler(state, canvas);
 
   // setup actions
-  Object.values(state.actions).forEach((action) => {
-    new Action(action, 0, handler);
+  actions = Object.values(state.actions).map((action) => {
+    return new Action(action, handler);
   });
   render();
 }

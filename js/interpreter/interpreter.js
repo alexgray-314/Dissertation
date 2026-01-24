@@ -142,8 +142,9 @@ class Interpreter {
       this.state.add_card(source, destination);
     } else if (source.type === "POSITION") {
       // remove card from source position and add it to dest
-      const c = this.state.remove_card(source);
-      state.add_card(c, destination);
+      const c = this.state.get_card(source);
+      this.state.remove_card(source);
+      this.state.add_card(c, destination);
     }
   }
 

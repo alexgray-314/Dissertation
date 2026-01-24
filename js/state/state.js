@@ -31,8 +31,8 @@ class State {
     }
 
     trigger_action(data) {
-        new Interpreter(this).interpret(this.actions[data.id].subTree);
         this.latestAction = data.player;
+        new Interpreter(this).interpret(this.actions[data.id].subTree);
     }
 
     get_latest_action_player() {
@@ -60,7 +60,8 @@ class State {
     // This does not check for programmer-defined blocks on movement
     add_card(card, dest) {
         if (card === undefined) {
-            return false;
+            console.error("Cannot add undefined card to stack");
+            return;
         }
         if (!this.areas.hasOwnProperty(dest.area)) {
             throw "Invalid area id " + dest.area;

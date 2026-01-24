@@ -1,6 +1,6 @@
 class Action {
 
-  constructor(action, playerId, handler) {
+  constructor(action, handler) {
     Object.assign(this, action);
     const row = document.getElementById("actions");
     const cell = row.insertCell(0);
@@ -9,7 +9,7 @@ class Action {
     this.button.addEventListener("click", function() {
       handler.call({
         type: "ACTION",
-        player: playerId,
+        player: activePlayer,
         id: this.id
       });
     });
