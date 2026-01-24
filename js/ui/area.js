@@ -21,7 +21,7 @@ class Area {
 
     ctx.fillStyle = "black";
     ctx.font = "12px Arial";
-    ctx.fillText(this.id, AREA_MARGIN, AREA_MARGIN + this.y*AREA_SPACING_Y - 5);
+    ctx.fillText(this.args.text, AREA_MARGIN, AREA_MARGIN + this.y*AREA_SPACING_Y - 5);
   }
 
 }

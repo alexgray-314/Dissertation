@@ -1,5 +1,5 @@
 define action s(text:"SNAP!!");
-define area a(min:1);
+define area a(min:1, text:"Discard Pile");
 define action x(text:"Place Card");
 
 on x {
