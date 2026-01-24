@@ -1,29 +1,38 @@
 class Canvas {
 
   constructor(initialState) {
-    const canvas = document.getElementById("canvas");
-    this.ctx = canvas.getContext("2d");
-    this.mouseHandler = new MouseHandler(canvas);
+    this.canvas = document.getElementById("canvas");
 
-    this.render();
+    // Convert all the state "areas" into UI "Areas"
+    let y = 0;
+    this.areas = Object.fromEntries(
+      Object.entries(initialState.areas).map(([id, area]) => {
+        y++;
+        return [id, new Area(area, y-1)];
+      })
+    );
+
+    console.log(this.areas);
+
+    this.mouseHandler = new MouseHandler(this.canvas, this.areas);
   }
 
   render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const ctx = this.canvas.getContext("2d");
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (let a of areas.values()) {
+    for (let a of Object.values(this.areas)) {
       a.render(ctx);
     }
 
-    if (mouseHandler.draggedCard) {
-      mouseHandler.draggedCard.render(
-        this.ctx,
+    if (this.mouseHandler.draggedCard) {
+      this.mouseHandler.draggedCard.render(
+        ctx,
         this.mouseHandler.mouseX - CARD_WIDTH / 2,
         this.mouseHandler.mouseY - CARD_HEIGHT / 2
       );
     }
-
-    requestAnimationFrame(this.render);
+    
   }
 
 }

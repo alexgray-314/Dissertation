@@ -4,13 +4,13 @@ const AREA_MARGIN = 20;
 class Area {
 
   // Will generate a UI area from a state area
-  constructor(y, area) {
+  constructor(area, y) {
     Object.assign(this, area);
     this.y = y;
     let x = 0
     this.stacks = area.stacks.map(function(stack) {
       x++;
-      return new Stack(x - 1, y, stack) ;
+      return new Stack(stack, x - 1, y) ;
     });
   }
 

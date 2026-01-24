@@ -6,11 +6,8 @@ fileSelector.addEventListener('change', (event) => {
 
     reader.addEventListener("load", () => {
         // LOAD THE GAME!!!!
-        const state = new State(reader.result, 2);
-        const handler = new Handler(state);
-        const canvas = new Canvas(state);
+        init(reader.result);
     });
 
     reader.readAsText(file);
-
 });
