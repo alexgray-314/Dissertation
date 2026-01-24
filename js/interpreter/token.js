@@ -6,7 +6,8 @@ const keyWords = {
   "if": "IF",
   "else": "ELSE",
   "move": "MOVE",
-  "deal": "DEAL"
+  "deal": "DEAL",
+  "cancel": "CANCEL"
 };
 
 const specialCharacters = {
@@ -20,4 +21,6 @@ const specialCharacters = {
   '{': "L_CURLY",
   '}': "R_CURLY",
   '+': "PLUS",
+  '/': "FORWARD_SLASH",
+  '\\': "BACKWARD_SLASH"
 };

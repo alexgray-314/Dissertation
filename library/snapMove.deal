@@ -1,0 +1,32 @@
+define action s(text:"SNAP!!");
+define area a(min:1);
+define action x(text:"Place Card");
+
+on move {
+  if \ == <.>[0,0] {
+    if / == a[0,0] {
+      <.>++;
+    } else {
+      cancel;
+    };
+  } else {
+    cancel;
+  }; 
+};
+
+on s {
+  if a[0, 0].suit == a[0, 1].suit {
+    if <@> == <0> {
+      move a[0] <1>[0,0];
+      move a[0] <1>[0,0];
+    } else {
+      move a[0] <0>[0,0];
+      move a[0] <0>[0,0];
+    };
+  } else {
+    move a[0] <@>[0];
+    move a[0] <@>[0];
+  };
+};
+
+deal();

@@ -55,8 +55,8 @@ class Lexer {
           token:"PLAYER",
           value:"MOVE"
         };
-      case '/':
-        this.#eat('/');
+      case '@':
+        this.#eat('@');
         return {
           line: this.line,
           token:"PLAYER",

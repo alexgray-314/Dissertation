@@ -5,6 +5,7 @@ class Handler {
     this.ui = ui;
   }
 
+  // Call the API. Request some change to the state
   call(request) {
     switch(request.type) {
       case "MOVE":
@@ -19,6 +20,11 @@ class Handler {
         return;
     }
     this.ui.update(this.state);
+  }
+
+  // Notify the UI that there has been some change to the state
+  notify(request) {
+    
   }
 
 }

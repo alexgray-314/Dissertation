@@ -53,10 +53,7 @@ class Recogniser {
         break;
       case "ON":
         this.#eat({token:"ON"});
-        this.#eat({token:"ID"});
-        this.#eat({token:"L_CURLY"});
-        this.#Stmts();
-        this.#eat({token:"R_CURLY"});
+        this.#Trigger();
         break;
       case "IF":
         this.#eat({token:"IF"});
@@ -82,6 +79,9 @@ class Recogniser {
         this.#eat({token:"PLAYER"});
         this.#Update();
         break;
+      case "CANCEL":
+        this.#eat({token:"CANCEL"});
+        break;
       default:
         this.#trace();
     }
@@ -90,7 +90,7 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     //console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER" || this.#peek().token === "CANCEL") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();
@@ -237,6 +237,12 @@ class Recogniser {
       case "STRING":
         this.#eat({token:"STRING"});
         break;
+      case "FORWARD_SLASH":
+        this.#eat({token:"FORWARD_SLASH"});
+        break;
+      case "BACKWARD_SLASH":
+        this.#eat({token:"BACKWARD_SLASH"});
+        break;
       default:
         this.#trace();
     }
@@ -261,6 +267,25 @@ class Recogniser {
       case "SET":
         this.#eat({token:"SET"});
         this.#Term();
+        break;
+      default:
+        this.#trace();
+    }
+  }
+
+  #Trigger() {
+    switch(this.#peek().token) {
+      case "MOVE":
+        this.#eat({token:"MOVE"});
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
+        break;
+      case "ID":
+        this.#eat({token:"ID"});
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
         break;
       default:
         this.#trace();
