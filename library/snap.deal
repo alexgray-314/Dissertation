@@ -3,15 +3,15 @@ define area a(min:1);
 define action x(text:"Place Card");
 
 on x {
-  if </> == <.> {
-    move </>[0] a[0];
+  if <@> == <.> {
+    move <@>[0] a[0];
     <.>++;
   } else {};
 };
 
 on s {
   if a[0, 0].suit == a[0, 1].suit {
-    if </> == <0> {
+    if <@> == <0> {
       move a[0] <1>[0,0];
       move a[0] <1>[0,0];
     } else {
@@ -19,8 +19,8 @@ on s {
       move a[0] <0>[0,0];
     };
   } else {
-    move a[0] </>[0];
-    move a[0] </>[0];
+    move a[0] <@>[0];
+    move a[0] <@>[0];
   };
 };
 
