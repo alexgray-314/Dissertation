@@ -8,10 +8,12 @@ class Area {
     Object.assign(this, area);
     this.y = y;
     let x = 0
-    this.stacks = area.stacks.map(function(stack) {
-      x++;
-      return new Stack(stack, x - 1, y) ;
-    });
+
+    this.stacks = [];
+    // check for min args
+    for (let x = 0; x < area.args.min; x++) {
+      this.stacks.push(new Stack(area.stacks[x] ?? {cards:[]}, x, y));
+    }
   }
 
   render(ctx) {
