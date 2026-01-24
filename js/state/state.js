@@ -42,7 +42,7 @@ class State {
     next_turn() {
         this.turn++;
         if (this.turn >= this.num_players) {
-            his.turn = 0;
+            this.turn = 0;
         }
     }
 
@@ -60,7 +60,6 @@ class State {
     // This does not check for programmer-defined blocks on movement
     add_card(card, dest) {
         if (card === undefined) {
-            console.error("Cannot add undefined card to stack");
             return;
         }
         if (!this.areas.hasOwnProperty(dest.area)) {
