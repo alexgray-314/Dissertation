@@ -1,8 +1,15 @@
+const STACK_SPACING_X = 80;
+
 class Stack {
-  constructor(x, y, arr) {
-    this.x = x;
-    this.y = y;
-    this.cards = arr.map(function(card) {return new Card(card)});
+  constructor(stack, x, y) {
+    Object.assign(this, stack);
+    this.cards = stack.cards.map(function(card) {return new Card(card)});
+    this.rect = {
+      x: AREA_MARGIN + x*STACK_SPACING_X, 
+      y: AREA_MARGIN + y*AREA_SPACING_Y,
+      width: CARD_WIDTH,
+      height: CARD_HEIGHT
+    }
   }
 
   get_top() {
@@ -24,21 +31,21 @@ class Stack {
   render(ctx) {
     // Outline
     ctx.strokeStyle = "rgba(0,0,0,0.4)";
-    ctx.strokeRect(this.x, this.y, CARD_WIDTH, CARD_HEIGHT);
+    ctx.strokeRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
     // Draw top card
     // TODO add option to fan out cards (for example, patience)
     if (this.cards.length > 0) {
-      this.cards[0].render(ctx, this.x, this.y);
+      this.cards[0].render(ctx, this.rect);
     }
   }
 
   contains(x, y) {
     return (
-      x >= this.x &&
-      x <= this.x + CARD_WIDTH &&
-      y >= this.y &&
-      y <= this.y + CARD_HEIGHT
+      x >= this.rect.x &&
+      x <= this.rect.x + this.rect.width &&
+      y >= this.rect.y &&
+      y <= this.rect.y + this.rect.height
     );
   }
 }

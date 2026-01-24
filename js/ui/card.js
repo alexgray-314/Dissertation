@@ -13,12 +13,12 @@ class Card {
     Object.assign(this, card);
   }
 
-  render(ctx, x, y) {
+  render(ctx, rect) {
     ctx.fillStyle = "white";
-    ctx.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
 
     ctx.strokeStyle = "black";
-    ctx.strokeRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+    ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
 
     if (this.suit === "hearts" || this.suit === "diamonds") {
       ctx.fillStyle = "red";
@@ -27,6 +27,6 @@ class Card {
     }
 
     ctx.font = "16px Arial";
-    ctx.fillText(this.rank + " " + SUIT_MAP[this.suit], x + CARD_WIDTH/7, y + CARD_HEIGHT/4);
+    ctx.fillText(this.rank + " " + SUIT_MAP[this.suit], rect.x + rect.width/7, rect.y + rect.height/4);
   }
 }
