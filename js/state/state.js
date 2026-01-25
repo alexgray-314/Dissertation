@@ -10,6 +10,9 @@ class State {
         this.turn = 0;
         this.latestAction;
 
+        // The movement catches that prevent movement 
+        this.catches = []
+
         // Set up the player hands
         for (let i = 0; i < num_players; i++) {
 
@@ -178,6 +181,10 @@ class State {
 
         this.actions[data.id].subTree = data.subTree;
 
+    }
+
+    add_catch(subTree) {
+        this.catches.push(subTree);
     }
 
     deal(data) {

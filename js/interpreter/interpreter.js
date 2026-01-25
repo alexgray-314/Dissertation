@@ -26,6 +26,11 @@ class Interpreter {
         case "UPDATE_TURN":
           this.#update_player(ast);
           break;
+        case "CATCH":
+          this.#add_catch(ast);
+          break;
+        case "CANCEL":
+          return;
       }
     }
 
@@ -146,6 +151,17 @@ class Interpreter {
       this.state.remove_card(source);
       this.state.add_card(c, destination);
     }
+  }
+
+  #add_catch(ast) {
+    // TODO also check for pattern matching and append this to the subtree 
+    // Append onto the end of the subTree 
+    const fullSubTree = ast.subTree.concat({
+      type: "MOVE",
+      source: "MOVE_SOURCE",
+      destination: "MOVE_DESTINATION",
+    })
+    this.state.add_catch(fullSubTree);
   }
 
   // TODO actually use a library function here, this is silly
