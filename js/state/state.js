@@ -12,6 +12,11 @@ class State {
 
         // The movement catches that prevent movement 
         this.catches = []
+        this.movementTracker = {
+            source: undefined,
+            destination: undefined,
+            card: undefined
+        }
 
         // Set up the player hands
         for (let i = 0; i < num_players; i++) {
@@ -30,6 +35,23 @@ class State {
 
         console.log("areas", this.areas);
         console.log("actions", this.actions);
+
+    }
+
+    check_move(source, destination) {
+
+        this.movementTracker.source = source;
+        this.movementTracker.destination = destination;
+
+        for (const c of this.catches) {
+            console.log("checking catch", c);
+            const interpreter = new Interpreter(this);
+            interpreter.interpret(c);
+        }
+
+        this.movementTracker.source = undefined;
+        this.movementTracker.destination = undefined;
+        this.movementTracker.card = undefined;
 
     }
 
@@ -116,8 +138,10 @@ class State {
 
     get_card(source) {
 
+        // console.log("trying to get", source);
+
         if (!this.areas.hasOwnProperty(source.area)) {
-            throw "Invalid area id " + source.area;
+            console.error("Invalid area id ", source.area);
         }
 
         const area = this.areas[source.area];

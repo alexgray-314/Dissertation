@@ -30,6 +30,7 @@ class Interpreter {
           this.#add_catch(ast);
           break;
         case "CANCEL":
+          console.log("Movement blocked");
           return;
       }
     }
@@ -38,6 +39,8 @@ class Interpreter {
 
   // If a term can be evaluated to another term
   evaluate(term) {
+    if (term === undefined) return undefined;
+
     switch (term.type) {
       case "PLAYER":
         return this.#evaluate_player(term);
@@ -58,6 +61,7 @@ class Interpreter {
     return subTerm[term.property];
   }
 
+  // <@> -> <0>
   #evaluate_player(term) {
     if (/^\d+$/.test(term.id)) {
       return term;
@@ -79,13 +83,29 @@ class Interpreter {
     }
   }
 
-  #evaluate_position(term) {
-    return this.state.get_card(term);
+  // a[0, 0] -> #4S
+  // (Pre-Evaluated) POSITION -> CARD
+  #evaluate_card(term) {
+
+    if (term.type === "POSITION") {
+      return this.state.get_card(term);
+    }
+    return term;
+
   }
 
-  // this needs to be run when a position is a players hand at runtime (so that </> works)
-  #evaluate_hand(term) {
+
+  // <@>[0,0] -> position
+  // / -> position
+  // Takes a term that represents a position
+  #evaluate_position(term) {
     if (term.type === "POSITION") {
+      if (term.area === "MOVE_DESTINATION") {
+        return this.state.movementTracker.destination;
+      }
+      if (term.area === "MOVE_SOURCE") {
+        return this.state.movementTracker.source;
+      }
       if (term.area.type === "PLAYER") {
         // the ids of the areas used to store player hands are hidden from the game
         const areaId = this.#evaluate_player(term.area).id.toString();
@@ -112,6 +132,8 @@ class Interpreter {
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
+        console.log(ast.left, "==", ast.right);
+        console.log(this.evaluate(ast.left), "==", this.evaluate(ast.right));
         if (this.#object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {
@@ -140,8 +162,8 @@ class Interpreter {
 
   #move(ast) {
     // If either the source or destination is a players hand, it must be evaluated
-    const source = this.#evaluate_hand(ast.source);
-    const destination = this.#evaluate_hand(ast.destination);
+    const source = this.#evaluate_position(ast.source);
+    const destination = this.#evaluate_position(ast.destination);
 
     if (source.type === "CARD") {
       this.state.add_card(source, destination);
@@ -158,8 +180,14 @@ class Interpreter {
     // Append onto the end of the subTree 
     const fullSubTree = ast.subTree.concat({
       type: "MOVE",
-      source: "MOVE_SOURCE",
-      destination: "MOVE_DESTINATION",
+      source: {
+        type: "POSITION",
+        area: "MOVE_SOURCE"
+      },
+      destination: {
+        type: "POSITION",
+        area: "MOVE_DESTINATION"
+      },
     })
     this.state.add_catch(fullSubTree);
   }

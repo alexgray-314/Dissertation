@@ -9,9 +9,7 @@ class Handler {
   call(request) {
     switch(request.type) {
       case "MOVE":
-        const card = this.state.get_card(request.source);
-        this.state.remove_card(request.source);
-        this.state.add_card(card, request.destination);
+        this.state.check_move(request.source, request.destination);
         break;
       case "ACTION":
         this.state.trigger_action(request);
@@ -20,12 +18,12 @@ class Handler {
         console.error("Invalid request " + request.type);
         return;
     }
-    this.ui.update(this.state);
+    this.notify();
   }
 
   // Notify the UI that there has been some change to the state
-  notify(request) {
-    
+  notify() {
+    this.ui.update(this.state);
   }
 
 }

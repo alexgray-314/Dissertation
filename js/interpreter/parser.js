@@ -304,10 +304,16 @@ class Parser {
         };
       case "FORWARD_SLASH":
         this.#eat({token: "FORWARD_SLASH"});
-        return "MOVE_DESTINATION";
+        return {
+          type: "POSITION",
+          area:"MOVE_DESTINATION"
+        };
       case "BACKWARD_SLASH":
         this.#eat({token: "BACKWARD_SLASH"});
-        return "MOVE_SOURCE";
+        return {
+          type: "POSITION",
+          area: "MOVE_SOURCE"
+        };
     }
     
   }
