@@ -30,8 +30,8 @@ class Interpreter {
           this.#add_catch(ast);
           break;
         case "CANCEL":
-          console.log("Movement blocked");
-          return;
+          this.#cancel_movement();
+          break;
       }
     }
 
@@ -132,8 +132,6 @@ class Interpreter {
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
-        console.log(ast.left, "==", ast.right);
-        console.log(this.evaluate(ast.left), "==", this.evaluate(ast.right));
         if (this.#object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {
@@ -165,6 +163,8 @@ class Interpreter {
     const source = this.#evaluate_position(ast.source);
     const destination = this.#evaluate_position(ast.destination);
 
+    if (source === undefined || destination === undefined) return;
+
     if (source.type === "CARD") {
       this.state.add_card(source, destination);
     } else if (source.type === "POSITION") {
@@ -190,6 +190,12 @@ class Interpreter {
       },
     })
     this.state.add_catch(fullSubTree);
+  }
+
+  #cancel_movement() {
+    this.state.movementTracker.souce = undefined;
+    this.state.movementTracker.destination = undefined;
+    this.state.movementTracker.card = undefined;
   }
 
   // TODO actually use a library function here, this is silly

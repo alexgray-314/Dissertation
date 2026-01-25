@@ -44,7 +44,6 @@ class State {
         this.movementTracker.destination = destination;
 
         for (const c of this.catches) {
-            console.log("checking catch", c);
             const interpreter = new Interpreter(this);
             interpreter.interpret(c);
         }
