@@ -105,16 +105,31 @@ class Parser {
     this.#eat(this.#peek());
     const b = this.#get_term();
     const consequent = this.#get_subtree();
-    this.#eat({token: "ELSE"});
-    const antecedent = this.#get_subtree();
-    return {
-      type: "IF",
-      comparator: comparator,
-      left: a,
-      right: b,
-      consequent: consequent,
-      antecedent: antecedent,
-    };
+
+    // if {} else {};
+    if (this.#peek().token === "ELSE") {
+      this.#eat({token: "ELSE"});
+      const antecedent = this.#get_subtree();
+      return {
+        type: "IF",
+        comparator: comparator,
+        left: a,
+        right: b,
+        consequent: consequent,
+        antecedent: antecedent,
+      };
+    } else {
+      // if {};
+      return {
+        type: "IF",
+        comparator: comparator,
+        left: a,
+        right: b,
+        consequent: consequent,
+        antecedent: [],
+      };
+    }
+    
 
   }
 

@@ -61,10 +61,7 @@ class Recogniser {
         this.#eat({token:"L_CURLY"});
         this.#Stmts();
         this.#eat({token:"R_CURLY"});
-        this.#eat({token:"ELSE"});
-        this.#eat({token:"L_CURLY"});
-        this.#Stmts();
-        this.#eat({token:"R_CURLY"});
+        this.#ElseClause();
         break;
       case "MOVE":
         this.#eat({token:"MOVE"});
@@ -289,6 +286,17 @@ class Recogniser {
         break;
       default:
         this.#trace();
+    }
+  }
+
+  // Nullable
+  #ElseClause() {
+    switch(this.#peek().token) {
+      case "ELSE":
+        this.#eat({token:"ELSE"});
+        this.#eat({token:"L_CURLY"});
+        this.#Stmts();
+        this.#eat({token:"R_CURLY"});
     }
   }
 
