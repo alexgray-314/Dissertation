@@ -17,6 +17,7 @@ class Handler {
         this.state.trigger_action(request);
         break;
       default:
+        console.error("Invalid request " + request.type);
         return;
     }
     this.ui.update(this.state);
