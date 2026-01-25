@@ -76,7 +76,13 @@ class Interpreter {
           return {
             type: "PLAYER",
             id: this.state.get_turn()
-          }
+          };
+        case "MOVE":
+          return {
+            type: "PLAYER",
+            // if there is currently a player moving, return that. Otherwise return the last player who moved
+            id: this.state.movementTracker.player_moving ?? this.state.movementTracker.last_successful_move_player
+          };
         default:
           throw term.id + " is not a valid player tag";
       }
@@ -196,6 +202,7 @@ class Interpreter {
     this.state.movementTracker.souce = undefined;
     this.state.movementTracker.destination = undefined;
     this.state.movementTracker.card = undefined;
+    this.state.movementTracker.player_moving = undefined;
   }
 
   // TODO actually use a library function here, this is silly

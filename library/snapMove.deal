@@ -3,15 +3,19 @@ define area a(min:1);
 define action x(text:"Place Card");
 
 on move {
-  if \ == <.>[0,0] {
-    if / == a[0,0] {
-      <.>++;
+  if <#> == <.> {
+    if \ == <.>[0,0] {
+      if / == a[0,0] {
+        <.>++;
+      } else {
+        cancel;
+      };
     } else {
       cancel;
-    };
+    }; 
   } else {
     cancel;
-  }; 
+  };
 };
 
 on s {

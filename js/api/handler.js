@@ -9,7 +9,7 @@ class Handler {
   call(request) {
     switch(request.type) {
       case "MOVE":
-        this.state.check_move(request.source, request.destination);
+        this.state.check_move(request.source, request.destination, activePlayer);
         break;
       case "ACTION":
         this.state.trigger_action(request);
