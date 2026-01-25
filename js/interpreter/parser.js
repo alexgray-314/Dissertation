@@ -36,6 +36,9 @@ class Parser {
       case "PLAYER":
         this.asts.push(this.#set_turn());
         break;
+      case "CANCEL":
+        this.asts.push(this.#parse_cancel());
+        break;
       default:
         throw "Illegal statement " + this.#peek().token;
     }
@@ -118,6 +121,18 @@ class Parser {
   /// --------- ACTION TRIGGERS (ON) -----------
   #parse_on() {
     this.#eat({token: "ON"});
+    switch (this.#peek().token) {
+      case "ID":
+        return this.#parse_action_trigger();
+      case "MOVE":
+        return this.#parse_catch_move();
+      default:
+        throw "Invalid catch statement: on " + this.#peek().value;
+    }
+
+  }
+
+  #parse_action_trigger() {
     const id = this.#peek().value;
     this.#eat({token: "ID"});
 
@@ -128,7 +143,24 @@ class Parser {
       id: id,
       subTree: subTree,
     };
+  }
 
+  #parse_catch_move() {
+    this.#eat({token: "MOVE"});
+
+    const subTree = this.#get_subtree();
+
+    return {
+      type: "CATCH",
+      subTree: subTree
+    }
+  }
+
+  #parse_cancel() {
+    this.#eat({token: "CANCEL"});
+    return {
+      type: "CANCEL"
+    }
   }
 
   /// --------- DEALING ---------
@@ -195,8 +227,14 @@ class Parser {
       case "PLAYER":
         term = this.#get_player_or_hand();
         break;
+      case "FORWARD_SLASH":
+        term = this.#get_position();
+        break;
+      case "BACKWARD_SLASH":
+        term = this.#get_position();
+        break;
       default:
-        throw "Illegal TERM";
+        throw "Illegal TERM " + this.#peek().token;
     }
     return this.#check_for_properties(term);
   }
@@ -254,14 +292,24 @@ class Parser {
   }
 
   #get_position() {
-    const id = this.#peek().value;
-    this.#eat({token: "ID"});
-    const index = this.#get_index();
-    return {
-      type: "POSITION",
-      area: id,
-      index: index,
+    switch(this.#peek().token) {
+      case "ID":
+        const id = this.#peek().value;
+        this.#eat({token: "ID"});
+        const index = this.#get_index();
+        return {
+          type: "POSITION",
+          area: id,
+          index: index,
+        };
+      case "FORWARD_SLASH":
+        this.#eat({token: "FORWARD_SLASH"});
+        return "MOVE_DESTINATION";
+      case "BACKWARD_SLASH":
+        this.#eat({token: "BACKWARD_SLASH"});
+        return "MOVE_SOURCE";
     }
+    
   }
 
   #get_index() {
