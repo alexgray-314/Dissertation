@@ -44,12 +44,26 @@ class MouseHandler {
         }
       }
 
-      // if dropped nowhere → return to original stack
+      // User has let go of card
       this.sourceStack.push(this.draggedCard, {position:0});
       this.draggedCard = null;
       this.sourceStack = null;
     });
 
+  }
+
+  render(ctx) {
+    if (this.draggedCard) {
+      this.draggedCard.render(
+        ctx,
+        {
+          x: this.mouseX - CARD_WIDTH / 2,
+          y: this.mouseY - CARD_HEIGHT / 2,
+          width: CARD_WIDTH,
+          height: CARD_HEIGHT
+        }
+      );
+    }
   }
 
 }

@@ -5,8 +5,6 @@ class Canvas {
 
     this.areas = {};
     this.update(initialState);
-
-    this.mouseHandler = new MouseHandler(this.canvas, this.areas);
   }
 
   update(state) {
@@ -25,19 +23,6 @@ class Canvas {
     for (let a of Object.values(this.areas)) {
       a.render(ctx);
     }
-
-    if (this.mouseHandler.draggedCard) {
-      this.mouseHandler.draggedCard.render(
-        ctx,
-        {
-          x: this.mouseHandler.mouseX - CARD_WIDTH / 2,
-          y: this.mouseHandler.mouseY - CARD_HEIGHT / 2,
-          width: CARD_WIDTH,
-          height: CARD_HEIGHT
-        }
-      );
-    }
-    
   }
 
 }

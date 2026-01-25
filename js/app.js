@@ -3,6 +3,7 @@ let handler;
 let canvas;
 let actions;
 let activePlayer = 0;
+let mouseHandler;
 
 // Player selector
 document.getElementById("playerSelector").addEventListener("change", elem => {
@@ -18,11 +19,16 @@ function init(sourceCode) {
   actions = Object.values(state.actions).map((action) => {
     return new Action(action, handler);
   });
+
+  // Mouse input
+  mouseHandler = new MouseHandler(canvas.canvas, canvas.areas);
+
   render();
 
 }
 
 function render() {
   canvas.render();
+  mouseHandler.render(canvas.canvas.getContext("2d"));
   requestAnimationFrame(render);
 }
