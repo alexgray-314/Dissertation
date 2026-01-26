@@ -179,6 +179,9 @@ class Recogniser {
       case "LESS_THAN":
         this.#eat({token:"LESS_THAN"});
         break;
+      case "CONTAINS":
+        this.#eat({token:"CONTAINS"});
+        break;
       default:
         this.#trace();
     }
@@ -191,6 +194,7 @@ class Recogniser {
       case "L_SQUARE":
         this.#eat({token:"L_SQUARE"});
         this.#eat({token:"NUMBER"});
+        this.#Set();
         this.#IndexRest();
         break;
       // default:
@@ -204,6 +208,7 @@ class Recogniser {
       case "COMMA":
         this.#eat({token:"COMMA"});
         this.#eat({token:"NUMBER"});
+        this.#Set();
         this.#eat({token:"R_SQUARE"});
         break;
       case "R_SQUARE":
@@ -211,6 +216,15 @@ class Recogniser {
         break;
       default:
         this.#trace();
+    }
+  }
+
+  // @Nullable
+  #Set() {
+    //console.log("Set");
+    if (this.#peek().token == "COLON") {
+      this.#eat({token:"COLON"});
+      this.#eat({token:"NUMBER"});
     }
   }
 

@@ -37,7 +37,12 @@ class Lexer {
   }
 
   #lex_number() {
-    const digit = this.#getDigit();
+    let multiplier = 1;
+    if (this.#peek() === '-') {
+      multiplier = -1;
+      this.#eat('-');
+    }
+    const digit = multiplier * this.#getDigit();
     return {
       line: this.line,
       token:"NUMBER",
@@ -188,7 +193,7 @@ class Lexer {
           tokens.push(this.#lex_player());
           this.#eat('>');
         }
-      } else if (/\d/.test(this.#peek())) {
+      } else if (/[\d-]/.test(this.#peek())) {
         tokens.push(this.#lex_number());
       } else if (this.#peek() === '.') {
         this.#eat('.');
@@ -206,13 +211,23 @@ class Lexer {
         }
       } else if (this.#peek() === '=') {
         this.#eat('=');
+
         if (this.#peek() === '=') {
+          // Traditional equals (==)
           this.#eat('=');
           tokens.push({
             line: this.line,
             token:"EQUALS"
           })
+        } else if (this.#peek() === '?') {
+          // Query on set (=?)
+          this.#eat('?');
+          tokens.push({
+            line: this.line,
+            token: "CONTAINS"
+          });
         } else {
+          // Variable assignment (=)
           tokens.push({
             line:this.line,
             token:"SET"
