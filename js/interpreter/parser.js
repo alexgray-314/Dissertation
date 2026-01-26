@@ -228,7 +228,7 @@ class Parser {
     let term;
     switch (this.#peek().token) {
       case "ID":
-        term = this.#get_position();
+        term = this.#area();
         break;
       case "CARD":
         term = this.#get_card();
@@ -243,10 +243,10 @@ class Parser {
         term = this.#get_player_or_hand();
         break;
       case "FORWARD_SLASH":
-        term = this.#get_position();
+        term = this.#get_move_position();
         break;
       case "BACKWARD_SLASH":
-        term = this.#get_position();
+        term = this.#get_move_position();
         break;
       default:
         throw "Illegal TERM " + this.#peek().token;
@@ -282,12 +282,7 @@ class Parser {
 
     // this is actually referencing a player's hand (which is a position)
     if (this.#peek().token === "L_SQUARE") {
-      const index = this.#get_index();
-      return {
-        type: "POSITION",
-        area: player,
-        index: index,
-      }
+      return this.#get_position_or_set(player);
     }
 
     return player;
@@ -306,17 +301,8 @@ class Parser {
     return s;
   }
 
-  #get_position() {
+  #get_move_position() {
     switch(this.#peek().token) {
-      case "ID":
-        const id = this.#peek().value;
-        this.#eat({token: "ID"});
-        const index = this.#get_index();
-        return {
-          type: "POSITION",
-          area: id,
-          index: index,
-        };
       case "FORWARD_SLASH":
         this.#eat({token: "FORWARD_SLASH"});
         return {
@@ -330,19 +316,80 @@ class Parser {
           area: "MOVE_SOURCE"
         };
     }
+  }
+
+  // An area ID has been used, return the position
+  #area() {
+    switch(this.#peek().token) {
+      case "ID":
+        const areaId = this.#peek().value;
+        this.#eat({token: "ID"});
+        return this.#get_position_or_set(areaId);
+        break;
+      default:
+        throw "Line " + this.#peek().line + ": Areas must be referenced by id or player"
+    }
+  }
+
+  #get_position_or_set(area) {
+
+    const index = this.#get_index();
+    if (index.type === "SET") {
+      // Set (a[0, 0:0])
+      return {
+        type: "SET",
+        start: {
+          type: "POSITION",
+          area: area,
+          index: index.start
+        },
+        end: {
+          type: "POSITION",
+          area: area,
+          index: index.end
+        },
+      }
+    } else {  
+      // Singular Position
+      return {
+        type: "POSITION",
+        area: area,
+        index: index,
+      };
+    }
     
   }
 
   #get_index() {
     this.#eat({token: "L_SQUARE"});
     const stack = this.#peek().value;
+    // TODO sets of stacks
     this.#eat({token: "NUMBER"});
     let pos = 0;
     if (this.#peek().token !== "R_SQUARE") {
       this.#eat({token: "COMMA"});
       pos = this.#peek().value;
       this.#eat({token: "NUMBER"});
+      if (this.#peek().token === "COLON") {
+        this.#eat({token: "COLON"});
+        const endPos = this.#peek().value;
+        this.#eat({token: "NUMBER"});
+        this.#eat({token: "R_SQUARE"});
+        // Index is actually a SET
+        return {
+          type: "SET",
+          start: {
+            stack: stack,
+            position: pos
+          },
+          end: {
+            stack: stack,
+            position: endPos
+          }
+        }
+      }
     }
+    // Just a standard index
     this.#eat({token: "R_SQUARE"});
     return {
       stack: stack,

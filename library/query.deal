@@ -1,0 +1,9 @@
+define area a();
+
+move #4S a[0,0];
+move #QH a[0,0];
+move #KD a[0,0];
+
+if #4S =? a[0, 0:2] {
+  cancel;
+};
