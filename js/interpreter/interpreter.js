@@ -63,6 +63,7 @@ class Interpreter {
 
   // <@> -> <0>
   #evaluate_player(term) {
+    // TODO throw some kind of error if the player is not yet defined
     if (/^\d+$/.test(term.id)) {
       return term;
     } else {
@@ -144,8 +145,47 @@ class Interpreter {
           this.interpret(ast.antecedent);
         }
         break;
+      case "CONTAINS":
+        this.#contains(ast);
+        break;
       default:
         throw ast.comparator + " is not a valid comparator";
+    }
+  }
+
+  #contains(ast) {
+    const left = this.#evaluate_card(this.evaluate(ast.left));
+    if (ast.right.type === "SET") {
+      const start = this.#evaluate_position(ast.right.start);
+      const end = this.#evaluate_position(ast.right.end);
+      const area = start.area;
+
+      // LOOP through the set
+      for (let stack = start.index.stack; stack <= end.index.stack; stack++) {
+        for (let pos = start.index.position; pos <= end.index.position; pos++) {
+          const right = this.#evaluate_card({
+            type: "POSITION",
+              area: area,
+              index: {
+                stack: stack,
+                position: pos
+              }
+          });
+
+          // Check for equality
+          if (this.#object_equals(left, right)) {
+            this.interpret(ast.consequent);
+            return;
+          } 
+
+        }
+      }
+
+      // Nothing in the set has matched with the left
+      this.interpret(ast.antecedent);
+
+    } else {
+      throw "You can only perform the =? operator on a SET";
     }
   }
 

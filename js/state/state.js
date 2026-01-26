@@ -150,19 +150,18 @@ class State {
 
         if (!this.areas.hasOwnProperty(source.area)) {
             console.error("Invalid area id ", source.area);
+            return undefined;
         }
 
         const area = this.areas[source.area];
 
         if (source.index.stack >= area.stacks.length) {
-            console.log("Stack index " + source.index.stack + " out of bounds");
             return undefined;
         }
 
         const stack = area.stacks[source.index.stack];
 
         if (source.index.position >= stack.cards.length) {
-            console.log("Card index " + source.index.position + " out of bounds");
             return undefined;
         }
 
