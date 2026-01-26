@@ -140,15 +140,30 @@ class Lexer {
   lex(s) {
     this.#init(s);
     let tokens = [];
+    let comment = false;
     while (this.#isMore()) {
       const c = this.#peek();
       if (c === '\n') {
         this.#eat(c);
         this.line += 1;
+        comment = false;
+      } else if (comment) {
+        this.#eat(c);
+      } else if (c === '/') {
+        this.#eat('/');
+        if (this.#peek() === '/') {
+          this.#eat('/');
+          comment = true;
+        } else {
+          tokens.push({
+            line: this.line,
+            token: "FORWARD_SLASH"
+          });
+        }
       } else if (specialCharacters.hasOwnProperty(c)) {
         tokens.push({
           line: this.line,
-          token:specialCharacters[c],
+          token: specialCharacters[c],
         });
         this.#eat(c);
       } else if (c === '"') {

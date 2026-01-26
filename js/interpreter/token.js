@@ -21,6 +21,5 @@ const specialCharacters = {
   '{': "L_CURLY",
   '}': "R_CURLY",
   '+': "PLUS",
-  '/': "FORWARD_SLASH",
   '\\': "BACKWARD_SLASH"
 };
