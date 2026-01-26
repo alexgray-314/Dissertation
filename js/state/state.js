@@ -10,7 +10,7 @@ class State {
         this.turn = 0;
         this.latestAction;
 
-        // The movement catches that prevent movement 
+        // The movement catches that prevent movement
         this.catches = []
         this.movementTracker = {
             source: undefined,
@@ -134,8 +134,7 @@ class State {
         const area = this.areas[source.area];
 
         if (source.index.stack >= area.stacks.length) {
-            console.log("Stack index " + source.index.stack + " out of bounds");
-            return false;
+            return;
         }
 
         const stack = area.stacks[source.index.stack];

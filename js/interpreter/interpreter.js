@@ -53,12 +53,22 @@ class Interpreter {
     }
   }
 
+  // Evaluate the term to its most simple form (i.e. position -> card)
+  evaluate_down(term) {
+    switch (term.type) {
+      case "POSITION":
+        return this.#evaluate_card(term);
+      default:
+        return term;
+    }
+  }
+
   #evaluate_property(term) {
     const subTerm = this.evaluate(term.term);
     if (subTerm === undefined) {
       return undefined;
     }
-    return subTerm[term.property];
+    return (subTerm??{})[term.property] ?? (this.evaluate_down(subTerm)??{})[term.property];
   }
 
   // <@> -> <0>
@@ -176,7 +186,7 @@ class Interpreter {
           if (this.#object_equals(left, right)) {
             this.interpret(ast.consequent);
             return;
-          } 
+          }
 
         }
       }
@@ -222,8 +232,8 @@ class Interpreter {
   }
 
   #add_catch(ast) {
-    // TODO also check for pattern matching and append this to the subtree 
-    // Append onto the end of the subTree 
+    // TODO also check for pattern matching and append this to the subtree
+    // Append onto the end of the subTree
     const fullSubTree = ast.subTree.concat({
       type: "MOVE",
       source: {
