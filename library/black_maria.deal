@@ -1,0 +1,77 @@
+// Area where players put cards they want to play in tricks
+define area centre(min:1, max:1, facing:"up");
+// Area where cards go after a trick finishes
+define area discard(min:1, max:1, facing:"down");
+
+define int winningPlayer;
+define card winingCard;
+
+// Card moved from turn player's hand to centre
+on move <#>[0] centre[0,0] {
+
+	// block movement if it's not the players turn
+	if <#> == <.> {
+
+        if a[0].size == 0 {
+            // This is the first card to be placed down - VALID
+
+            winningCard = ##;
+            winningPlayer = <#>.id;
+        
+        } else {
+            // The trick suit has already been established
+
+            if ##.suit == winningCard.suit {
+                // The card is in the trick - VALID
+
+            } else {
+                if winningCard.suit =? <#>[0, 0:52].suit {
+                    // The player has a card in-suit that they could have played - INVALID
+
+                    cancel;
+                } else {
+                    // The player can "throw away" a card - VALID
+
+                };
+            };
+
+            if ##.rank >> winningCard.rank {
+                // Card is now the highest in the trick
+
+                winningCard = ##;
+                winningPlayer = <#>.id;
+            };
+
+        };
+
+        // Execute move early
+        move \ /;
+
+        if centre[0].size == 4 {
+            // this is the last card to be played
+
+            <.> = <winningPlayer>;
+            // TODO count scores
+            move centre[0,0] discard[0,0];
+            move centre[0,0] discard[0,0];
+            move centre[0,0] discard[0,0];
+            move centre[0,0] discard[0,0];
+        } else {
+            // It's the next players turn
+            
+            <.>++;
+        };
+
+    } else {
+        cancel;
+    };
+
+};
+
+// block all other card movements
+on move ? ? {
+	cancel;
+};
+
+winningPlayer = 0;
+deal(distribute:"even");
