@@ -1,2 +1,5 @@
 define card x;
 define int i;
+
+i = 10;
+x = #4S;

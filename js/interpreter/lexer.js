@@ -249,7 +249,7 @@ class Lexer {
           // Variable assignment (=)
           tokens.push({
             line:this.line,
-            token:"SET"
+            token:"ASSIGN"
           })
         }
 

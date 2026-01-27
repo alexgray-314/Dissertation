@@ -39,8 +39,23 @@ class Parser {
       case "CANCEL":
         this.asts.push(this.#parse_cancel());
         break;
+      case "ID":
+        this.asts.push(this.#parse_assign_or_function_call());
+        break;
       default:
         throw "Illegal statement " + this.#peek().token;
+    }
+  }
+
+  #parse_assign_or_function_call() {
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    this.#eat({token: "ASSIGN"}); // =
+    const term = this.#get_term();
+    return {
+      type: "ASSIGN",
+      id: id,
+      value: term
     }
   }
 
@@ -328,7 +343,6 @@ class Parser {
         const areaId = this.#peek().value;
         this.#eat({token: "ID"});
         return this.#get_position_or_set(areaId);
-        break;
       default:
         throw "Line " + this.#peek().line + ": Areas must be referenced by id or player"
     }

@@ -79,6 +79,9 @@ class Recogniser {
       case "CANCEL":
         this.#eat({token:"CANCEL"});
         break;
+      case "ID":
+        this.#Assign();
+        break;
       default:
         this.#trace();
     }
@@ -87,11 +90,17 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     //console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER" || this.#peek().token === "CANCEL") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER" || this.#peek().token === "CANCEL" || this.#peek().token === "ID") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();
     }
+  }
+
+  #Assign() {
+    this.#eat({token:"ID"});
+    this.#eat({token:"ASSIGN"});
+    this.#Term();
   }
 
   #Type() {
@@ -216,7 +225,7 @@ class Recogniser {
   // @Nullable
   #Set() {
     //console.log("Set");
-    if (this.#peek().token == "COLON") {
+    if (this.#peek().token === "COLON") {
       this.#eat({token:"COLON"});
       this.#eat({token:"NUMBER"});
     }
@@ -269,8 +278,8 @@ class Recogniser {
         this.#eat({token:"PLUS"});
         this.#eat({token:"PLUS"});
         break;
-      case "SET":
-        this.#eat({token:"SET"});
+      case "ASSIGN":
+        this.#eat({token:"ASSIGN"});
         this.#Term();
         break;
       default:
