@@ -129,7 +129,7 @@ class Parser {
         antecedent: [],
       };
     }
-    
+
 
   }
 
@@ -192,8 +192,8 @@ class Parser {
   /// --------- DEFINE STATEMENTS
   #parse_define() {
     this.#eat({token: "DEFINE"});
-    const type = this.#peek().token;
-    this.#eat(this.#peek());
+    const type = this.#peek().value.toUpperCase();
+    this.#eat({token: "ID"});
     const id = this.#peek().value;
     this.#eat({token: "ID"});
     const args = this.#get_args();
@@ -349,7 +349,7 @@ class Parser {
           index: index.end
         },
       }
-    } else {  
+    } else {
       // Singular Position
       return {
         type: "POSITION",
@@ -357,7 +357,7 @@ class Parser {
         index: index,
       };
     }
-    
+
   }
 
   #get_index() {

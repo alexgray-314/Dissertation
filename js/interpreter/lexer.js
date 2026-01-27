@@ -92,11 +92,7 @@ class Lexer {
           return {
             line: this.line,
             token:"PLAYER",
-            value: {
-              line: this.line,
-              token: "VARIABLE",
-              id: id.value
-            }
+            value: id.value,
           };
         } else {
           throw "Invalid Character. Refer to documentation on players ";

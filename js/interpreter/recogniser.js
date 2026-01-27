@@ -96,18 +96,14 @@ class Recogniser {
 
   #Type() {
     //console.log("Type");
-    switch(this.#peek().token) {
-      case "AREA":
-        this.#eat({token:"AREA"});
-        break;
-      case "ACTION":
-        this.#eat({token:"ACTION"});
-        break;
-      default:
-        this.#trace();
+    if(this.#peek().token === "ID") {
+      this.#eat({token: "ID"});
+    } else {
+      this.#trace();
     }
   }
 
+  // @ Nullable
   #Args() {
     //console.log("Args");
     switch(this.#peek().token) {
@@ -115,8 +111,6 @@ class Recogniser {
         this.#eat({token:"L_PAREN"});
         this.#ArgFirst();
         break;
-      default:
-        this.#trace();
     }
   }
 

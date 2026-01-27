@@ -227,6 +227,8 @@ class Interpreter {
       case "ACTION":
         this.state.define_action(ast);
         break;
+      default:
+        console.error("Invalid valueType: ", ast.valueType);
     }
   }
 

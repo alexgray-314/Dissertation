@@ -3,7 +3,7 @@ define area a(min:1, text:"Discard Pile");
 
 on move {
   // Can only move cards on your turn
-  if <#> == <.> {
+  if </> == <.> {
     // Can only take a card from your hand
     if \ == <.>[0,0] {
       // Can only put cards down in area a
