@@ -259,12 +259,20 @@ class Interpreter {
               }
           });
 
-          if (property !== undefined) {}
-          right = this.#evaluate_property({
-            type: "PROPERTY",
-            property: property,
-            term: right
-          });
+          if (property !== undefined) {
+            right = this.#evaluate_property({
+              type: "PROPERTY",
+              property: property,
+              term: right
+            });
+          }
+
+          // Break out of loop early to save time
+          if (right === undefined) {
+            // The check will fail
+            this.interpret(ast.antecedent);
+            return;
+          }
 
           // Check for equality
           if (this.#object_equals(left, right)) {
