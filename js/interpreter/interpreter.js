@@ -165,21 +165,37 @@ class Interpreter {
 
   #contains(ast) {
     const left = this.#evaluate_card(this.evaluate(ast.left));
-    if (ast.right.type === "SET") {
-      const start = this.#evaluate_position(ast.right.start);
-      const end = this.#evaluate_position(ast.right.end);
+    let property = undefined;
+    let set = ast.right;
+
+    if (ast.right.type === "PROPERTY") {
+      property = ast.right.property;
+      set = ast.right.term;
+    }
+
+    if (set.type === "SET") {
+      const start = this.#evaluate_position(set.start);
+      const end = this.#evaluate_position(set.end);
       const area = start.area;
 
       // LOOP through the set
       for (let stack = start.index.stack; stack <= end.index.stack; stack++) {
         for (let pos = start.index.position; pos <= end.index.position; pos++) {
-          const right = this.#evaluate_card({
+
+          let right = this.#evaluate_card({
             type: "POSITION",
               area: area,
               index: {
                 stack: stack,
                 position: pos
               }
+          });
+
+          if (property !== undefined) {}
+          right = this.#evaluate_property({
+            type: "PROPERTY",
+            property: property,
+            term: right
           });
 
           // Check for equality

@@ -1,5 +1,5 @@
 on move {
-  if #4D =? deck[0, 0:51] {
+  if #4D.suit =? deck[0, 0:51].suit {
     cancel;
   };
 };
