@@ -207,20 +207,23 @@ class Parser {
 
   #get_args() {
     let args = {}
-    this.#eat({token: "L_PAREN"});
-    while (this.#peek().token !== "R_PAREN") {
-      const id = this.#peek().value;
-      this.#eat({token: "ID"});
-      this.#eat({token: "COLON"});
+    // Check to see if there are any args
+    if (this.#peek().token === "L_PAREN") {
+      this.#eat({token: "L_PAREN"});
+      while (this.#peek().token !== "R_PAREN") {
+        const id = this.#peek().value;
+        this.#eat({token: "ID"});
+        this.#eat({token: "COLON"});
 
-      const value = this.#get_term();
+        const value = this.#get_term();
 
-      if (this.#peek().token === "COMMA") {
-        this.#eat({token: "COMMA"});
+        if (this.#peek().token === "COMMA") {
+          this.#eat({token: "COMMA"});
+        }
+        args[id] = value;
       }
-      args[id] = value;
+      this.#eat({token: "R_PAREN"});
     }
-    this.#eat({token: "R_PAREN"});
     return args;
   }
 

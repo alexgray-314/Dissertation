@@ -227,6 +227,9 @@ class Interpreter {
       case "ACTION":
         this.state.define_action(ast);
         break;
+      case "INT": case "CARD":
+        this.state.assign_variable(ast);
+        break;
       default:
         console.error("Invalid valueType: ", ast.valueType);
     }

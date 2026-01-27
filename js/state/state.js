@@ -6,6 +6,7 @@ class State {
 
         this.areas = {};
         this.actions = {};
+        this.variables = {};
         this.num_players = num_players;
         this.turn = 0;
         this.latestAction;
@@ -38,6 +39,15 @@ class State {
         console.log("areas", this.areas);
         console.log("actions", this.actions);
 
+    }
+
+    assign_variable(data) {
+      const type = data.valueType;
+      const id = data.id;
+      this.variables[id] = {
+        type: type,
+        value: undefined
+      }
     }
 
     check_move(source, destination, player) {
