@@ -53,8 +53,8 @@ class Lexer {
   #lex_player() {
 
     switch(this.#peek()) {
-      case '#':
-        this.#eat('#');
+      case '/':
+        this.#eat('/');
         return {
           line: this.line,
           token:"PLAYER",
@@ -234,6 +234,21 @@ class Lexer {
           })
         }
 
+      } else if (this.#peek() === '!') {
+        this.#eat('!');
+        if (this.#peek() === '=') {
+          this.#eat('=')
+          tokens.push({
+            line: this.line,
+            token: "NOT_EQUALS"
+          })
+        } else if (this.#peek() === '?') {
+          this.#eat('?');
+          tokens.push({
+            line: this.line,
+            token:"NOT_CONTAINS"
+          })
+        }
       } else {
         throw "Invalid Character: " + c;
       }

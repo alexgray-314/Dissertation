@@ -7,16 +7,16 @@ define int winningPlayer;
 define card winingCard;
 
 // Card moved from turn player's hand to centre
-on move <#>[0] centre[0,0] {
+on move </>[0] centre[0,0] {
 
 	// block movement if it's not the players turn
-	if <#> == <.> {
+	if </> == <.> {
 
         if a[0].size == 0 {
             // This is the first card to be placed down - VALID
 
             winningCard = \;
-            winningPlayer = <#>.id;
+            winningPlayer = </>.id;
         
         } else {
             // The trick suit has already been established
@@ -25,7 +25,7 @@ on move <#>[0] centre[0,0] {
                 // The card is in the trick - VALID
 
             } else {
-                if winningCard.suit =? <#>[0, 0:52].suit {
+                if winningCard.suit =? </>[0, 0:52].suit {
                     // The player has a card in-suit that they could have played - INVALID
 
                     cancel;
@@ -39,7 +39,7 @@ on move <#>[0] centre[0,0] {
                 // Card is now the highest in the trick
 
                 winningCard = \;
-                winningPlayer = <#>.id;
+                winningPlayer = </>.id;
             };
 
         };
