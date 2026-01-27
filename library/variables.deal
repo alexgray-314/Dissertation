@@ -1,10 +1,12 @@
 define card x;
-define int i;
+define int me;
 
-i = 0;
-
-on move {
-    x = \;
-};
+me = 0;
 
 deal();
+
+x = <me>[0,0];
+
+on move {
+
+};

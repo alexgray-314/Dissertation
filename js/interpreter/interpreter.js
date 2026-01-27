@@ -65,6 +65,13 @@ class Interpreter {
     }
   }
 
+  #evaluate_variable(var_id) {
+    if (!this.state.variables.hasOwnProperty(var_id)) {
+      return undefined;
+    }
+    return this.state.variables[var_id].value;
+  }
+
   #evaluate_property(term) {
     const subTerm = this.evaluate(term.term);
     if (subTerm === undefined) {
@@ -97,7 +104,16 @@ class Interpreter {
             id: this.state.movementTracker.player_moving ?? this.state.movementTracker.last_successful_move_player
           };
         default:
-          throw term.id + " is not a valid player tag";
+
+          const value = this.#evaluate_variable(term.id);
+          if (value !== undefined) {
+            return {
+              type: "PLAYER",
+              id: value
+            }
+          }
+
+          throw "Invalid player tag. Variable " + term.id + " is undefined";
       }
     }
   }
@@ -145,7 +161,11 @@ class Interpreter {
       if (value === undefined) {
         console.error("Cannot assign to " + ast.id + ", ", ast.value, " is not of type " + variable.type);
       } else {
-        variable.value = value;
+        // distinction between returning undefined because the term is of the wrong type...
+        // and a variable of the correct type, but with an undefined value
+        if (typeof value !== 'boolean') {
+          variable.value = value;
+        }
       }
     } else {
       console.error("Variable " + ast.id + " is undefined");
@@ -155,6 +175,9 @@ class Interpreter {
   // Check whether a term can evaluate to a specific type
   // Will return undefined if not
   #evaluate_term_to_type(term, type) {
+    // Check term is not undefined
+    if (term === undefined) return undefined;
+
     // Check for javascript primitives
     if (type === "INT") {
       if (typeof term == 'number') {
@@ -165,13 +188,18 @@ class Interpreter {
     }
 
     // Check for language-defined types
-    let evTerm = this.evaluate(term);
+    const evTerm = this.evaluate(term);
     if (evTerm.type === type) {
       return evTerm;
     }
-    evTerm = this.evaluate_down(evTerm);
-    if (evTerm.type === type) {
-      return evTerm;
+
+    // If the term is a position, see if it can be evaluated to a card
+    if (evTerm.type === "POSITION") {
+      const card = this.#evaluate_card(evTerm);
+      // distinction between returning undefined because the term is of the wrong type...
+      // and a variable of the correct type, but with an undefined value
+      console.log("position with no card in it");
+      return card ?? false;
     }
     return undefined;
   }
