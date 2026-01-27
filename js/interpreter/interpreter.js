@@ -32,6 +32,8 @@ class Interpreter {
         case "CANCEL":
           this.#cancel_movement();
           break;
+        case "ASSIGN":
+          this.#assign_variable(ast);
       }
     }
 
@@ -136,6 +138,44 @@ class Interpreter {
     return term;
   }
 
+  #assign_variable(ast) {
+    if (this.state.variables.hasOwnProperty(ast.id)) {
+      const variable = this.state.variables[ast.id];
+      const value = this.#evaluate_term_to_type(ast.value, variable.type);
+      if (value === undefined) {
+        console.error("Cannot assign to " + ast.id + ", ", ast.value, " is not of type " + variable.type);
+      } else {
+        variable.value = value;
+      }
+    } else {
+      console.error("Variable " + ast.id + " is undefined");
+    }
+  }
+
+  // Check whether a term can evaluate to a specific type
+  // Will return undefined if not
+  #evaluate_term_to_type(term, type) {
+    // Check for javascript primitives
+    if (type === "INT") {
+      if (typeof term == 'number') {
+        return term;
+      } else {
+        return undefined;
+      }
+    }
+
+    // Check for language-defined types
+    let evTerm = this.evaluate(term);
+    if (evTerm.type === type) {
+      return evTerm;
+    }
+    evTerm = this.evaluate_down(evTerm);
+    if (evTerm.type === type) {
+      return evTerm;
+    }
+    return undefined;
+  }
+
   #update_player(ast) {
     let player = ast.player;
     if (player === "NEXT"){
@@ -228,7 +268,7 @@ class Interpreter {
         this.state.define_action(ast);
         break;
       case "INT": case "CARD":
-        this.state.assign_variable(ast);
+        this.state.define_variable(ast);
         break;
       default:
         console.error("Invalid valueType: ", ast.valueType);

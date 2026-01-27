@@ -41,7 +41,7 @@ class State {
 
     }
 
-    assign_variable(data) {
+    define_variable(data) {
       const type = data.valueType;
       const id = data.id;
       this.variables[id] = {

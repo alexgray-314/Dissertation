@@ -1,5 +1,10 @@
 define card x;
 define int i;
 
-i = 10;
-x = #4S;
+i = 0;
+
+on move {
+    x = \;
+};
+
+deal();
