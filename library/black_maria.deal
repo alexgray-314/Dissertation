@@ -15,13 +15,13 @@ on move <#>[0] centre[0,0] {
         if a[0].size == 0 {
             // This is the first card to be placed down - VALID
 
-            winningCard = ##;
+            winningCard = \;
             winningPlayer = <#>.id;
         
         } else {
             // The trick suit has already been established
 
-            if ##.suit == winningCard.suit {
+            if \.suit == winningCard.suit {
                 // The card is in the trick - VALID
 
             } else {
@@ -35,10 +35,10 @@ on move <#>[0] centre[0,0] {
                 };
             };
 
-            if ##.rank >> winningCard.rank {
+            if \.rank >> winningCard.rank {
                 // Card is now the highest in the trick
 
-                winningCard = ##;
+                winningCard = \;
                 winningPlayer = <#>.id;
             };
 
