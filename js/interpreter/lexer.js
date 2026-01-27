@@ -76,11 +76,27 @@ class Lexer {
         };
       default:
         if (/\d/.test(this.#peek())) {
+          // Number
           const digit = this.#getDigit();
           return {
             line: this.line,
             token:"PLAYER",
             value:digit
+          };
+        } else if (/[a-zA-Z]/.test(this.#peek())) {
+          // Variable
+          const id = this.#lex_kw_or_id();
+          if (id.token !== "ID") {
+            throw "line " + id.line + ": " + id.type + " cannot be used as a variable name";
+          }
+          return {
+            line: this.line,
+            token:"PLAYER",
+            value: {
+              line: this.line,
+              token: "VARIABLE",
+              id: id.value
+            }
           };
         } else {
           throw "Invalid Character. Refer to documentation on players ";
@@ -193,6 +209,13 @@ class Lexer {
           tokens.push(this.#lex_player());
           this.#eat('>');
         }
+      } else if (this.#peek() === '>') {
+        this.#eat('>');
+        this.#eat('>');
+        tokens.push({
+          line: this.line,
+          token:"GREATER_THAN"
+        });
       } else if (/[\d-]/.test(this.#peek())) {
         tokens.push(this.#lex_number());
       } else if (this.#peek() === '.') {
@@ -249,8 +272,14 @@ class Lexer {
             token:"NOT_CONTAINS"
           })
         }
+      } else if (this.#peek() === '?') {
+        this.#eat('?');
+        tokens.push({
+          line: this.line,
+          token: "WILDCARD"
+        })
       } else {
-        throw "Invalid Character: " + c;
+        throw "line " + this.line + ": Invalid Character: " + c;
       }
 
     }
