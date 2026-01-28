@@ -27,7 +27,7 @@ class Area {
       }
       for (let card of this.stacks[0].cards) {
         card.render(ctx, rect);
-        rect.x += 30;
+        rect.x += 40;
       }
     } else {
       for (let s of this.stacks) {

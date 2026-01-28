@@ -14,7 +14,7 @@ document.getElementById("playerSelector").addEventListener("change", elem => {
 });
 
 function init(sourceCode) {
-  state = new State(sourceCode, 2);
+  state = new State(sourceCode, 4);
   canvas = new Canvas(state);
   handler = new Handler(state, canvas);
 
