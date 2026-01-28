@@ -7,7 +7,6 @@ class Area {
   constructor(area, y) {
     Object.assign(this, area);
     this.y = y;
-    let x = 0
 
     this.stacks = [];
     // check for min args
@@ -17,8 +16,23 @@ class Area {
   }
 
   render(ctx) {
-    for (let s of this.stacks) {
-      s.render(ctx);
+
+    if (this.args.hand === "true") {
+      // The area is a players hand
+      let rect = {
+        x: AREA_MARGIN,
+        y: AREA_MARGIN + this.y*AREA_SPACING_Y,
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT,
+      }
+      for (let card of this.stacks[0].cards) {
+        card.render(ctx, rect);
+        rect.x += 30;
+      }
+    } else {
+      for (let s of this.stacks) {
+        s.render(ctx);
+      }
     }
 
     ctx.fillStyle = "black";

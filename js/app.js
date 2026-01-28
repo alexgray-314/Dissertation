@@ -8,6 +8,9 @@ let mouseHandler;
 // Player selector
 document.getElementById("playerSelector").addEventListener("change", elem => {
   activePlayer = Number(elem.target.value);
+  if (handler !== undefined) {
+    handler.notify();
+  }
 });
 
 function init(sourceCode) {

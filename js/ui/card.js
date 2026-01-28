@@ -27,6 +27,6 @@ class Card {
     }
 
     ctx.font = "16px Arial";
-    ctx.fillText(this.rank + " " + SUIT_MAP[this.suit], rect.x + rect.width/7, rect.y + rect.height/4);
+    ctx.fillText(this.rank + SUIT_MAP[this.suit], rect.x + rect.width/8, rect.y + rect.height/4);
   }
 }

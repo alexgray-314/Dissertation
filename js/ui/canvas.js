@@ -9,10 +9,15 @@ class Canvas {
 
   update(state) {
     // Convert all the state "areas" into UI "Areas"
+    this.areas = {}
     let y = 0;
     Object.entries(state.areas).forEach(([id, area]) => {
-      y++;
-      this.areas[id] = new Area(area, y-1);
+      if (id !== "deck") { // Do not display the deck
+        if (!/\d+/.test(id) || id === activePlayer.toString()) { // if it's an ID, check it's the current players ID
+          y++;
+          this.areas[id] = new Area(area, y-1);
+        }
+      }
     })
   }
 

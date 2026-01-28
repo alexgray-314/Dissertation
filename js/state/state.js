@@ -29,6 +29,7 @@ class State {
                 id: i.toString(),
                 args: {
                     min:1,
+                    hand:"true",
                     text:"Player " + i + "'s hand",
                 }
             });
