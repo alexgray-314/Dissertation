@@ -419,7 +419,16 @@ class Parser {
         },
       }
     } else {
-      // Singular Position
+      // Referring to a stack
+      if (index.position === undefined) {
+        return {
+          type: "STACK",
+          area: area,
+          index: index.stack
+        }
+      }
+
+      // Referring to a card position
       return {
         type: "POSITION",
         area: area,
@@ -434,7 +443,7 @@ class Parser {
     const stack = this.#peek().value;
     // TODO sets of stacks
     this.#eat({token: "NUMBER"});
-    let pos = 0;
+    let pos = undefined;
     if (this.#peek().token !== "R_SQUARE") {
       this.#eat({token: "COMMA"});
       pos = this.#peek().value;
@@ -458,7 +467,6 @@ class Parser {
         }
       }
     }
-    // Just a standard index
     this.#eat({token: "R_SQUARE"});
     return {
       stack: stack,

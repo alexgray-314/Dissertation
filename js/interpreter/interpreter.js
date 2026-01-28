@@ -56,6 +56,8 @@ class Interpreter {
         return this.#evaluate_property(term);
       case "VARIABLE":
         return this.#evaluate_variable(term.id);
+      case "STACK":
+        return this.#evaluate_stack(term);
       default:
         return term;
     }
@@ -68,6 +70,23 @@ class Interpreter {
         return this.evaluate_card(term);
       default:
         return term;
+    }
+  }
+
+  #evaluate_stack(term) {
+
+    let area = term.area;
+    // check if area is a hand
+    if (area.type === "PLAYER") {
+      // the ids of the areas used to store player hands are hidden from the game
+      area = this.#evaluate_player(area).id.toString();
+    }
+
+    if (this.state.areas.hasOwnProperty(area)) {
+      return this.state.areas[area].stacks[term.index].cards;
+    } else {
+      console.error("Invalid area id ", area);
+      return undefined;
     }
   }
 

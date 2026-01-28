@@ -12,7 +12,7 @@ on move </>[0,0:20] centre[0,0] {
 	// block movement if it's not the players turn
 	if </> == <.> {
 
-        if a[0].size == 0 {
+        if a[0].length == 0 {
             // This is the first card to be placed down - VALID
 
             winningCard = \;
@@ -47,7 +47,7 @@ on move </>[0,0:20] centre[0,0] {
         // Execute move early
         move \ /;
 
-        if centre[0].size == 4 {
+        if centre[0].length == 4 {
             // this is the last card to be played
 
             <.> = <winningPlayer>;
