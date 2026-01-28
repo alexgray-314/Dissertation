@@ -144,13 +144,13 @@ class Interpreter {
   }
 
   // a[0, 0] -> #4S
-  // (Pre-Evaluated) POSITION -> CARD
+  // POSITION -> CARD
   evaluate_card(term) {
 
     if (term.type === "POSITION") {
       return this.state.get_card(this.evaluate(term));
     }
-    console.error("Could not get card. Invalid position");
+    console.error("Could not get card. Invalid position", term);
     return undefined;
 
   }
@@ -295,7 +295,7 @@ class Interpreter {
   }
 
   #contains(ast) {
-    const left = this.evaluate_card(this.evaluate(ast.left));
+    const left = this.evaluate_down(this.evaluate(ast.left));
     let property = undefined;
     let set = ast.right;
 
