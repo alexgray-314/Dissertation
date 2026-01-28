@@ -2,38 +2,42 @@ class Interpreter {
 
   constructor(state) {
     this.state = state;
+    this.running = true; // if this is set to false, the interpreter will stop execution
   }
 
   interpret(asts) {
 
     for (let ast of asts) {
-      switch (ast.type) {
-        case "DEFINE":
-          this.#define(ast);
-          break;
-        case "MOVE":
-          this.#move(ast);
-          break;
-        case "ON":
-          this.#register_action_trigger(ast);
-          break;
-        case "IF":
-          this.#if(ast);
-          break;
-        case "DEAL":
-          this.state.deal(ast);
-          break;
-        case "UPDATE_TURN":
-          this.#update_player(ast);
-          break;
-        case "CATCH":
-          this.#add_catch(ast);
-          break;
-        case "CANCEL":
-          this.#cancel_movement();
-          break;
-        case "ASSIGN":
-          this.#assign_variable(ast);
+      if (this.running) {
+        switch (ast.type) {
+          case "DEFINE":
+            this.#define(ast);
+            break;
+          case "MOVE":
+            this.#move(ast);
+            break;
+          case "ON":
+            this.#register_action_trigger(ast);
+            break;
+          case "IF":
+            this.#if(ast);
+            break;
+          case "DEAL":
+            this.state.deal(ast);
+            break;
+          case "UPDATE_TURN":
+            this.#update_player(ast);
+            break;
+          case "CATCH":
+            this.#add_catch(ast);
+            break;
+          case "CANCEL":
+            this.#cancel_movement();
+            break;
+          case "ASSIGN":
+            this.#assign_variable(ast);
+            break;
+        }
       }
     }
 
@@ -59,7 +63,7 @@ class Interpreter {
   evaluate_down(term) {
     switch (term.type) {
       case "POSITION":
-        return this.#evaluate_card(term);
+        return this.evaluate_card(term);
       default:
         return term;
     }
@@ -120,12 +124,13 @@ class Interpreter {
 
   // a[0, 0] -> #4S
   // (Pre-Evaluated) POSITION -> CARD
-  #evaluate_card(term) {
+  evaluate_card(term) {
 
     if (term.type === "POSITION") {
-      return this.state.get_card(term);
+      return this.state.get_card(this.evaluate(term));
     }
-    return term;
+    console.error("Could not get card. Invalid position");
+    return undefined;
 
   }
 
@@ -195,7 +200,7 @@ class Interpreter {
 
     // If the term is a position, see if it can be evaluated to a card
     if (evTerm.type === "POSITION") {
-      const card = this.#evaluate_card(evTerm);
+      const card = this.evaluate_card(evTerm);
       // distinction between returning undefined because the term is of the wrong type...
       // and a variable of the correct type, but with an undefined value
       console.log("position with no card in it");
@@ -217,7 +222,7 @@ class Interpreter {
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
-        if (this.#object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
+        if (this.object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {
           this.interpret(ast.antecedent);
@@ -232,7 +237,7 @@ class Interpreter {
   }
 
   #contains(ast) {
-    const left = this.#evaluate_card(this.evaluate(ast.left));
+    const left = this.evaluate_card(this.evaluate(ast.left));
     let property = undefined;
     let set = ast.right;
 
@@ -250,7 +255,7 @@ class Interpreter {
       for (let stack = start.index.stack; stack <= end.index.stack; stack++) {
         for (let pos = start.index.position; pos <= end.index.position; pos++) {
 
-          let right = this.#evaluate_card({
+          let right = this.evaluate_card({
             type: "POSITION",
               area: area,
               index: {
@@ -275,7 +280,7 @@ class Interpreter {
           }
 
           // Check for equality
-          if (this.#object_equals(left, right)) {
+          if (this.object_equals(left, right)) {
             this.interpret(ast.consequent);
             return;
           }
@@ -330,29 +335,16 @@ class Interpreter {
 
   #add_catch(ast) {
     // Append onto the end of the subTree
-    const fullSubTree = ast.subTree.concat({
-      type: "MOVE",
-      source: {
-        type: "POSITION",
-        area: "MOVE_SOURCE"
-      },
-      destination: {
-        type: "POSITION",
-        area: "MOVE_DESTINATION"
-      },
-    })
-    this.state.add_catch(fullSubTree);
+    this.state.add_catch(ast.subTree);
   }
 
   #cancel_movement() {
-    this.state.movementTracker.souce = undefined;
-    this.state.movementTracker.destination = undefined;
-    this.state.movementTracker.card = undefined;
-    this.state.movementTracker.player_moving = undefined;
+    this.state.movementTracker.cancelled = true;
+    this.running = false;
   }
 
   // TODO actually use a library function here, this is silly
-  #object_equals(a, b) {
+  object_equals(a, b) {
     if (a === b) return true;
 
     if (typeof a !== "object" || typeof b !== "object" || a === null || b === null || a === undefined || b === undefined) {
@@ -364,7 +356,7 @@ class Interpreter {
 
     if (keysA.length !== keysB.length) return false;
 
-    return keysA.every(key => keysB.includes(key) && this.#object_equals(a[key], b[key]));
+    return keysA.every(key => keysB.includes(key) && this.object_equals(a[key], b[key]));
   }
 
 }

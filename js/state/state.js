@@ -18,7 +18,8 @@ class State {
             destination: undefined,
             card: undefined,
             last_successful_move_player: undefined,
-            player_moving: undefined // the player currently trying to move
+            player_moving: undefined, // the player currently trying to move
+            cancelled: false // whether or not the card movement has been cancelled
         }
 
         // Set up the player hands
@@ -54,22 +55,29 @@ class State {
 
         this.movementTracker.source = source;
         this.movementTracker.destination = destination;
+        this.movementTracker.card = this.get_card(source)
         this.movementTracker.player_moving = player;
+        this.movementTracker.cancelled = false;
+
+        const interpreter = new Interpreter(this);
 
         for (const c of this.catches) {
-            const interpreter = new Interpreter(this);
             interpreter.interpret(c);
         }
 
-        // If the movement has not been cancelled, then update the last successful move player
-        if (this.movementTracker.player_moving !== undefined) {
-            this.movementTracker.last_successful_move_player = this.movementTracker.player_moving;
+        // If the movement has not been cancelled, then update the last successful move player...
+        // And check to execute movement
+        if (this.movementTracker.cancelled === false && new Interpreter(this).object_equals(this.get_card(source), this.movementTracker.card)) {
+            this.movementTracker.last_successful_move_player = player;
+            this.remove_card(source);
+            this.add_card(this.movementTracker.card, destination);
         }
 
         this.movementTracker.source = undefined;
         this.movementTracker.destination = undefined;
         this.movementTracker.card = undefined;
         this.movementTracker.player_moving = undefined;
+        this.movementTracker.cancelled = false;
 
     }
 
