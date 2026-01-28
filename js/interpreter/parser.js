@@ -97,15 +97,15 @@ class Parser {
             type: "UPDATE_TURN",
             player: "NEXT"
           };
-        case "SET":
-          this.#eat({token: "SET"});
+        case "ASSIGN":
+          this.#eat({token: "ASSIGN"});
           const player = this.#get_player();
           return {
             type: "UPDATE_TURN",
             player: player,
           };
         default:
-          throw "You haven't set the turn to anything"
+          throw "Line " + this.#peek().line + ": You haven't set the turn to anything";
       }
     }
   }

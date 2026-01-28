@@ -83,7 +83,7 @@ class Interpreter {
     }
 
     if (this.state.areas.hasOwnProperty(area)) {
-      return this.state.areas[area].stacks[term.index].cards;
+      return this.state.areas[area].stacks[term.index]??{cards:[]}.cards;
     } else {
       console.error("Invalid area id ", area);
       return undefined;
@@ -252,9 +252,47 @@ class Interpreter {
       case "CONTAINS":
         this.#contains(ast);
         break;
+      case "GREATER_THAN":
+        if (this.#greater_than(ast.left, ast.right)) {
+          this.interpret(ast.consequent);
+        } else {
+          this.interpret(ast.antecedent);
+        }
+        break;
       default:
         throw ast.comparator + " is not a valid comparator";
     }
+  }
+
+  // String -> Number if possible
+  // Rank -> Number
+  #convert_to_number(term) {
+    // Already a number
+    if (typeof term === 'number') {
+      return term;
+    }
+    // "0"
+    if (!isNaN(Number(term))) {
+      return Number(term);
+    }
+    // Rank
+    if (typeof term === 'string') {
+      return {
+        "J": 11,
+        "Q": 12,
+        "K": 13,
+        "A": 14,
+      }[term.toUpperCase()] ?? undefined
+    }
+
+    return undefined;
+  }
+
+  #greater_than(left, right) {
+    const l = this.#convert_to_number(this.evaluate(left));
+    const r = this.#convert_to_number(this.evaluate(right));
+
+    return l > r;
   }
 
   #contains(ast) {

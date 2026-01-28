@@ -182,6 +182,9 @@ class Recogniser {
       case "LESS_THAN":
         this.#eat({token:"LESS_THAN"});
         break;
+      case "GREATER_THAN":
+        this.#eat({token:"GREATER_THAN"});
+        break;
       case "CONTAINS":
         this.#eat({token:"CONTAINS"});
         break;
