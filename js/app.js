@@ -24,7 +24,7 @@ function init(sourceCode) {
   });
 
   // Mouse input
-  mouseHandler = new MouseHandler(canvas.canvas, canvas.areas, handler);
+  mouseHandler = new MouseHandler(canvas, handler);
 
   render();
 

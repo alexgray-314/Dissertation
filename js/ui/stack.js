@@ -5,7 +5,7 @@ class Stack {
     Object.assign(this, stack);
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
-      x: AREA_MARGIN + x*STACK_SPACING_X, 
+      x: AREA_MARGIN + x*STACK_SPACING_X,
       y: AREA_MARGIN + y*AREA_SPACING_Y,
       width: CARD_WIDTH,
       height: CARD_HEIGHT
@@ -40,12 +40,4 @@ class Stack {
     }
   }
 
-  contains(x, y) {
-    return (
-      x >= this.rect.x &&
-      x <= this.rect.x + this.rect.width &&
-      y >= this.rect.y &&
-      y <= this.rect.y + this.rect.height
-    );
-  }
 }

@@ -1,69 +1,49 @@
 class MouseHandler {
-  constructor(canvas, UIAreas, handler) {
+  constructor(ui, handler) {
 
     this.draggedCard = null;
-    this.sourceStack = null;
     this.mouseX = 0;
     this.mouseY = 0;
-    this.areas = UIAreas;
+    this.ui = ui;
 
     // Position objects to be passed onto the handler
     this.source = undefined;
     this.destination = undefined;
 
-    canvas.addEventListener("mousedown", (e) => {
-      const rect = canvas.getBoundingClientRect();
+    ui.canvas.addEventListener("mousedown", (e) => {
+      const rect = ui.canvas.getBoundingClientRect();
       this.mouseX = e.clientX - rect.left;
       this.mouseY = e.clientY - rect.top;
 
-      for (const a of Object.values(this.areas)) {
+      for (const box of this.ui.hitBoxes) {
 
-        a.stacks.forEach((stack, index) => {
-          if (stack.cards.length && stack.contains(this.mouseX, this.mouseY)) {
-            this.draggedCard = stack.get_top();
-            this.sourceStack = stack;
-            stack.remove({position: 0});
+          if (box.contains(this.mouseX, this.mouseY)) {
+            console.log("box");
+            this.draggedCard = ui.remove_card(box.position);
             // SOURCE CARD for potential movement request
-            this.source = {
-              type: "POSITION",
-              area: a.id,
-              index: {
-                stack: index,
-                position: 0
-              }
-            };
+            this.source = box.position
             return;
           }
-        });
 
       }
     });
 
-    canvas.addEventListener("mousemove", (e) => {
-      const rect = canvas.getBoundingClientRect();
+    ui.canvas.addEventListener("mousemove", (e) => {
+      const rect = ui.canvas.getBoundingClientRect();
       this.mouseX = e.clientX - rect.left;
       this.mouseY = e.clientY - rect.top;
     });
 
-    canvas.addEventListener("mouseup", () => {
+    ui.canvas.addEventListener("mouseup", () => {
       if (!this.draggedCard) return;
 
-      for (const a of Object.values(this.areas)) {
-        a.stacks.forEach((stack, index) => {
+      for (const box of this.ui.hitBoxes) {
 
-          if (stack.contains(this.mouseX, this.mouseY)) {
+          if (box.contains(this.mouseX, this.mouseY)) {
             this.draggedCard = null;
-            this.sourceStack = null;
 
             // DESTINATION
-            this.destination = {
-              type: "POSITION",
-              area: a.id,
-              index: {
-                stack: index,
-                position: 0
-              }
-            };
+            this.destination = box.position
 
             // call the handler
             handler.call({
@@ -76,14 +56,13 @@ class MouseHandler {
             return;
           }
 
-        });
+
       }
-      
+
       if (!this.draggedCard) return;
       // User has let go of card
-      this.sourceStack.push(this.draggedCard, {position:0});
+      ui.push_card(this.source, this.draggedCard);
       this.draggedCard = null;
-      this.sourceStack = null;
     });
 
   }
