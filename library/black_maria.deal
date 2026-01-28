@@ -4,7 +4,7 @@ define area centre(min:1, max:1, facing:"up", text:"Centre");
 define area discard(min:1, max:1, facing:"down", text:"Discard Pile");
 
 define int winningPlayer;
-define card winingCard;
+define card winningCard;
 
 // Card moved from turn player's hand to centre
 on move </>[0,0:20] centre[0,0] {

@@ -206,7 +206,7 @@ class Interpreter {
 
     // Check for javascript primitives
     if (type === "INT") {
-      if (typeof term == 'number') {
+      if (typeof this.evaluate(term) == 'number') {
         return term;
       } else {
         return undefined;
@@ -224,7 +224,6 @@ class Interpreter {
       const card = this.evaluate_card(evTerm);
       // distinction between returning undefined because the term is of the wrong type...
       // and a variable of the correct type, but with an undefined value
-      console.log("position with no card in it");
       return card ?? false;
     }
     return undefined;
