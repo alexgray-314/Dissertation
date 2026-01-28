@@ -7,7 +7,7 @@ define int winningPlayer;
 define card winingCard;
 
 // Card moved from turn player's hand to centre
-on move </>[0] centre[0,0] {
+on move </>[0,0:20] centre[0,0] {
 
 	// block movement if it's not the players turn
 	if </> == <.> {
@@ -52,9 +52,9 @@ on move </>[0] centre[0,0] {
 
             <.> = <winningPlayer>;
             // TODO count scores
-            move centre[0,0] discard[0,0];
-            move centre[0,0] discard[0,0];
-            move centre[0,0] discard[0,0];
+            move centre[0,1] discard[0,0];
+            move centre[0,1] discard[0,0];
+            move centre[0,1] discard[0,0];
             move centre[0,0] discard[0,0];
         } else {
             // It's the next players turn

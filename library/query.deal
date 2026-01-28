@@ -1,8 +1,6 @@
-move #QH <0>[0,0];
-move #QH <0>[0,0];
+define card x;
+x = #AH;
 
-on move {
-  if <0>[0,0] == <0>[0,1] {
-    cancel;
-  };
+if #QH.suit == x.suit {
+  move #4D <0>[0,0];
 };

@@ -54,6 +54,8 @@ class Interpreter {
         return this.#evaluate_position(term);
       case "PROPERTY":
         return this.#evaluate_property(term);
+      case "VARIABLE":
+        return this.#evaluate_variable(term.id);
       default:
         return term;
     }

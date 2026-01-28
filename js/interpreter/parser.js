@@ -288,11 +288,23 @@ class Parser {
     return args;
   }
 
+  #get_position_or_variable() {
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    if (this.#peek().token === "L_SQUARE") {
+      return this.#get_position_or_set(id);
+    }
+    return {
+      type: "VARIABLE",
+      id: id
+    }
+  }
+
   #get_term() {
     let term;
     switch (this.#peek().token) {
       case "ID":
-        term = this.#area();
+        term = this.#get_position_or_variable();
         break;
       case "CARD":
         term = this.#get_card();
@@ -385,18 +397,6 @@ class Parser {
           type: "POSITION",
           area: "MOVE_SOURCE"
         };
-    }
-  }
-
-  // An area ID has been used, return the position
-  #area() {
-    switch(this.#peek().token) {
-      case "ID":
-        const areaId = this.#peek().value;
-        this.#eat({token: "ID"});
-        return this.#get_position_or_set(areaId);
-      default:
-        throw "Line " + this.#peek().line + ": Areas must be referenced by id or player"
     }
   }
 
