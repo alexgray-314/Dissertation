@@ -329,7 +329,6 @@ class Interpreter {
   }
 
   #add_catch(ast) {
-    // TODO also check for pattern matching and append this to the subtree
     // Append onto the end of the subTree
     const fullSubTree = ast.subTree.concat({
       type: "MOVE",

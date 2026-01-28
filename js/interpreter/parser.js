@@ -178,12 +178,58 @@ class Parser {
   #parse_catch_move() {
     this.#eat({token: "MOVE"});
 
-    const subTree = this.#get_subtree();
+    let catchSource = undefined;
+    let catchDest = undefined;
+
+    if (this.#peek().token !== "L_CURLY") {
+      catchSource = this.#get_term();
+      catchDest = this.#get_term();
+    }
+
+    let subTree = this.#get_subtree();
+
+    if (catchSource !== undefined && catchSource.type !== "WILDCARD") {
+      subTree = this.#add_catch_clause_to_subTree(catchSource, subTree, "MOVE_SOURCE");
+    }
+
+    if (catchDest !== undefined && catchDest.type !== "WILDCARD") {
+      subTree = this.#add_catch_clause_to_subTree(catchDest, subTree, "MOVE_DESTINATION");
+    }
 
     return {
       type: "CATCH",
       subTree: subTree
     }
+  }
+
+  // Target must either be "MOVE_SOURCE" or "MOVE_DESTINATION"
+  #add_catch_clause_to_subTree(clause, subTree, target) {
+    let comparator = undefined;
+    switch (clause.type) {
+      case "POSITION":
+        comparator = "EQUALS";
+        break;
+      case "SET":
+        comparator = "CONTAINS";
+        break;
+      default:
+        console.error("Line " + this.#peek().line + ": Can only catch movement on positions or sets");
+        return subTree;
+    }
+
+    return [{
+      type: "IF",
+      comparator: comparator,
+      left: {
+        type: "POSITION",
+        area: target
+      },
+      right: clause, // this is a position,
+      consequent: subTree,
+      antecedent: [{
+        type: "CANCEL"
+      }]
+    }]
   }
 
   #parse_cancel() {
@@ -265,6 +311,12 @@ class Parser {
         break;
       case "BACKWARD_SLASH":
         term = this.#get_move_position();
+        break;
+      case "WILDCARD":
+        this.#eat({token: "WILDCARD"});
+        term = {
+          type: "WILDCARD"
+        };
         break;
       default:
         throw "Illegal TERM " + this.#peek().token;

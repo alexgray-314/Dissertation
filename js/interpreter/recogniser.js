@@ -257,6 +257,9 @@ class Recogniser {
       case "BACKWARD_SLASH":
         this.#eat({token:"BACKWARD_SLASH"});
         break;
+      case "WILDCARD":
+        this.#eat({token:"WILDCARD"});
+        break;
       default:
         this.#trace();
     }
@@ -291,6 +294,7 @@ class Recogniser {
     switch(this.#peek().token) {
       case "MOVE":
         this.#eat({token:"MOVE"});
+        this.#TriggerCatches();
         this.#eat({token:"L_CURLY"});
         this.#Stmts();
         this.#eat({token:"R_CURLY"});
@@ -303,6 +307,14 @@ class Recogniser {
         break;
       default:
         this.#trace();
+    }
+  }
+
+  // Nullable
+  #TriggerCatches() {
+    if (this.#peek().token !== "L_CURLY") {
+      this.#Term();
+      this.#Term();
     }
   }
 
