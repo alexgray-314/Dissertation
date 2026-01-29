@@ -205,16 +205,16 @@ class Interpreter {
     if (term === undefined) return undefined;
 
     // Check for javascript primitives
+    const evTerm = this.evaluate(term);
     if (type === "INT") {
-      if (typeof this.evaluate(term) == 'number') {
-        return term;
+      if (typeof evTerm == 'number') {
+        return evTerm;
       } else {
         return undefined;
       }
     }
 
     // Check for language-defined types
-    const evTerm = this.evaluate(term);
     if (evTerm.type === type) {
       return evTerm;
     }
