@@ -83,7 +83,7 @@ class Interpreter {
     }
 
     if (this.state.areas.hasOwnProperty(area)) {
-      return this.state.areas[area].stacks[term.index]??{cards:[]}.cards;
+      return (this.state.areas[area].stacks[term.index]??{cards:[]}).cards;
     } else {
       console.error("Invalid area id ", area);
       return undefined;
@@ -242,6 +242,9 @@ class Interpreter {
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
+        console.log(" ");
+        console.log(ast.left, "==", ast.right);
+        console.log(this.evaluate(ast.left), "==", this.evaluate(ast.right));
         if (this.object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {
