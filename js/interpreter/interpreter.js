@@ -242,9 +242,6 @@ class Interpreter {
   #if(ast) {
     switch (ast.comparator) {
       case "EQUALS":
-        console.log(" ");
-        console.log(ast.left, "==", ast.right);
-        console.log(this.evaluate(ast.left), "==", this.evaluate(ast.right));
         if (this.object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
           this.interpret(ast.consequent);
         } else {

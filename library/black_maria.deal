@@ -52,10 +52,7 @@ on move </>[0,0:20] centre[0,0] {
 
             <.> = <winningPlayer>;
             // TODO count scores
-            move centre[0,1] discard[0,0];
-            move centre[0,1] discard[0,0];
-            move centre[0,1] discard[0,0];
-            move centre[0,0] discard[0,0];
+            move centre[0,0:3] discard[0,0];
         } else {
             // It's the next players turn
             
