@@ -1,5 +1,6 @@
 const AREA_SPACING_Y = 130;
 const AREA_MARGIN = 20;
+const FAN_SPACING = 40;
 
 class Area {
 
@@ -34,9 +35,9 @@ class Area {
         for (let card of this.stacks[0].cards) {
           hitBoxes.push(new Hitbox(
             {
-              x: AREA_MARGIN + pos*40,
+              x: AREA_MARGIN + pos*FAN_SPACING,
               y: AREA_MARGIN + this.y*AREA_SPACING_Y,
-              width: 40,
+              width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
               height: CARD_HEIGHT,
             },
             {
@@ -67,7 +68,7 @@ class Area {
       }
       for (let card of this.stacks[0].cards) {
         card.render(ctx, rect);
-        rect.x += 40;
+        rect.x += FAN_SPACING;
       }
     } else {
       for (let s of this.stacks) {
