@@ -18,7 +18,6 @@ class MouseHandler {
       for (const box of this.ui.hitBoxes) {
 
           if (box.contains(this.mouseX, this.mouseY)) {
-            console.log("box");
             this.draggedCard = ui.remove_card(box.position);
             // SOURCE CARD for potential movement request
             this.source = box.position

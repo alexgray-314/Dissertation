@@ -376,8 +376,8 @@ class Interpreter {
 
   #move(ast) {
     // If either the source or destination is a players hand, it must be evaluated
-    const source = this.#evaluate_position(ast.source);
-    const destination = this.#evaluate_position(ast.destination);
+    const source = this.evaluate(ast.source);
+    const destination = this.evaluate(ast.destination);
 
     if (source === undefined || destination === undefined) return;
 
@@ -388,7 +388,39 @@ class Interpreter {
       const c = this.state.get_card(source);
       this.state.remove_card(source);
       this.state.add_card(c, destination);
+    } else if (source.type === "SET") {
+      this.#move_set(source, destination);
     }
+  }
+
+  #move_set(set, destination) {
+
+    const start = this.#evaluate_position(set.start);
+    const end = this.#evaluate_position(set.end);
+    const area = start.area;
+
+    // LOOP through the set
+    for (let stack = start.index.stack; stack <= end.index.stack; stack++) {
+      for (let pos = start.index.position; pos <= end.index.position; pos++) {
+
+        const source = this.evaluate({
+          type: "POSITION",
+          area: area,
+          index: {
+            stack: stack,
+            position: 0 // we set the position to zero as we can just move the top card that number of times
+          }
+        })
+
+        const card = this.state.get_card(source);
+        if (card === undefined) return; // we're done moving
+        this.state.remove_card(source);
+        this.state.add_card(card, destination);
+        console.log("moved");
+
+      }
+    }
+
   }
 
   #add_catch(ast) {
