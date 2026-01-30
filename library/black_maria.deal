@@ -21,25 +21,25 @@ on move </>[0,0:20] centre[0,0] {
         } else {
             // The trick suit has already been established
 
-            if \.suit == winningCard.suit {
-                // The card is in the trick - VALID
+            if \.suit != winningCard.suit {
+                // The card is not in-suit
 
-            } else {
                 if winningCard.suit =? </>[0, 0:52].suit {
                     // The player has a card in-suit that they could have played - INVALID
-
                     cancel;
-                } else {
-                    // The player can "throw away" a card - VALID
-
                 };
-            };
+                // Card can be "thrown away"
 
-            if \.rank >> winningCard.rank {
-                // Card is now the highest in the trick
+            } else {
+                // The card is in-suit
 
-                winningCard = \;
-                winningPlayer = </>.id;
+                if \.rank >> winningCard.rank {
+                    // Card is now the highest in the trick
+
+                    winningCard = \;
+                    winningPlayer = </>.id;
+                };
+
             };
 
         };

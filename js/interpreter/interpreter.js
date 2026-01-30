@@ -248,8 +248,26 @@ class Interpreter {
           this.interpret(ast.antecedent);
         }
         break;
+      case "NOT_EQUALS":
+        if (!this.object_equals(this.evaluate(ast.left), this.evaluate(ast.right))) {
+          this.interpret(ast.consequent);
+        } else {
+          this.interpret(ast.antecedent);
+        }
+        break;
       case "CONTAINS":
-        this.#contains(ast);
+        if (this.#contains(ast)) {
+          this.interpret(ast.consequent);
+        } else {
+          this.interpret(ast.antecedent);
+        }
+        break;
+      case "NOT_CONTAINS":
+        if (!this.#contains(ast)) {
+          this.interpret(ast.consequent);
+        } else {
+          this.interpret(ast.antecedent);
+        }
         break;
       case "GREATER_THAN":
         if (this.#greater_than(ast.left, ast.right)) {
@@ -333,21 +351,19 @@ class Interpreter {
           // Break out of loop early to save time
           if (right === undefined) {
             // The check will fail
-            this.interpret(ast.antecedent);
-            return;
+            return false;
           }
 
           // Check for equality
           if (this.object_equals(left, right)) {
-            this.interpret(ast.consequent);
-            return;
+            return true;
           }
 
         }
       }
 
       // Nothing in the set has matched with the left
-      this.interpret(ast.antecedent);
+      return false;
 
     } else {
       throw "You can only perform the =? operator on a SET";
@@ -416,7 +432,6 @@ class Interpreter {
         if (card === undefined) return; // we're done moving
         this.state.remove_card(source);
         this.state.add_card(card, destination);
-        console.log("moved");
 
       }
     }

@@ -179,6 +179,9 @@ class Recogniser {
       case "EQUALS":
         this.#eat({token:"EQUALS"});
         break;
+      case "NOT_EQUALS":
+        this.#eat({token:"NOT_EQUALS"});
+        break;
       case "LESS_THAN":
         this.#eat({token:"LESS_THAN"});
         break;
@@ -187,6 +190,9 @@ class Recogniser {
         break;
       case "CONTAINS":
         this.#eat({token:"CONTAINS"});
+        break;
+      case "NOT_CONTAINS":
+        this.#eat({token:"NOT_CONTAINS"});
         break;
       default:
         this.#trace();
