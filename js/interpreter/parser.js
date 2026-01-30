@@ -42,9 +42,34 @@ class Parser {
       case "ID":
         this.asts.push(this.#parse_assign_or_function_call());
         break;
+      case "FOR":
+        this.asts.push(this.#parse_for());
+        break;
       default:
         throw "Illegal statement " + this.#peek().token;
     }
+  }
+
+  #parse_for() {
+    this.#eat({token: "FOR"});
+    const id = this.#peek().value;
+    this.#eat({token: "ID"});
+    this.#eat({token: "IN"});
+
+    const set = this.#get_set_or_number();
+    if (set.type !== "SET") {
+      throw "For loop must be performed on a SET";
+    }
+
+    const subTree = this.#get_subtree();
+
+    return {
+      type: "FOR",
+      itemId: id,
+      set: set,
+      subTree: subTree,
+    }
+
   }
 
   #parse_assign_or_function_call() {

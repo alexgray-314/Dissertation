@@ -5,7 +5,9 @@ const keyWords = {
   "else": "ELSE",
   "move": "MOVE",
   "deal": "DEAL",
-  "cancel": "CANCEL"
+  "cancel": "CANCEL",
+  "for": "FOR",
+  "in": "IN"
 };
 
 const specialCharacters = {

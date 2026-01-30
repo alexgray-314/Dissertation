@@ -37,6 +37,9 @@ class Interpreter {
           case "ASSIGN":
             this.#assign_variable(ast);
             break;
+          case "FOR":
+            this.#for_loop(ast);
+            break;
         }
       }
     }
@@ -441,6 +444,31 @@ class Interpreter {
   #add_catch(ast) {
     // Append onto the end of the subTree
     this.state.add_catch(ast.subTree);
+  }
+
+  #for_loop(ast) {
+
+    // Basic set of ints
+    if (typeof ast.set.start === 'number') {
+      // Define loop variable
+      this.state.define_variable({
+        id: ast.itemId,
+        valueType: "INT"
+      });
+
+      // Actually do the loop
+      for (let i = ast.set.start; i <= ast.set.end; i++) {
+        // Set the loop variable within the state
+        this.#assign_variable({
+          type: "ASSIGN",
+          id: ast.itemId,
+          value: i,
+        });
+        // Run 1 pass of the loop
+        this.interpret(ast.subTree);
+      }
+    }
+
   }
 
   #cancel_movement() {

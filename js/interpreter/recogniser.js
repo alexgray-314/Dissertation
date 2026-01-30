@@ -82,6 +82,9 @@ class Recogniser {
       case "ID":
         this.#Assign();
         break;
+      case "FOR":
+        this.#For();
+        break;
       default:
         this.#trace();
     }
@@ -90,7 +93,7 @@ class Recogniser {
   // this is nullable
   #Stmts() {
     //console.log("Stmts");
-    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER" || this.#peek().token === "CANCEL" || this.#peek().token === "ID") {
+    if (this.#peek().token === "DEFINE" || this.#peek().token === "ON" || this.#peek().token === "IF" || this.#peek().token === "MOVE" || this.#peek().token === "DEAL" || this.#peek().token === "PLAYER" || this.#peek().token === "CANCEL" || this.#peek().token === "ID" || this.#peek().token === "FOR") {
       this.#Stmt();
       this.#eat({token:"SEMI_COLON"});
       this.#Stmts();
@@ -336,6 +339,22 @@ class Recogniser {
         this.#Stmts();
         this.#eat({token:"R_CURLY"});
     }
+  }
+
+  #For() {
+    this.#eat({token:"FOR"});
+    this.#eat({token:"ID"});
+    this.#eat({token:"IN"});
+    this.#FullSet();
+    this.#eat({token:"L_CURLY"});
+    this.#Stmts();
+    this.#eat({token:"R_CURLY"});
+  }
+
+  #FullSet() {
+    this.#eat({token:"NUMBER"});
+    this.#eat({token:"COLON"});
+    this.#eat({token:"NUMBER"});
   }
 
 }

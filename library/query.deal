@@ -1,6 +1,7 @@
-define card x;
-x = #AH;
+define area a;
+define int x;
+x = 1;
 
-if #QH.suit == x.suit {
-  move #4D <0>[0,0];
+for i in 0:2 {
+  move #4D <i>[0,0];
 };
