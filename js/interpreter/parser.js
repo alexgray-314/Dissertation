@@ -440,37 +440,63 @@ class Parser {
 
   #get_index() {
     this.#eat({token: "L_SQUARE"});
-    const stack = this.#peek().value;
-    // TODO sets of stacks
-    this.#eat({token: "NUMBER"});
+    const stack = this.#get_set_or_number();
     let pos = undefined;
     if (this.#peek().token !== "R_SQUARE") {
       this.#eat({token: "COMMA"});
-      pos = this.#peek().value;
-      this.#eat({token: "NUMBER"});
-      if (this.#peek().token === "COLON") {
-        this.#eat({token: "COLON"});
-        const endPos = this.#peek().value;
-        this.#eat({token: "NUMBER"});
-        this.#eat({token: "R_SQUARE"});
-        // Index is actually a SET
-        return {
-          type: "SET",
-          start: {
-            stack: stack,
-            position: pos
-          },
-          end: {
-            stack: stack,
-            position: endPos
-          }
-        }
-      }
+      pos = this.#get_set_or_number();
     }
     this.#eat({token: "R_SQUARE"});
+
+    if (stack.type === "SET" || (pos??{}).type === "SET") {
+
+      return {
+        type: "SET",
+        start: {
+          stack: (stack??{}).start ?? stack, // undefined checker in case either is not actually a stack
+          position: (pos??{}).start ?? pos
+        },
+        end: {
+          stack: (stack??{}).end ?? stack,
+          position: (pos??{}).end ?? pos
+        }
+      }
+
+    } else {
+      return {
+        stack: stack,
+        position: pos,
+      }
+    }
+
+  }
+
+  #get_set_or_number() {
+
+    let start = undefined
+    let end = undefined
+
+    if (this.#peek().token === "NUMBER") {
+      start = this.#peek().value;
+      this.#eat({token: "NUMBER"});
+    }
+
+    if (this.#peek().token === "COLON") {
+      this.#eat({token: "COLON"});
+    } else {
+      // this is not a set
+      return start;
+    }
+
+    if (this.#peek().token === "NUMBER") {
+      end = this.#peek().value;
+      this.#eat({token: "NUMBER"});
+    }
+
     return {
-      stack: stack,
-      position: pos,
+      type: "SET",
+      start: start,
+      end: end
     }
   }
 
