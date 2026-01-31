@@ -11,7 +11,7 @@ class Area {
 
     this.stacks = [];
     // check for min args
-    for (let x = 0; x < area.args.min; x++) {
+    for (let x = 0; x < Math.max(area.args.min, area.stacks.length); x++) {
       const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y);
       this.stacks.push(stack);
 
