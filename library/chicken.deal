@@ -4,8 +4,8 @@ define int chicken;
 
 // Custom Dealing
 for i in 1:4 { // give each player 4 cards
-    for x in 0:3 { // loop through all players - this is hard-coded for now
-        move deck[0,0] <x>[i,0];
+    for p in 0:3 { // loop through all players - this is hard-coded for now
+        move deck[0,0] <p>[i,0];
     }
 }
 move deck[0,0:52] x[0,0]; // Put the rest of the deck in the draw pile

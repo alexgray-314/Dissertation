@@ -496,15 +496,28 @@ class Parser {
 
   }
 
+  // TODO in the future, also support +, -, etc
+  // TODO, this should also be used for players really
+  #get_arithmetic_expr() {
+    if (this.#peek().token === "NUMBER") {
+      const number = this.#peek().value;
+      this.#eat({token: "NUMBER"});
+      return number;
+    }
+    if (this.#peek().token === "ID") {
+      const varId = this.#peek().value;
+      this.#eat({token: "ID"});
+      return {
+        type: "VARIABLE",
+        id: varId
+      };
+    }
+    return undefined;
+  }
+
   #get_set_or_number() {
 
-    let start = undefined
-    let end = undefined
-
-    if (this.#peek().token === "NUMBER") {
-      start = this.#peek().value;
-      this.#eat({token: "NUMBER"});
-    }
+    const start = this.#get_arithmetic_expr();
 
     if (this.#peek().token === "COLON") {
       this.#eat({token: "COLON"});
@@ -513,10 +526,7 @@ class Parser {
       return start;
     }
 
-    if (this.#peek().token === "NUMBER") {
-      end = this.#peek().value;
-      this.#eat({token: "NUMBER"});
-    }
+    const end = this.#get_arithmetic_expr();
 
     return {
       type: "SET",

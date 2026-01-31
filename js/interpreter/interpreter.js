@@ -164,23 +164,40 @@ class Interpreter {
   // Takes a term that represents a position
   #evaluate_position(term) {
     if (term.type === "POSITION") {
-      if (term.area === "MOVE_DESTINATION") {
+
+      // Check for position keywords
+      if (term.area === "MOVE_DESTINATION") { // TODO make these their own type. It's weird them being part of the {position} object
         return this.state.movementTracker.destination;
       }
       if (term.area === "MOVE_SOURCE") {
         return this.state.movementTracker.source;
       }
+
+
+      const index = this.#evaluate_index(term.index)
       if (term.area.type === "PLAYER") {
         // the ids of the areas used to store player hands are hidden from the game
         const areaId = this.#evaluate_player(term.area).id.toString();
         return {
           type: "POSITION",
           area: areaId,
-          index: term.index,
+          index: index,
         };
+      }
+      return {
+        type: "POSITION",
+        area: term.area,
+        index: index,
       }
     }
     return term;
+  }
+
+  #evaluate_index(term) {
+    return {
+      stack: this.evaluate(term.stack),
+      position: this.evaluate(term.position)
+    }
   }
 
   #assign_variable(ast) {
