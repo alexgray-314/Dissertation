@@ -130,6 +130,13 @@ class Interpreter {
             // if there is currently a player moving, return that. Otherwise return the last player who moved
             id: this.state.movementTracker.player_moving ?? this.state.movementTracker.last_successful_move_player
           };
+        case "ALL":
+          // this is actually a set
+          return {
+            type: "SET",
+            start: 0,
+            end: this.state.num_players
+          }
         default:
 
           // Player has an id stored in a variable
@@ -468,8 +475,10 @@ class Interpreter {
 
   #for_loop(ast) {
 
+    const set = this.evaluate(ast.set);
+
     // Basic set of ints
-    if (typeof ast.set.start === 'number') {
+    if (typeof set.start === 'number') {
       // Define loop variable
       this.state.define_variable({
         id: ast.itemId,
@@ -477,7 +486,7 @@ class Interpreter {
       });
 
       // Actually do the loop
-      for (let i = ast.set.start; i <= ast.set.end; i++) {
+      for (let i = set.start; i <= set.end; i++) {
         // Set the loop variable within the state
         this.#assign_variable({
           type: "ASSIGN",

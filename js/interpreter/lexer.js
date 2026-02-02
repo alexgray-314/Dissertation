@@ -74,6 +74,14 @@ class Lexer {
           token:"PLAYER",
           value:"TURN",
         };
+      case '*':
+        this.#eat('*');
+        // NOTE: this will evaluate to a set
+        return {
+          line: this.line,
+          token:"PLAYER",
+          value: "ALL"
+        }
       default:
         if (/\d/.test(this.#peek())) {
           // Number
