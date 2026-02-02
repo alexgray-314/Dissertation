@@ -56,10 +56,7 @@ class Parser {
     this.#eat({token: "ID"});
     this.#eat({token: "IN"});
 
-    const set = this.#get_set_or_number();
-    if (set.type !== "SET") {
-      throw "For loop must be performed on a SET";
-    }
+    const set = this.#get_term(["SET", "PLAYER"]);
 
     const subTree = this.#get_subtree();
 
@@ -322,7 +319,7 @@ class Parser {
     }
   }
 
-  #get_term() {
+  #get_term(allowed) {
     let term;
     switch (this.#peek().token) {
       case "ID":
@@ -335,7 +332,7 @@ class Parser {
         term = this.#get_string();
         break;
       case "NUMBER":
-        term = this.#get_number();
+        term = this.#get_set_or_number();
         break;
       case "PLAYER":
         term = this.#get_player_or_hand();
@@ -355,7 +352,15 @@ class Parser {
       default:
         throw "Illegal TERM " + this.#peek().token;
     }
-    return this.#check_for_properties(term);
+    // get the type and also check if it's a standard JavaScript number
+    const type = term.type ?? ((typeof term == 'number') ? "INT": undefined);
+
+    if (allowed === undefined || allowed.includes(type)) {
+      return this.#check_for_properties(term);
+    } else {
+      throw "Error: " + type + " is not a valid type";
+    }
+
   }
 
   #check_for_properties(term) {
@@ -391,12 +396,6 @@ class Parser {
 
     return player;
 
-  }
-
-  #get_number() {
-    const n = this.#peek().value;
-    this.#eat({token: "NUMBER"});
-    return n;
   }
 
   #get_string() {

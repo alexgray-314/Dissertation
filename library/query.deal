@@ -2,12 +2,8 @@ define area a;
 define int x;
 x = 1;
 
-if <0>[0].length == 1 {
-
-};
-
 for i in 1:4 { // give each player 4 cards
-    for p in 0:3 { // loop through all players - this is hard-coded for now
+    for p in <*> { // loop through all players
         move deck[0,0] <p>[i,0];
     };
 };

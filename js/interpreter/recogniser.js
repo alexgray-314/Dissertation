@@ -352,9 +352,13 @@ class Recogniser {
   }
 
   #FullSet() {
-    this.#eat({token:"NUMBER"});
-    this.#eat({token:"COLON"});
-    this.#eat({token:"NUMBER"});
+    if (this.#peek().token === "PLAYER" && this.#peek().value === "ALL") {
+      this.#eat({token:"PLAYER"});
+    } else {
+      this.#eat({token:"NUMBER"});
+      this.#eat({token:"COLON"});
+      this.#eat({token:"NUMBER"});
+    }
   }
 
   #AExpr() {

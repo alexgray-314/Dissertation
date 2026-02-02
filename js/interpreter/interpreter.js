@@ -135,7 +135,7 @@ class Interpreter {
           return {
             type: "SET",
             start: 0,
-            end: this.state.num_players
+            end: this.state.num_players - 1
           }
         default:
 
