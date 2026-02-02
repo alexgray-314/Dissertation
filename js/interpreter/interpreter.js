@@ -60,7 +60,14 @@ class Interpreter {
       case "VARIABLE":
         return this.#evaluate_variable(term.id);
       case "STACK":
+        // return type: [Card]
         return this.#evaluate_stack(term);
+      case "MOVE_DESTINATION":
+        // return type: Position
+        return this.state.movementTracker.destination;
+      case "MOVE_SOURCE":
+        // return type: Position
+        return this.state.movementTracker.source;
       default:
         return term;
     }
@@ -164,15 +171,6 @@ class Interpreter {
   // Takes a term that represents a position
   #evaluate_position(term) {
     if (term.type === "POSITION") {
-
-      // Check for position keywords
-      if (term.area === "MOVE_DESTINATION") { // TODO make these their own type. It's weird them being part of the {position} object
-        return this.state.movementTracker.destination;
-      }
-      if (term.area === "MOVE_SOURCE") {
-        return this.state.movementTracker.source;
-      }
-
 
       const index = this.#evaluate_index(term.index)
       if (term.area.type === "PLAYER") {

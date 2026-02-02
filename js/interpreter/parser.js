@@ -214,11 +214,11 @@ class Parser {
     let subTree = this.#get_subtree();
 
     if (catchSource !== undefined && catchSource.type !== "WILDCARD") {
-      subTree = this.#add_catch_clause_to_subTree(catchSource, subTree, "MOVE_SOURCE");
+      subTree = this.#add_catch_clause_to_subTree(catchSource, subTree, {type:"MOVE_SOURCE"});
     }
 
     if (catchDest !== undefined && catchDest.type !== "WILDCARD") {
-      subTree = this.#add_catch_clause_to_subTree(catchDest, subTree, "MOVE_DESTINATION");
+      subTree = this.#add_catch_clause_to_subTree(catchDest, subTree, {type:"MOVE_DESTINATION"});
     }
 
     return {
@@ -227,7 +227,7 @@ class Parser {
     }
   }
 
-  // Target must either be "MOVE_SOURCE" or "MOVE_DESTINATION"
+  // Target must either be {type:"MOVE_SOURCE"} or {type:"MOVE_DESTINATION"}
   #add_catch_clause_to_subTree(clause, subTree, target) {
     let comparator = undefined;
     switch (clause.type) {
@@ -245,10 +245,7 @@ class Parser {
     return [{
       type: "IF",
       comparator: comparator,
-      left: {
-        type: "POSITION",
-        area: target
-      },
+      left: target,
       right: clause, // this is a position,
       consequent: subTree,
       antecedent: [{
@@ -413,14 +410,12 @@ class Parser {
       case "FORWARD_SLASH":
         this.#eat({token: "FORWARD_SLASH"});
         return {
-          type: "POSITION",
-          area:"MOVE_DESTINATION"
+          type:"MOVE_DESTINATION"
         };
       case "BACKWARD_SLASH":
         this.#eat({token: "BACKWARD_SLASH"});
         return {
-          type: "POSITION",
-          area: "MOVE_SOURCE"
+          type: "MOVE_SOURCE"
         };
     }
   }
