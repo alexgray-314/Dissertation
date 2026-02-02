@@ -46,6 +46,8 @@ class Interpreter {
 
   }
 
+  // -------------------------- EVALUATION -------------------------------
+
   // If a term can be evaluated to another term
   evaluate(term) {
     if (term === undefined) return undefined;
@@ -68,16 +70,6 @@ class Interpreter {
       case "MOVE_SOURCE":
         // return type: Position
         return this.state.movementTracker.source;
-      default:
-        return term;
-    }
-  }
-
-  // Evaluate the term to its most simple form (i.e. position -> card)
-  evaluate_down(term) {
-    switch (term.type) {
-      case "POSITION":
-        return this.evaluate_card(term);
       default:
         return term;
     }
@@ -117,8 +109,8 @@ class Interpreter {
 
   // <@> -> <0>
   #evaluate_player(term) {
-    // TODO throw some kind of error if the player is not yet defined
     if (/^\d+$/.test(term.id)) {
+      // if the ID is only digits, we don't need to evaluate further
       return term;
     } else {
       switch (term.id) {
@@ -140,6 +132,7 @@ class Interpreter {
           };
         default:
 
+          // Player has an id stored in a variable
           const value = this.#evaluate_variable(term.id);
           if (value !== undefined) {
             return {
@@ -170,7 +163,6 @@ class Interpreter {
   // / -> position
   // Takes a term that represents a position
   #evaluate_position(term) {
-    if (term.type === "POSITION") {
 
       const index = this.#evaluate_index(term.index)
       if (term.area.type === "PLAYER") {
@@ -182,13 +174,13 @@ class Interpreter {
           index: index,
         };
       }
+
       return {
         type: "POSITION",
         area: term.area,
         index: index,
       }
-    }
-    return term;
+
   }
 
   #evaluate_index(term) {
@@ -198,26 +190,9 @@ class Interpreter {
     }
   }
 
-  #assign_variable(ast) {
-    if (this.state.variables.hasOwnProperty(ast.id)) {
-      const variable = this.state.variables[ast.id];
-      const value = this.#evaluate_term_to_type(ast.value, variable.type);
-      if (value === undefined) {
-        console.error("Cannot assign to " + ast.id + ", ", ast.value, " is not of type " + variable.type);
-      } else {
-        // distinction between returning undefined because the term is of the wrong type...
-        // and a variable of the correct type, but with an undefined value
-        if (typeof value !== 'boolean') {
-          variable.value = value;
-        }
-      }
-    } else {
-      console.error("Variable " + ast.id + " is undefined");
-    }
-  }
-
   // Check whether a term can evaluate to a specific type
-  // Will return undefined if not
+  // Will return undefined if term is of the wrong type
+  // Will return false if term is the correct type, but with an undefined value
   #evaluate_term_to_type(term, type) {
     // Check term is not undefined
     if (term === undefined) return undefined;
@@ -245,6 +220,36 @@ class Interpreter {
       return card ?? false;
     }
     return undefined;
+  }
+
+  // Evaluate the term to its most simple form (i.e. position -> card)
+  evaluate_down(term) {
+    switch (term.type) {
+      case "POSITION":
+        return this.evaluate_card(term);
+      default:
+        return term;
+    }
+  }
+
+  // ------------------------- END OF EVALUATION -----------------------------
+
+  #assign_variable(ast) {
+    if (this.state.variables.hasOwnProperty(ast.id)) {
+      const variable = this.state.variables[ast.id];
+      const value = this.#evaluate_term_to_type(ast.value, variable.type);
+      if (value === undefined) {
+        console.error("Cannot assign to " + ast.id + ", ", ast.value, " is not of type " + variable.type);
+      } else {
+        // distinction between returning undefined because the term is of the wrong type...
+        // and a variable of the correct type, but with an undefined value
+        if (typeof value !== 'boolean') {
+          variable.value = value;
+        }
+      }
+    } else {
+      console.error("Variable " + ast.id + " is undefined");
+    }
   }
 
   #update_player(ast) {
