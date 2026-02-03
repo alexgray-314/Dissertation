@@ -7,7 +7,7 @@ define int winningPlayer;
 define card winningCard;
 
 // Card moved from turn player's hand to centre
-on move </>[0,0:20] centre[0,0] {
+on move </>[0:0,0:20] centre[0,0] {
 
 	// block movement if it's not the players turn
 	if </> == <.> {
@@ -24,7 +24,7 @@ on move </>[0,0:20] centre[0,0] {
             if \.suit != winningCard.suit {
                 // The card is not in-suit
 
-                if winningCard.suit =? </>[0, 0:52].suit {
+                if winningCard.suit =? </>[0:0, 0:52].suit {
                     // The player has a card in-suit that they could have played - INVALID
                     cancel;
                 };
@@ -52,7 +52,7 @@ on move </>[0,0:20] centre[0,0] {
 
             <.> = <winningPlayer>;
             // TODO count scores
-            move centre[0,0:3] discard[0,0];
+            move centre[0:0,0:3] discard[0,0];
         } else {
             // It's the next players turn
             
