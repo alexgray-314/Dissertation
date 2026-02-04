@@ -4,14 +4,14 @@ define int chicken;
 
 // Custom Dealing
 for i in 1:4 { // give each player 4 cards
-    for p in 0:3 { // loop through all players - this is hard-coded for now
+    for p in <*> { // loop through all players
         move deck[0,0] <p>[i,0];
-    }
-}
-move deck[0,0:52] x[0,0]; // Put the rest of the deck in the draw pile
+    };
+};
+move deck[0:0,0:] x[0,0]; // Put the rest of the deck in the draw pile
 
 // Take a card from draw pile
-on move x[0,0] </>[1:,0] {
+on move x[0,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
 
@@ -20,10 +20,10 @@ on move x[0,0] </>[1:,0] {
     if <.>.id == chicken {
         
     };
-}
+};
 
 // Take a card from discard pile
-on move x[1,0] </>[1:,0] {
+on move x[1,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
 
@@ -32,11 +32,11 @@ on move x[1,0] </>[1:,0] {
     if <.>.id == chicken {
         
     };
-}
+};
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
-on move </>[1:,0] x[1, 0] {
+on move </>[1:,0:0] x[1, 0] {
     if \.rank != /.rank {
         // Wrong card, you must take a new one
         define int newSlot;
@@ -53,5 +53,5 @@ on move ? ? {
 on c {
     if <.> == <@> {
         chicken = <.>.id;
-    }
-}
+    };
+};
