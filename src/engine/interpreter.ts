@@ -1,20 +1,20 @@
-import { CardVisitor } from "./calc/cardVisitor";
-import { NumberVisitor } from "./calc/numberVisitor";
-import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, CancelContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "./language/dealParser";
-import { Card, SpecialCard, StandardCard } from "./model/card";
-import { State } from "./state/state";
-import { PositionVisitor } from "./calc/positionVisitor";
-import { dealVisitor } from "./language/dealVisitor";
+import { CardVisitor } from "../calc/cardVisitor";
+import { NumberVisitor } from "../calc/numberVisitor";
+import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, CancelContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "../language/dealParser";
+import { Card, SpecialCard, StandardCard } from "../model/card";
+import { State } from "../state/state";
+import { PositionVisitor } from "../calc/positionVisitor";
+import { dealVisitor } from "../language/dealVisitor";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Comparator, Primitive } from "./state/comparator";
-import { TermVisitor } from "./calc/termVisitor";
-import { IntSetVisitor } from "./calc/intSetVisitor";
-import { PositionSetVisitor } from "./calc/positionSetVisitor";
-import { Position } from "./model/area";
-import { MoveCatch } from "./state/move_catch";
+import { Comparator, Primitive } from "../state/comparator";
+import { TermVisitor } from "../calc/termVisitor";
+import { IntSetVisitor } from "../calc/intSetVisitor";
+import { PositionSetVisitor } from "../calc/positionSetVisitor";
+import { Position } from "../model/area";
+import { MoveCatch } from "../state/move_catch";
 
 export class Interpreter implements dealVisitor<void> {
 

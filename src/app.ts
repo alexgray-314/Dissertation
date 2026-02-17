@@ -21,7 +21,8 @@ fileSelector.addEventListener('change', (event) => {
 
     reader.addEventListener("load", () => {
       // LOAD THE GAME!!!!
-      init((reader.result ?? "") as string);
+      // init((reader.result ?? "") as string);
+      console.log(reader.result);
     });
 
     reader.readAsText(file);
