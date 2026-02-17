@@ -1,5 +1,5 @@
 import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { Interpreter } from "../interpreter";
+import { Interpreter } from "../engine/interpreter";
 import { State } from "../state/state";
 import { UI } from "./ui";
 import { MoveCatch } from "../state/move_catch";
@@ -26,7 +26,7 @@ type Request = {
     }
 }
 
-class Handler {
+export class Handler {
 
     state : State;
     ui : UI;
