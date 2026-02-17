@@ -22,6 +22,6 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "antlr4ts": "^0.5.0-alpha.4"
   }
 }
