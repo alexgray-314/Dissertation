@@ -47,9 +47,7 @@ export class TermVisitor implements dealVisitor<Primitive> {
         const property : string | undefined = ctx.property()?.ID().text;
         // NOTE: this will only get primitive properties. TODO deal with complex objects
         const term = ctx.getChild(0).accept(this);
-        console.log("TERM IS", term);
         if (property !== undefined && typeof term === 'object') {
-            console.log("trying to get property", property);
             return (term as any)[property];
         }
         return term;

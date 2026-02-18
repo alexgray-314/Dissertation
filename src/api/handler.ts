@@ -44,7 +44,7 @@ export class Handler {
             this.state.move_info.dest = [request.destination.area, request.destination.stack, request.destination.position];
             this.state.move_info.card = this.state.get_card(this.state.move_info.source);
             for (let moveCatch of this.state.move_catches) {
-                if (!moveCatch.check(this.state)) {
+                if (moveCatch.caught(this.state)) {
                     // If movement has been canceled, stop future move catch clauses from being executed
                     break;
                 }
@@ -53,8 +53,8 @@ export class Handler {
             // Don't move the card if cancel; has been called
             if (
                 !this.state.move_info.cancelled &&
-                new Comparator(this.state).equals(this.state.get_card(this.state.move_info.source), this.state.move_info.card
-                )) {
+                new Comparator(this.state).equals(this.state.get_card(this.state.move_info.source), this.state.move_info.card)
+            ) {
                 this.state.move_card(
                     this.state.move_info.source,
                     this.state.move_info.dest

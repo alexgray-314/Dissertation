@@ -19,12 +19,12 @@ export class MoveCatch {
     }
 
     /**
-        Checks the move source/dest then runs subtree to see if this move catch will allow movement
+        Checks if this movement clause is "caught" by the current movement request, then runs the subtree
         @returns true if the movement is allowed
-        @returns false if movement blocked
-        @returns true if movement is not relevant to this statement
+        @returns true if movement blocked
+        @returns false if movement is not relevant to this statement
     */
-    check(state : State) : boolean {
+    caught(state : State) : boolean {
         const info : MoveInfo = state.move_info;
 
         if ( // check if the move catches refer to this specific movement
@@ -32,9 +32,9 @@ export class MoveCatch {
             this.compare_position(state, info.dest, this.dest)
         ) {
             this.subTree.accept(new Interpreter(state));
-            return !state.move_info.cancelled;
+            return true;
         }
-        return true;
+        return false;
 
     }
 
@@ -48,7 +48,7 @@ export class MoveCatch {
             return true;
         } else if (target.positionset() !== undefined) {
             let contains : boolean = false;
-            target.accept(new PositionSetVisitor(state, (evaluated_target : Position) => {
+            target.positionset()!.accept(new PositionSetVisitor(state, (evaluated_target : Position) => {
                 if (
                     evaluated_target[0] === position[0] &&
                     evaluated_target[1] === position[1] &&
