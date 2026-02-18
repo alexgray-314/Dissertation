@@ -5,6 +5,7 @@ import { UI } from "./ui";
 import { MoveCatch } from "../state/move_catch";
 import { Card } from "../model/card";
 import { Comparator } from "../state/comparator";
+import {activePlayer} from "../app";
 
 type Request = {
     type: "ACTION",
@@ -45,19 +46,21 @@ export class Handler {
             this.state.move_info.dest = [request.destination.area, request.destination.stack, request.destination.position];
             this.state.move_info.card = this.state.get_card(this.state.move_info.source);
             for (let moveCatch of this.state.move_catches) {
-                if (moveCatch.check(this.state)) {
-                    const card : Card = this.state.get_card(this.state.move_info.source);
-                    if (
-                        !this.state.move_info.cancelled &&
-                        new Comparator(this.state).equals(card, this.state.move_info.card
-                        )) {
-                        this.state.move_card(
-                            this.state.move_info.source,
-                            this.state.move_info.dest
-                        );
-                    }
+                if (!moveCatch.check(this.state)) {
+                    // If movement has been canceled, stop future move catch clauses from being executed
                     break;
                 }
+            }
+            // Only move the card if the state is as we expect and the programmer hasn't already moved the card
+            // Don't move the card if cancel; has been called
+            if (
+                !this.state.move_info.cancelled &&
+                new Comparator(this.state).equals(this.state.get_card(this.state.move_info.source), this.state.move_info.card
+                )) {
+                this.state.move_card(
+                    this.state.move_info.source,
+                    this.state.move_info.dest
+                );
             }
             this.state.reset_move_info();
             break;
@@ -73,7 +76,7 @@ export class Handler {
 
     // Notify the UI that there has been some change to the state
     notify() {
-        this.ui.update(this.state, 0);
+        this.ui.update(this.state, activePlayer);
     }
 
 }

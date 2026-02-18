@@ -7,6 +7,8 @@ import {dealParser} from "./language/dealParser";
 import {dealVisitor} from "./language/dealVisitor";
 import {Interpreter} from "./engine/interpreter";
 import {Canvas} from "./ui/canvas";
+import {MouseHandler} from "./ui/input/mouseHandler";
+import {Action} from "./ui/input/action";
 
 /**
  * npm run build
@@ -28,12 +30,12 @@ fileSelector.addEventListener('change', (event) => {
   }
 });
 
-let state : State | undefined = undefined;
-let handler : Handler | undefined = undefined;
-let canvas : Canvas | undefined = undefined;
-// let actions;
-let activePlayer : number = 0;
-// let mouseHandler;
+let state : State;
+let handler : Handler;
+let canvas : Canvas;
+let actions : Action[] = [];
+export var activePlayer : number = 0;
+let mouseHandler : MouseHandler;
 
 // Player selector
 document.getElementById("playerSelector")?.addEventListener("change", event => {
@@ -63,12 +65,12 @@ function init(sourceCode : string) {
   handler = new Handler(state, canvas);
 
   // setup actions
-  // actions = Object.values(state.actions).map((action) => {
-  //   return new Action(action, handler);
-  // });
+  actions = Array.from(state.action_catches.keys()).map((action : string) => {
+    return new Action(action, handler);
+  });
 
   // Mouse input
-  // mouseHandler = new MouseHandler(canvas, handler);
+  mouseHandler = new MouseHandler(canvas, handler);
 
   render();
 
@@ -80,7 +82,7 @@ function init(sourceCode : string) {
 function render() {
   if (canvas) {
     canvas.render();
-    // mouseHandler.render(canvas.canvas.getContext("2d"));
+    mouseHandler.render(canvas.canvas.getContext("2d") as CanvasRenderingContext2D);
     requestAnimationFrame(render);
   }
 }

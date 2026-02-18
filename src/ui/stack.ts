@@ -1,9 +1,10 @@
-import {Card, CARD_HEIGHT, CARD_WIDTH, Rect} from "./card";
+import {Card, CARD_HEIGHT, CARD_WIDTH} from "./card";
 
 const STACK_SPACING_X = 80;
 
 import * as model from "../model/stack";
 import {AREA_MARGIN, AREA_SPACING_Y} from "./area";
+import {Rect} from "./hitbox";
 
 export class Stack {
 

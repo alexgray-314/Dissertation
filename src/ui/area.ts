@@ -5,7 +5,7 @@ export const AREA_MARGIN = 20;
 export const FAN_SPACING = 40;
 
 import * as model from "../model/area";
-import {Hitbox} from "./hitbox";
+import {Hitbox, Rect} from "./hitbox";
 import {CARD_HEIGHT, CARD_WIDTH} from "./card";
 
 export class Area {
@@ -30,14 +30,7 @@ export class Area {
         // Users can only take the top card
         hitBoxes.push(new Hitbox(
           stack.rect,
-          {
-            type: "POSITION",
-            area: area.id,
-            index: {
-              position: 0,
-              stack: x
-            }
-          }
+          [area.id, x, 0]
         ));
       } else {
         // This is a hand, users can take any card
@@ -50,14 +43,7 @@ export class Area {
               width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
               height: CARD_HEIGHT,
             },
-            {
-              type: "POSITION",
-              area: area.id,
-              index: {
-                position: pos,
-                stack: 0
-              }
-            }
+            [area.id, 0, pos]
           ));
           pos++;
         }
@@ -70,7 +56,7 @@ export class Area {
 
     if (this.child.args.hand === "true") {
       // The area is a players hand
-      let rect = {
+      let rect : Rect = {
         x: AREA_MARGIN,
         y: AREA_MARGIN + this.y*AREA_SPACING_Y,
         width: CARD_WIDTH,

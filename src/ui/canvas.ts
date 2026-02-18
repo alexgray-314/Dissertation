@@ -5,6 +5,7 @@ import {Card} from "./card";
 import {UI} from "../api/ui";
 
 import * as model from "../model/area";
+import {Position} from "../model/area";
 
 export class Canvas implements UI{
 
@@ -20,14 +21,14 @@ export class Canvas implements UI{
     this.update(initialState, 0);
   }
 
-  remove_card(position : any) {
-    const card = this.areas[position.area].stacks[position.index.stack].cards[position.index.position];
-    this.areas[position.area].stacks[position.index.stack].cards.splice(position.index.position, 1);
+  remove_card([a, s, p] : Position) {
+    const card = this.areas[a].stacks[s].cards[p];
+    this.areas[a].stacks[s].cards.splice(p, 1);
     return card;
   }
 
-  push_card(position : any, card : Card) {
-    this.areas[position.area].stacks[position.index.stack].cards.splice(position.index.position, 0, card);
+  push_card([a,s,p] : Position, card : Card) {
+    this.areas[a].stacks[s].cards.splice(p, 0, card);
   }
 
   update(state : State, player : number) {

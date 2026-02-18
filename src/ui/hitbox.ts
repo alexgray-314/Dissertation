@@ -1,9 +1,18 @@
+import {Position} from "../model/area";
+
+export type Rect = {
+  x: number,
+  y: number,
+  width: number,
+  height: number
+}
+
 export class Hitbox {
 
-  rect: any;
-  position: any;
+  rect: Rect;
+  position: Position;
 
-  constructor(rect : any, position: any) {
+  constructor(rect : Rect, position: Position) {
     this.rect = rect;
     this.position = position;
   }

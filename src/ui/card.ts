@@ -1,11 +1,5 @@
 import * as model from "../model/card";
-
-export type Rect = {
-  x: number,
-  y: number,
-  width: number,
-  height: number
-}
+import {Rect} from "./hitbox";
 
 export const CARD_WIDTH = 70;
 export const CARD_HEIGHT = 100;

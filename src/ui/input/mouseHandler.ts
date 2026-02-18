@@ -1,7 +1,22 @@
-class MouseHandler {
-  constructor(ui, handler) {
+import {UI} from "../../api/ui";
+import {Handler} from "../../api/handler";
+import {Card, CARD_HEIGHT, CARD_WIDTH} from "../card";
+import {Position} from "../../model/area";
+import {Canvas} from "../canvas";
+import {activePlayer} from "../../app";
 
-    this.draggedCard = null;
+export class MouseHandler {
+
+  draggedCard : Card | undefined;
+  mouseX : number;
+  mouseY : number;
+  source: Position | undefined;
+  destination : Position | undefined;
+  ui : Canvas;
+
+  constructor(ui : Canvas, handler : Handler) {
+
+    this.draggedCard = undefined;
     this.mouseX = 0;
     this.mouseY = 0;
     this.ui = ui;
@@ -35,11 +50,12 @@ class MouseHandler {
 
     ui.canvas.addEventListener("mouseup", () => {
       if (!this.draggedCard) return;
+      if (!this.source) return;
 
       for (const box of this.ui.hitBoxes) {
 
           if (box.contains(this.mouseX, this.mouseY)) {
-            this.draggedCard = null;
+            this.draggedCard = undefined;
 
             // DESTINATION
             this.destination = box.position
@@ -48,25 +64,32 @@ class MouseHandler {
             handler.call({
               type: "MOVE",
               player: activePlayer,
-              source: this.source,
-              destination: this.destination
+              source: {
+                area: this.source[0],
+                stack: this.source[1],
+                position: this.source[2]
+              },
+              destination: {
+                area: this.destination[0],
+                stack: this.destination[1],
+                position: this.destination[2]
+              }
             });
 
             return;
           }
-
 
       }
 
       if (!this.draggedCard) return;
       // User has let go of card
       ui.push_card(this.source, this.draggedCard);
-      this.draggedCard = null;
+      this.draggedCard = undefined;
     });
 
   }
 
-  render(ctx) {
+  render(ctx: CanvasRenderingContext2D) {
     if (this.draggedCard) {
       this.draggedCard.render(
         ctx,
