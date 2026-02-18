@@ -1,4 +1,4 @@
-// Generated from c:/Users/alexj/University/dealer/src/language/deal.g4 by ANTLR 4.13.1
+// Generated from c:/Users/alexj/WebstormProjects/plain-js/src/language/deal.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -20,8 +20,8 @@ public class dealLexer extends Lexer {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, COMMENT=38, 
-		MOVE_DEST=39, MOVE_SOURCE=40, NUMBER=41, ID=42, CARD=43, STRING=44, SPACES=45, 
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, COMMENT=37, MOVE_DEST=38, 
+		MOVE_SOURCE=39, WILDCARD=40, NUMBER=41, ID=42, CARD=43, STRING=44, SPACES=45, 
 		NEWLINE=46;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -37,7 +37,7 @@ public class dealLexer extends Lexer {
 			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
 			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
 			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
-			"T__33", "T__34", "T__35", "T__36", "COMMENT", "MOVE_DEST", "MOVE_SOURCE", 
+			"T__33", "T__34", "T__35", "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "WILDCARD", 
 			"NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE"
 		};
 	}
@@ -49,7 +49,7 @@ public class dealLexer extends Lexer {
 			"'int'", "'card'", "'move'", "'on'", "'{'", "'}'", "'for'", "'in'", "'if'", 
 			"'else'", "'cancel'", "'='", "'++'", "'('", "','", "')'", "':'", "'['", 
 			"']'", "'=='", "'!='", "'<<'", "'<='", "'>='", "'>>'", "'=?'", "'!?'", 
-			"'*'", "'?'", null, "'/'", "'\\'"
+			"'*'", null, "'/'", "'\\'", "'?'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -58,8 +58,8 @@ public class dealLexer extends Lexer {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "NUMBER", "ID", "CARD", 
-			"STRING", "SPACES", "NEWLINE"
+			null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "WILDCARD", "NUMBER", "ID", 
+			"CARD", "STRING", "SPACES", "NEWLINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -152,7 +152,7 @@ public class dealLexer extends Lexer {
 		"\u001c\u0001\u001c\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001e\u0001"+
 		"\u001e\u0001\u001e\u0001\u001f\u0001\u001f\u0001\u001f\u0001 \u0001 \u0001"+
 		" \u0001!\u0001!\u0001!\u0001\"\u0001\"\u0001\"\u0001#\u0001#\u0001$\u0001"+
-		"$\u0001%\u0001%\u0001%\u0001%\u0005%\u00d7\b%\n%\f%\u00da\t%\u0001%\u0001"+
+		"$\u0001$\u0001$\u0005$\u00d5\b$\n$\f$\u00d8\t$\u0001$\u0001$\u0001%\u0001"+
 		"%\u0001&\u0001&\u0001\'\u0001\'\u0001(\u0004(\u00e3\b(\u000b(\f(\u00e4"+
 		"\u0001)\u0004)\u00e8\b)\u000b)\f)\u00e9\u0001*\u0001*\u0001*\u0001*\u0003"+
 		"*\u00f0\b*\u0001*\u0001*\u0001+\u0001+\u0005+\u00f6\b+\n+\f+\u00f9\t+"+
@@ -201,7 +201,7 @@ public class dealLexer extends Lexer {
 		";\u00bc\u0001\u0000\u0000\u0000=\u00bf\u0001\u0000\u0000\u0000?\u00c2"+
 		"\u0001\u0000\u0000\u0000A\u00c5\u0001\u0000\u0000\u0000C\u00c8\u0001\u0000"+
 		"\u0000\u0000E\u00cb\u0001\u0000\u0000\u0000G\u00ce\u0001\u0000\u0000\u0000"+
-		"I\u00d0\u0001\u0000\u0000\u0000K\u00d2\u0001\u0000\u0000\u0000M\u00dd"+
+		"I\u00d0\u0001\u0000\u0000\u0000K\u00db\u0001\u0000\u0000\u0000M\u00dd"+
 		"\u0001\u0000\u0000\u0000O\u00df\u0001\u0000\u0000\u0000Q\u00e2\u0001\u0000"+
 		"\u0000\u0000S\u00e7\u0001\u0000\u0000\u0000U\u00eb\u0001\u0000\u0000\u0000"+
 		"W\u00f3\u0001\u0000\u0000\u0000Y\u00fd\u0001\u0000\u0000\u0000[\u0104"+
@@ -252,14 +252,14 @@ public class dealLexer extends Lexer {
 		"?\u0000\u0000\u00caD\u0001\u0000\u0000\u0000\u00cb\u00cc\u0005!\u0000"+
 		"\u0000\u00cc\u00cd\u0005?\u0000\u0000\u00cdF\u0001\u0000\u0000\u0000\u00ce"+
 		"\u00cf\u0005*\u0000\u0000\u00cfH\u0001\u0000\u0000\u0000\u00d0\u00d1\u0005"+
-		"?\u0000\u0000\u00d1J\u0001\u0000\u0000\u0000\u00d2\u00d3\u0005/\u0000"+
-		"\u0000\u00d3\u00d4\u0005/\u0000\u0000\u00d4\u00d8\u0001\u0000\u0000\u0000"+
-		"\u00d5\u00d7\b\u0000\u0000\u0000\u00d6\u00d5\u0001\u0000\u0000\u0000\u00d7"+
-		"\u00da\u0001\u0000\u0000\u0000\u00d8\u00d6\u0001\u0000\u0000\u0000\u00d8"+
-		"\u00d9\u0001\u0000\u0000\u0000\u00d9\u00db\u0001\u0000\u0000\u0000\u00da"+
-		"\u00d8\u0001\u0000\u0000\u0000\u00db\u00dc\u0006%\u0000\u0000\u00dcL\u0001"+
-		"\u0000\u0000\u0000\u00dd\u00de\u0005/\u0000\u0000\u00deN\u0001\u0000\u0000"+
-		"\u0000\u00df\u00e0\u0005\\\u0000\u0000\u00e0P\u0001\u0000\u0000\u0000"+
+		"/\u0000\u0000\u00d1\u00d2\u0005/\u0000\u0000\u00d2\u00d6\u0001\u0000\u0000"+
+		"\u0000\u00d3\u00d5\b\u0000\u0000\u0000\u00d4\u00d3\u0001\u0000\u0000\u0000"+
+		"\u00d5\u00d8\u0001\u0000\u0000\u0000\u00d6\u00d4\u0001\u0000\u0000\u0000"+
+		"\u00d6\u00d7\u0001\u0000\u0000\u0000\u00d7\u00d9\u0001\u0000\u0000\u0000"+
+		"\u00d8\u00d6\u0001\u0000\u0000\u0000\u00d9\u00da\u0006$\u0000\u0000\u00da"+
+		"J\u0001\u0000\u0000\u0000\u00db\u00dc\u0005/\u0000\u0000\u00dcL\u0001"+
+		"\u0000\u0000\u0000\u00dd\u00de\u0005\\\u0000\u0000\u00deN\u0001\u0000"+
+		"\u0000\u0000\u00df\u00e0\u0005?\u0000\u0000\u00e0P\u0001\u0000\u0000\u0000"+
 		"\u00e1\u00e3\u0007\u0001\u0000\u0000\u00e2\u00e1\u0001\u0000\u0000\u0000"+
 		"\u00e3\u00e4\u0001\u0000\u0000\u0000\u00e4\u00e2\u0001\u0000\u0000\u0000"+
 		"\u00e4\u00e5\u0001\u0000\u0000\u0000\u00e5R\u0001\u0000\u0000\u0000\u00e6"+
@@ -282,7 +282,7 @@ public class dealLexer extends Lexer {
 		"\u0000\u0000\u0000\u0104\u0103\u0001\u0000\u0000\u0000\u0105\u0106\u0001"+
 		"\u0000\u0000\u0000\u0106\u0104\u0001\u0000\u0000\u0000\u0106\u0107\u0001"+
 		"\u0000\u0000\u0000\u0107\u0108\u0001\u0000\u0000\u0000\u0108\u0109\u0006"+
-		"-\u0000\u0000\u0109\\\u0001\u0000\u0000\u0000\b\u0000\u00d8\u00e4\u00e9"+
+		"-\u0000\u0000\u0109\\\u0001\u0000\u0000\u0000\b\u0000\u00d6\u00e4\u00e9"+
 		"\u00ef\u00f7\u00ff\u0106\u0001\u0006\u0000\u0000";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());

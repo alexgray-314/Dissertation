@@ -1,4 +1,4 @@
-// Generated from C:\Users\alexj\University\dealer/src/language/deal.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from C:\Users\alexj\WebstormProjects\plain-js/src/language/deal.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ATN } from "antlr4ts/atn/ATN";
@@ -64,10 +64,10 @@ export class dealParser extends Parser {
 	public static readonly T__33 = 34;
 	public static readonly T__34 = 35;
 	public static readonly T__35 = 36;
-	public static readonly T__36 = 37;
-	public static readonly COMMENT = 38;
-	public static readonly MOVE_DEST = 39;
-	public static readonly MOVE_SOURCE = 40;
+	public static readonly COMMENT = 37;
+	public static readonly MOVE_DEST = 38;
+	public static readonly MOVE_SOURCE = 39;
+	public static readonly WILDCARD = 40;
 	public static readonly NUMBER = 41;
 	public static readonly ID = 42;
 	public static readonly CARD = 43;
@@ -120,7 +120,7 @@ export class dealParser extends Parser {
 		"'int'", "'card'", "'move'", "'on'", "'{'", "'}'", "'for'", "'in'", "'if'", 
 		"'else'", "'cancel'", "'='", "'++'", "'('", "','", "')'", "':'", "'['", 
 		"']'", "'=='", "'!='", "'<<'", "'<='", "'>='", "'>>'", "'=?'", "'!?'", 
-		"'*'", "'?'", undefined, "'/'", "'\\'",
+		"'*'", undefined, "'/'", "'\\'", "'?'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
@@ -128,7 +128,7 @@ export class dealParser extends Parser {
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
-		undefined, undefined, undefined, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", 
+		undefined, undefined, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "WILDCARD", 
 		"NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(dealParser._LITERAL_NAMES, dealParser._SYMBOLIC_NAMES, []);
@@ -1510,7 +1510,7 @@ export class dealParser extends Parser {
 				this.enterOuterAlt(_localctx, 1);
 				{
 				this.state = 262;
-				this.match(dealParser.T__36);
+				this.match(dealParser.WILDCARD);
 				}
 				break;
 
@@ -1599,7 +1599,7 @@ export class dealParser extends Parser {
 		"TS\x03\x02\x02\x02UV\x03\x02\x02\x02VW\x07\x03\x02\x02W\x05\x03\x02\x02" +
 		"\x02XZ\x05\x04\x03\x02YX\x03\x02\x02\x02Z]\x03\x02\x02\x02[Y\x03\x02\x02" +
 		"\x02[\\\x03\x02\x02\x02\\\x07\x03\x02\x02\x02][\x03\x02\x02\x02^c\x07" +
-		"\x04\x02\x02_d\x07)\x02\x02`d\x07\x05\x02\x02ad\x07\x06\x02\x02bd\x05" +
+		"\x04\x02\x02_d\x07(\x02\x02`d\x07\x05\x02\x02ad\x07\x06\x02\x02bd\x05" +
 		"6\x1C\x02c_\x03\x02\x02\x02c`\x03\x02\x02\x02ca\x03\x02\x02\x02cb\x03" +
 		"\x02\x02\x02de\x03\x02\x02\x02ef\x07\x07\x02\x02f\t\x03\x02\x02\x02gh" +
 		"\x07\b\x02\x02hi\t\x02\x02\x02ik\x07,\x02\x02jl\x05$\x13\x02kj\x03\x02" +
@@ -1637,7 +1637,7 @@ export class dealParser extends Parser {
 		"\x02\xC8\xC9\x056\x1C\x02\xC9\xCA\x07\x1D\x02\x02\xCA-\x03\x02\x02\x02" +
 		"\xCB\xCC\x05(\x15\x02\xCC\xCD\x07\x1C\x02\x02\xCD\xCE\x056\x1C\x02\xCE" +
 		"\xCF\x07\x19\x02\x02\xCF\xD0\x056\x1C\x02\xD0\xD1\x07\x1D\x02\x02\xD1" +
-		"\xD5\x03\x02\x02\x02\xD2\xD5\x07*\x02\x02\xD3\xD5\x07)\x02\x02\xD4\xCB" +
+		"\xD5\x03\x02\x02\x02\xD2\xD5\x07)\x02\x02\xD3\xD5\x07(\x02\x02\xD4\xCB" +
 		"\x03\x02\x02\x02\xD4\xD2\x03\x02\x02\x02\xD4\xD3\x03\x02\x02\x02\xD5/" +
 		"\x03\x02\x02\x02\xD6\xDE\x07-\x02\x02\xD7\xDE\x07.\x02\x02\xD8\xDE\x05" +
 		"6\x1C\x02\xD9\xDE\x05\b\x05\x02\xDA\xDE\x05*\x16\x02\xDB\xDE\x05,\x17" +
@@ -1659,11 +1659,11 @@ export class dealParser extends Parser {
 		"(\x15\x02\xFE\xFF\x07\x1C\x02\x02\xFF\u0100\x05:\x1E\x02\u0100\u0101\x07" +
 		"\x19\x02\x02\u0101\u0102\x05:\x1E\x02\u0102\u0103\x07\x1D\x02\x02\u0103" +
 		"=\x03\x02\x02\x02\u0104\u0105\x07\x04\x02\x02\u0105\u0106\x07&\x02\x02" +
-		"\u0106\u0107\x07\x07\x02\x02\u0107?\x03\x02\x02\x02\u0108\u010C\x07\'" +
-		"\x02\x02\u0109\u010C\x05.\x18\x02\u010A\u010C\x05<\x1F\x02\u010B\u0108" +
-		"\x03\x02\x02\x02\u010B\u0109\x03\x02\x02\x02\u010B\u010A\x03\x02\x02\x02" +
-		"\u010CA\x03\x02\x02\x02\x16ET[ckt\x98\xA9\xB3\xB6\xC0\xD4\xDD\xE0\xEA" +
-		"\xEE\xF3\xF6\xFB\u010B";
+		"\u0106\u0107\x07\x07\x02\x02\u0107?\x03\x02\x02\x02\u0108\u010C\x07*\x02" +
+		"\x02\u0109\u010C\x05.\x18\x02\u010A\u010C\x05<\x1F\x02\u010B\u0108\x03" +
+		"\x02\x02\x02\u010B\u0109\x03\x02\x02\x02\u010B\u010A\x03\x02\x02\x02\u010C" +
+		"A\x03\x02\x02\x02\x16ET[ckt\x98\xA9\xB3\xB6\xC0\xD4\xDD\xE0\xEA\xEE\xF3" +
+		"\xF6\xFB\u010B";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!dealParser.__ATN) {
@@ -2809,6 +2809,7 @@ export class PlayersetContext extends ParserRuleContext {
 
 
 export class Move_catchContext extends ParserRuleContext {
+	public WILDCARD(): TerminalNode | undefined { return this.tryGetToken(dealParser.WILDCARD, 0); }
 	public position(): PositionContext | undefined {
 		return this.tryGetRuleContext(0, PositionContext);
 	}

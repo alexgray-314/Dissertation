@@ -1,4 +1,4 @@
-// Generated from C:\Users\alexj\University\dealer/src/language/deal.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from C:\Users\alexj\WebstormProjects\plain-js/src/language/deal.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";

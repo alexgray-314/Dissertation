@@ -51,7 +51,8 @@ intset:         aexpr ':' aexpr?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
-move_catch:     '?' | position | positionset;
+move_catch:     WILDCARD | position | positionset;
+WILDCARD:       '?';
 
 NUMBER:         [0-9]+ ;
 ID:             [a-zA-Z]+ ;

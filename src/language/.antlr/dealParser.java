@@ -1,4 +1,4 @@
-// Generated from c:/Users/alexj/University/dealer/src/language/deal.g4 by ANTLR 4.13.1
+// Generated from c:/Users/alexj/WebstormProjects/plain-js/src/language/deal.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -20,8 +20,8 @@ public class dealParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, COMMENT=38, 
-		MOVE_DEST=39, MOVE_SOURCE=40, NUMBER=41, ID=42, CARD=43, STRING=44, SPACES=45, 
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, COMMENT=37, MOVE_DEST=38, 
+		MOVE_SOURCE=39, WILDCARD=40, NUMBER=41, ID=42, CARD=43, STRING=44, SPACES=45, 
 		NEWLINE=46;
 	public static final int
 		RULE_prog = 0, RULE_stmt = 1, RULE_block = 2, RULE_player = 3, RULE_definition = 4, 
@@ -49,7 +49,7 @@ public class dealParser extends Parser {
 			"'int'", "'card'", "'move'", "'on'", "'{'", "'}'", "'for'", "'in'", "'if'", 
 			"'else'", "'cancel'", "'='", "'++'", "'('", "','", "')'", "':'", "'['", 
 			"']'", "'=='", "'!='", "'<<'", "'<='", "'>='", "'>>'", "'=?'", "'!?'", 
-			"'*'", "'?'", null, "'/'", "'\\'"
+			"'*'", null, "'/'", "'\\'", "'?'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -58,8 +58,8 @@ public class dealParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "NUMBER", "ID", "CARD", 
-			"STRING", "SPACES", "NEWLINE"
+			null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "WILDCARD", "NUMBER", "ID", 
+			"CARD", "STRING", "SPACES", "NEWLINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1760,6 +1760,7 @@ public class dealParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class Move_catchContext extends ParserRuleContext {
+		public TerminalNode WILDCARD() { return getToken(dealParser.WILDCARD, 0); }
 		public PositionContext position() {
 			return getRuleContext(PositionContext.class,0);
 		}
@@ -1783,7 +1784,7 @@ public class dealParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(262);
-				match(T__36);
+				match(WILDCARD);
 				}
 				break;
 			case 2:
@@ -1888,7 +1889,7 @@ public class dealParser extends Parser {
 		"\u0000VX\u0003\u0002\u0001\u0000WV\u0001\u0000\u0000\u0000X[\u0001\u0000"+
 		"\u0000\u0000YW\u0001\u0000\u0000\u0000YZ\u0001\u0000\u0000\u0000Z\u0005"+
 		"\u0001\u0000\u0000\u0000[Y\u0001\u0000\u0000\u0000\\a\u0005\u0002\u0000"+
-		"\u0000]b\u0005\'\u0000\u0000^b\u0005\u0003\u0000\u0000_b\u0005\u0004\u0000"+
+		"\u0000]b\u0005&\u0000\u0000^b\u0005\u0003\u0000\u0000_b\u0005\u0004\u0000"+
 		"\u0000`b\u00034\u001a\u0000a]\u0001\u0000\u0000\u0000a^\u0001\u0000\u0000"+
 		"\u0000a_\u0001\u0000\u0000\u0000a`\u0001\u0000\u0000\u0000bc\u0001\u0000"+
 		"\u0000\u0000cd\u0005\u0005\u0000\u0000d\u0007\u0001\u0000\u0000\u0000"+
@@ -1943,7 +1944,7 @@ public class dealParser extends Parser {
 		"&\u0013\u0000\u00ca\u00cb\u0005\u001a\u0000\u0000\u00cb\u00cc\u00034\u001a"+
 		"\u0000\u00cc\u00cd\u0005\u0017\u0000\u0000\u00cd\u00ce\u00034\u001a\u0000"+
 		"\u00ce\u00cf\u0005\u001b\u0000\u0000\u00cf\u00d3\u0001\u0000\u0000\u0000"+
-		"\u00d0\u00d3\u0005(\u0000\u0000\u00d1\u00d3\u0005\'\u0000\u0000\u00d2"+
+		"\u00d0\u00d3\u0005\'\u0000\u0000\u00d1\u00d3\u0005&\u0000\u0000\u00d2"+
 		"\u00c9\u0001\u0000\u0000\u0000\u00d2\u00d0\u0001\u0000\u0000\u0000\u00d2"+
 		"\u00d1\u0001\u0000\u0000\u0000\u00d3-\u0001\u0000\u0000\u0000\u00d4\u00dc"+
 		"\u0005+\u0000\u0000\u00d5\u00dc\u0005,\u0000\u0000\u00d6\u00dc\u00034"+
@@ -1975,7 +1976,7 @@ public class dealParser extends Parser {
 		"\u0000\u0100\u0101\u0005\u001b\u0000\u0000\u0101;\u0001\u0000\u0000\u0000"+
 		"\u0102\u0103\u0005\u0002\u0000\u0000\u0103\u0104\u0005$\u0000\u0000\u0104"+
 		"\u0105\u0005\u0005\u0000\u0000\u0105=\u0001\u0000\u0000\u0000\u0106\u010a"+
-		"\u0005%\u0000\u0000\u0107\u010a\u0003,\u0016\u0000\u0108\u010a\u0003:"+
+		"\u0005(\u0000\u0000\u0107\u010a\u0003,\u0016\u0000\u0108\u010a\u0003:"+
 		"\u001d\u0000\u0109\u0106\u0001\u0000\u0000\u0000\u0109\u0107\u0001\u0000"+
 		"\u0000\u0000\u0109\u0108\u0001\u0000\u0000\u0000\u010a?\u0001\u0000\u0000"+
 		"\u0000\u0014CRYair\u0096\u00a7\u00b1\u00b4\u00be\u00d2\u00db\u00de\u00e8"+
