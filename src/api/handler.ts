@@ -63,10 +63,12 @@ export class Handler {
             this.state.reset_move_info();
             break;
         case "ACTION":
+            this.state.action_player = request.player;
             const subTree : ParseTree | undefined = this.state.action_catches.get(request.id);
             if (subTree !== undefined) {
                 new Interpreter(this.state).visit(subTree);
             }
+            this.state.action_player = NaN;
             break;
         }
         this.notify();

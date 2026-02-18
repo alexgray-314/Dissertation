@@ -9,6 +9,7 @@ import {Interpreter} from "./engine/interpreter";
 import {Canvas} from "./ui/canvas";
 import {MouseHandler} from "./ui/input/mouseHandler";
 import {Action} from "./ui/input/action";
+import {lib} from "../library/deck";
 
 /**
  * npm run build
@@ -48,13 +49,12 @@ document.getElementById("playerSelector")?.addEventListener("change", event => {
 
 function init(sourceCode : string) {
 
-  const lexer = new dealLexer(CharStreams.fromString(sourceCode));
-  const tokens = new CommonTokenStream(lexer);
-  const parser = new dealParser(tokens);
-  const tree = parser.prog();
+  const libraryContent = get_tree(lib);
+  const tree = get_tree(sourceCode);
   const state = new State(4);
   const interpreter : dealVisitor<void> = new Interpreter(state);
   try {
+    interpreter.visit(libraryContent)
     interpreter.visit(tree);
   } catch (error) {
     console.error(error);
@@ -76,6 +76,10 @@ function init(sourceCode : string) {
   console.log(state);
   console.log("canvas", canvas);
 
+}
+
+function get_tree(sourceCode : string) {
+  return (new dealParser(new CommonTokenStream(new dealLexer(CharStreams.fromString(sourceCode))))).prog();
 }
 
 function render() {
