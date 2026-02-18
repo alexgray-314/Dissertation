@@ -68,7 +68,7 @@ export class Area {
 
   render(ctx : CanvasRenderingContext2D) {
 
-    if ("true" === "true") {
+    if (this.child.args.hand === "true") {
       // The area is a players hand
       let rect = {
         x: AREA_MARGIN,
@@ -76,6 +76,9 @@ export class Area {
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
       }
+      // Outline
+      ctx.strokeStyle = "rgba(0,0,0,0.4)";
+      ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
       for (let card of this.stacks[0].cards) {
         card.render(ctx, rect);
         rect.x += FAN_SPACING;

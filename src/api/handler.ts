@@ -73,7 +73,7 @@ export class Handler {
 
     // Notify the UI that there has been some change to the state
     notify() {
-        this.ui.update(this.state);
+        this.ui.update(this.state, 0);
     }
 
 }
