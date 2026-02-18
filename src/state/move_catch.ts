@@ -1,13 +1,7 @@
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import {MoveInfo, State} from "./state";
-import {Comparator} from "./comparator";
 import {Position} from "../model/area";
-import {dealVisitor} from "../language/dealVisitor";
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { PositionContext, PositionsetContext, Move_catchContext, AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, BlockContext, CancelContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "../language/dealParser";
-import { dealLexer } from "../language/dealLexer";
+import { Move_catchContext } from "../language/dealParser";
 import { PositionVisitor } from "../calc/positionVisitor";
 import { PositionSetVisitor } from "../calc/positionSetVisitor";
 
@@ -34,7 +28,7 @@ export class MoveCatch {
             this.compare_position(state, info.source, this.source) &&
             this.compare_position(state, info.dest, this.dest)
         )
-        
+
     }
 
     private compare_position (state : State, position : Position | undefined, target : Move_catchContext) : boolean {
