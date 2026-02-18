@@ -1,30 +1,42 @@
-class Canvas {
+import {State} from "../state/state";
+import {Area} from "./area";
+import {Hitbox} from "./hitbox";
+import {Card} from "./card";
+import {UI} from "../api/ui";
 
-  constructor(initialState) {
-    this.canvas = document.getElementById("canvas");
+import * as model from "../model/area";
+
+export class Canvas implements UI{
+
+  canvas : HTMLCanvasElement;
+  areas: Record<string, Area>;
+  hitBoxes : Hitbox[];
+
+  constructor(initialState : State) {
+    this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
     this.areas = {};
     this.hitBoxes = [];
-    this.update(initialState);
+    this.update(initialState, 0);
   }
 
-  remove_card(position) {
+  remove_card(position : any) {
     const card = this.areas[position.area].stacks[position.index.stack].cards[position.index.position];
     this.areas[position.area].stacks[position.index.stack].cards.splice(position.index.position, 1);
     return card;
   }
 
-  push_card(position, card) {
+  push_card(position : any, card : Card) {
     this.areas[position.area].stacks[position.index.stack].cards.splice(position.index.position, 0, card);
   }
 
-  update(state) {
+  update(state : State, player : number) {
     // Convert all the state "areas" into UI "Areas"
     let y = 0;
     this.hitBoxes.splice(0, this.hitBoxes.length); // clear hitBoxes
-    Object.entries(state.areas).forEach(([id, area]) => {
+    state.areas.forEach((area : model.Area, id : string) => {
       if (id !== "deck") { // Do not display the deck
-        if (/\d+/.test(id) && id !== activePlayer.toString()) { // if it's an ID, check it's the current players ID
+        if (/\d+/.test(id) && id !== player.toString()) { // if it's an ID, check it's the current players ID
           delete this.areas[id];
         } else {
           this.areas[id] = new Area(area, y, this.hitBoxes);
@@ -35,7 +47,7 @@ class Canvas {
   }
 
   render() {
-    const ctx = this.canvas.getContext("2d");
+    const ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let a of Object.values(this.areas)) {

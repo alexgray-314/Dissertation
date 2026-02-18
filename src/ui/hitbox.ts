@@ -1,10 +1,14 @@
-class Hitbox {
-  constructor(rect, position) {
+export class Hitbox {
+
+  rect: any;
+  position: any;
+
+  constructor(rect : any, position: any) {
     this.rect = rect;
     this.position = position;
   }
 
-  contains(x, y) {
+  contains(x : number, y : number): boolean {
     return (
       x >= this.rect.x &&
       x <= this.rect.x + this.rect.width &&

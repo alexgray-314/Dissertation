@@ -1,7 +1,16 @@
+import {Card, CARD_HEIGHT, CARD_WIDTH, Rect} from "./card";
+
 const STACK_SPACING_X = 80;
 
-class Stack {
-  constructor(stack, x, y) {
+import * as model from "../model/stack";
+import {AREA_MARGIN, AREA_SPACING_Y} from "./area";
+
+export class Stack {
+
+  cards : Card[];
+  rect : Rect;
+
+  constructor(stack : model.Stack, x : number, y : number) {
     Object.assign(this, stack);
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
@@ -12,23 +21,19 @@ class Stack {
     }
   }
 
-  get_top() {
-    return this.cards[0];
-  }
-
-  get(index) {
+  get(index : any) {
     return this.cards[index.position];
   }
 
-  push(card, index) {
+  push(card : any, index : any) {
     this.cards.splice(index.position, 0, card);
   }
 
-  remove(index) {
+  remove(index : any) {
     this.cards.splice(index.position, 1)
   }
 
-  render(ctx) {
+  render(ctx : CanvasRenderingContext2D) {
     // Outline
     ctx.strokeStyle = "rgba(0,0,0,0.4)";
     ctx.strokeRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);

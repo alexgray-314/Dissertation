@@ -1,9 +1,3 @@
 define area a;
-define int x;
-x = 1;
-
-for i in 1:4 { // give each player 4 cards
-    for p in <*> { // loop through all players
-        move deck[0,0] <p>[i,0];
-    };
-};
+move #4s a[0,0];
+move #AH <0>[1,1];
