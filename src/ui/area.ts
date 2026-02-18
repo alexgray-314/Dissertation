@@ -34,8 +34,8 @@ export class Area {
         ));
       } else {
         // This is a hand, users can take any card
-        let pos = 0;
-        for (let card of this.stacks[0].cards) {
+
+        for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
           hitBoxes.push(new Hitbox(
             {
               x: AREA_MARGIN + pos*FAN_SPACING,
@@ -45,7 +45,6 @@ export class Area {
             },
             [area.id, 0, pos]
           ));
-          pos++;
         }
       }
 

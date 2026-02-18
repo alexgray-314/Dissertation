@@ -12,7 +12,6 @@ export class Stack {
   rect : Rect;
 
   constructor(stack : model.Stack, x : number, y : number) {
-    Object.assign(this, stack);
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
       x: AREA_MARGIN + x*STACK_SPACING_X,
@@ -20,18 +19,6 @@ export class Stack {
       width: CARD_WIDTH,
       height: CARD_HEIGHT
     }
-  }
-
-  get(index : any) {
-    return this.cards[index.position];
-  }
-
-  push(card : any, index : any) {
-    this.cards.splice(index.position, 0, card);
-  }
-
-  remove(index : any) {
-    this.cards.splice(index.position, 1)
   }
 
   render(ctx : CanvasRenderingContext2D) {

@@ -2,8 +2,6 @@ import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { Interpreter } from "../engine/interpreter";
 import { State } from "../state/state";
 import { UI } from "./ui";
-import { MoveCatch } from "../state/move_catch";
-import { Card } from "../model/card";
 import { Comparator } from "../state/comparator";
 import {activePlayer} from "../app";
 

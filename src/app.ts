@@ -30,7 +30,6 @@ fileSelector.addEventListener('change', (event) => {
   }
 });
 
-let state : State;
 let handler : Handler;
 let canvas : Canvas;
 let actions : Action[] = [];

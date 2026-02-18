@@ -33,7 +33,7 @@ export class Card {
       }
 
       ctx.font = "16px Arial";
-      ctx.fillText(this.child.rank + SUIT_MAP[this.child.suit], rect.x + rect.width / 8, rect.y + rect.height / 4);
+      ctx.fillText(this.child.rank.toUpperCase() + SUIT_MAP[this.child.suit], rect.x + rect.width / 8, rect.y + rect.height / 4);
     }
   }
 }
