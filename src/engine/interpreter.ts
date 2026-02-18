@@ -15,6 +15,7 @@ import { IntSetVisitor } from "../calc/intSetVisitor";
 import { PositionSetVisitor } from "../calc/positionSetVisitor";
 import { Position } from "../model/area";
 import { MoveCatch } from "../state/move_catch";
+import {deal} from "./functions";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -237,6 +238,13 @@ export class Interpreter implements dealVisitor<void> {
             }
         }
 
+    }
+
+    visitFunction_call (ctx: Function_callContext) {
+        switch(ctx.ID().text) {
+            case "deal":
+                deal(this.state, {});
+        }
     }
 
     visitCancel (ctx: CancelContext) {

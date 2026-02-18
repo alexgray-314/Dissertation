@@ -208,44 +208,4 @@ export class State {
 
     }
 
-    assign_action_subtree() {
-
-
-    }
-
-    add_catch() {
-    }
-
-    deal(args: Record<string, number | string>) {
-        const defaultArgs = {
-            jokers:"false",
-            distribute:"all",
-            shuffle:"true",
-            hand_max:52
-        };
-        Object.assign(defaultArgs, args); // merge defaults with set parameters
-
-        const deckArray = this.areas.get("deck")!.stacks[0].cards;
-        // ---- Shuffle the deck
-        if (defaultArgs.shuffle === "true") {
-            deckArray.sort(function (a, b) {
-                return Math.random() - 0.5;
-            });
-        }
-
-        // TODO actually consider the args
-
-        // Deal out the cards until done
-        let player = 0;
-        for (let i= 0; deckArray.length > 0; i++) {
-          this.add_card(deckArray[0], [player.toString(), 0, 0]);
-          this.remove_card(["deck", 0, 0]);
-          player++;
-          if (player >= this.num_players) {
-              player = 0;
-          }
-        }
-
-  }
-
 }
