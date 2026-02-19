@@ -49,12 +49,13 @@ on move </>[1:,0:0] x[1, 0] {
         // Wrong card, you must take a new one
 
         // Find the first empty stack
-        newSlot = 0;
-        for c in </>[0:, 0:0] {
-            log c;
-            newSlot = newSlot + 1;
-            if c == empty {
-                
+        newSlot = 1;
+        for c in </>[1:, 0:0] {
+            if c != empty {
+                newSlot = newSlot + 1;
+            } else {
+                move x[0,0] </>[newSlot, 0];
+                cancel; 
             };
         };
         move x[0,0] </>[newSlot, 0];

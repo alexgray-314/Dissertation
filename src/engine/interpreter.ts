@@ -209,7 +209,6 @@ export class Interpreter implements dealVisitor<void> {
         } else if (ctx.set().positionset() !== undefined) {
             
             // TODO - this doesn't work as expected
-            console.error("LOOP DOESN'T PERFORM EXPECTED BEHAVIOUR. NEED TO DO A HARD COPY OF ALL CARDS, REALLY");
             new PositionSetVisitor(this.state, (pos : Position) => {
                 const c : Card = this.state.get_card(pos);
                 this.state.variables.set(loopVar, ["CARD", c]);

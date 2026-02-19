@@ -48,7 +48,7 @@ export class State {
                 i.toString(),
                 {
                     min:1,
-                    hand:"true",
+                    hand:"false",
                     text:"Player " + i + "'s hand",
                 }
             ));
