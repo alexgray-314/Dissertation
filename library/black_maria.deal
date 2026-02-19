@@ -24,7 +24,7 @@ on move </>[0:0,0:20] centre[0,0] {
             if \.suit != winningCard.suit {
                 // The card is not in-suit
 
-                if winningCard.suit =? </>[0:0, 0:52].suit {
+                if winningCard.suit =? </>[0:0, 0:].suit {
                     // The player has a card in-suit that they could have played - INVALID
                     cancel;
                 };

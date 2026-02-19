@@ -1,4 +1,4 @@
-// Generated from C:\Users\alexj\WebstormProjects\plain-js/src/language/deal.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from deal.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ATN } from "antlr4ts/atn/ATN";

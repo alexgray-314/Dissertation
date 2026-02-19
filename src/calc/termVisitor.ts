@@ -39,12 +39,26 @@ export class TermVisitor implements dealVisitor<Primitive> {
     visitArg?: ((ctx: ArgContext) => Primitive) | undefined;
     visitArearef?: ((ctx: ArearefContext) => Primitive) | undefined;
     visitArea?: ((ctx: AreaContext) => Primitive) | undefined;
-    visitStack?: ((ctx: StackContext) => Primitive) | undefined;
+    visitStack (ctx: StackContext) {
+        return this.state.areas.get(ctx.arearef().text)?.stacks.length;
+    }
     visitPosition (ctx: PositionContext) {
         return new CardVisitor(this.state).visit(ctx);
     }
     visitTerm (ctx: TermContext) : Primitive {
+
         const property : string | undefined = ctx.property()?.ID().text;
+
+        // Special Cases - Consider stacks
+        // For example: x[0].length
+        if (ctx.stack() !== undefined) {
+            if (property === "length") {
+                return this.visitStack(ctx.stack()!);
+            } else {
+                return undefined;
+            }
+        }
+
         // NOTE: this will only get primitive properties. TODO deal with complex objects
         const term = ctx.getChild(0).accept(this);
         if (property !== undefined && typeof term === 'object') {

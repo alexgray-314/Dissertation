@@ -38,7 +38,7 @@ position:       arearef '[' aexpr ',' aexpr ']'
 MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
 
-term:           (CARD | STRING | aexpr | player | area | stack | position) property?;
+term:           (CARD | STRING | variable | aexpr | player | area | stack | position) property?;
 property:       '.' ID;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
