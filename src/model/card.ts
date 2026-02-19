@@ -32,7 +32,7 @@ export class StandardCard {
     rank : Rank; // TODO make rank and suit an enum so that it can be converted to a number
     suit : Suit;
     display : string;
-    faceup: boolean = false;
+    faceup: boolean = true;
 
     // Value #<rank><suit>
     // E.g. #4S == the 4 of spades

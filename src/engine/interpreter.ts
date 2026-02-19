@@ -1,5 +1,5 @@
-import { CardVisitor } from "../calc/cardVisitor";
-import { NumberVisitor } from "../calc/numberVisitor";
+import {CardVisitor} from "../calc/cardVisitor";
+import {NumberVisitor} from "../calc/numberVisitor";
 import {
     AssignContext,
     CancelContext,
@@ -8,27 +8,28 @@ import {
     Function_callContext,
     IfContext,
     LogContext,
+    ModifyContext,
     Move_catchContext,
     MoveContext,
     On_actionContext,
     On_moveContext,
     UpdateTurnContext,
 } from "../language/dealParser";
-import { Card, SpecialCard, StandardCard } from "../model/card";
-import { State } from "../state/state";
-import { PositionVisitor } from "../calc/positionVisitor";
-import { dealVisitor } from "../language/dealVisitor";
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Comparator, Primitive } from "../state/comparator";
-import { TermVisitor } from "../calc/termVisitor";
-import { IntSetVisitor } from "../calc/intSetVisitor";
-import { PositionSetVisitor } from "../calc/positionSetVisitor";
-import { Position } from "../model/area";
-import { MoveCatch } from "../state/move_catch";
-import { deal } from "./functions";
+import {Card, SpecialCard} from "../model/card";
+import {State} from "../state/state";
+import {PositionVisitor} from "../calc/positionVisitor";
+import {dealVisitor} from "../language/dealVisitor";
+import {ErrorNode} from "antlr4ts/tree/ErrorNode";
+import {ParseTree} from "antlr4ts/tree/ParseTree";
+import {RuleNode} from "antlr4ts/tree/RuleNode";
+import {TerminalNode} from "antlr4ts/tree/TerminalNode";
+import {Comparator} from "../state/comparator";
+import {TermVisitor} from "../calc/termVisitor";
+import {IntSetVisitor} from "../calc/intSetVisitor";
+import {PositionSetVisitor} from "../calc/positionSetVisitor";
+import {Position} from "../model/area";
+import {MoveCatch} from "../state/move_catch";
+import {deal} from "./functions";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -273,6 +274,16 @@ export class Interpreter implements dealVisitor<void> {
             output += ((ctx.getChild(c).accept(new TermVisitor(this.state))?.toString()) ?? "") + " ";
         }
         console.log(output);
+    }
+
+    visitModify (ctx: ModifyContext) : void {
+        const card : Card = this.cardVisitor.visit(ctx.getChild(0)) ?? SpecialCard.Empty;
+        if (card !== SpecialCard.Empty && card !== SpecialCard.Joker) {
+            const method : string = ctx.function_call().ID().text;
+            if (method === "up" || method === "down") {
+                card[method]();
+            }
+        }
     }
 
     visit(tree: ParseTree): void {

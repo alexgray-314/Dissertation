@@ -23,6 +23,7 @@ on move x[0,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
 
+    /..up(); // flip the card the right way around
     move / x[1,0]; // move your card to discard pile
     <.>++;
     if <.> == chicken {
@@ -35,6 +36,7 @@ on move x[1,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
 
+    /..up(); // flip the card the right way around
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     <.>++;
     if <.> == chicken {
@@ -61,6 +63,7 @@ on move </>[1:,0:0] x[1, 0] {
         move x[0,0] </>[newSlot, 0];
         cancel; 
     }; 
+    \..up();
 };
 
 on move ? ? {
