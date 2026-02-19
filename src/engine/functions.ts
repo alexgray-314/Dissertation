@@ -1,9 +1,14 @@
 import {State} from "../state/state";
 import {Card} from "../model/card";
 
-function shuffle(cards: Card[]) {
+export function shuffle(state : State) {
 
-    cards.sort(function (a, b) {
+    const deck = state.areas.get("deck")?.stacks[0].cards;
+    if (!deck) {
+        return;
+    }
+
+    deck.sort(function (a : Card, b : Card) {
         return Math.random() - 0.5;
     });
 }
@@ -24,7 +29,7 @@ export function deal(state : State, args: Record<string, number | string>) {
 
     // ---- Shuffle the deck
     if (defaultArgs.shuffle === "true") {
-        shuffle(deck);
+        shuffle(state);
     }
 
     // TODO actually consider the args

@@ -17,6 +17,8 @@ for i in 1:4 { // give each player 4 cards
     };
 };
 move deck[0:0,0:] x[0,0]; // Put the rest of the deck in the draw pile
+move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
+x[1,0]..up();
 
 // Take a card from draw pile
 on move x[0,0] </>[1:,0:0] {
@@ -29,6 +31,7 @@ on move x[0,0] </>[1:,0:0] {
     if <.> == chicken {
         log "This is the end of the game";
     };
+    \..down(); // Put that card you're taking face down
 };
 
 // Take a card from discard pile
@@ -42,6 +45,7 @@ on move x[1,0] </>[1:,0:0] {
     if <.> == chicken {
         log "this is the end of the game";
     };
+    \..down(); // Put the card you're taking face down
 };
 
 // Moving one of your cards to the discard pile

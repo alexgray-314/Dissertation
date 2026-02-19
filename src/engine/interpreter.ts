@@ -29,7 +29,7 @@ import {IntSetVisitor} from "../calc/intSetVisitor";
 import {PositionSetVisitor} from "../calc/positionSetVisitor";
 import {Position} from "../model/area";
 import {MoveCatch} from "../state/move_catch";
-import {deal} from "./functions";
+import {deal, shuffle} from "./functions";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -257,6 +257,9 @@ export class Interpreter implements dealVisitor<void> {
         switch(ctx.ID().text) {
             case "deal":
                 deal(this.state, {});
+                break;
+            case "shuffle":
+                shuffle(this.state);
                 break;
             default:
                 console.log(ctx.ID().text);
