@@ -1,6 +1,14 @@
 define area x(min:2, max:2, label:""); // x[0] draw x[1] discard
 define action c(label:"Chicken");
 define int chicken;
+define int newSlot;
+
+suffle();
+
+// Flip all the cards face down
+for c in deck[0:0, 0:] {
+    c..down();
+};
 
 // Custom Dealing
 for i in 1:4 { // give each player 4 cards
@@ -17,8 +25,8 @@ on move x[0,0] </>[1:,0:0] {
 
     move / x[1,0]; // move your card to discard pile
     <.>++;
-    if <.>.id == chicken {
-        
+    if <.> == chicken {
+        log "This is the end of the game";
     };
 };
 
@@ -29,8 +37,8 @@ on move x[1,0] </>[1:,0:0] {
 
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     <.>++;
-    if <.>.id == chicken {
-        
+    if <.> == chicken {
+        log "this is the end of the game";
     };
 };
 
@@ -39,10 +47,18 @@ on move x[1,0] </>[1:,0:0] {
 on move </>[1:,0:0] x[1, 0] {
     if \.rank != /.rank {
         // Wrong card, you must take a new one
-        define int newSlot;
-        newSlot = </>[].length + 1; // length
+
+        // Find the first empty stack
+        newSlot = 0;
+        for c in </>[0:, 0:0] {
+            log c;
+            newSlot = newSlot + 1;
+            if c == empty {
+                
+            };
+        };
         move x[0,0] </>[newSlot, 0];
-        cancel;
+        cancel; 
     }; 
 };
 
@@ -52,6 +68,7 @@ on move ? ? {
 
 on c {
     if <.> == <@> {
-        chicken = <.>.id;
+        log "Bcawwwrrrkkk";
+        chicken = <.>;
     };
 };
