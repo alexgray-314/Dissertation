@@ -32,6 +32,7 @@ export class StandardCard {
     rank : Rank; // TODO make rank and suit an enum so that it can be converted to a number
     suit : Suit;
     display : string;
+    faceup: boolean = false;
 
     // Value #<rank><suit>
     // E.g. #4S == the 4 of spades
@@ -81,6 +82,16 @@ export class StandardCard {
 
     toString() : string {
         return this.display;
+    }
+
+    up() {
+        this.faceup = true;
+    }
+    down() {
+        this.faceup = false;
+    }
+    flip() {
+        this.faceup = !this.faceup;
     }
 
 }
