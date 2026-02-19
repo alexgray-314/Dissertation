@@ -3,7 +3,7 @@ define action c(label:"Chicken");
 define int chicken;
 define int newSlot;
 
-suffle();
+shuffle();
 
 // Flip all the cards face down
 for c in deck[0:0, 0:] {
