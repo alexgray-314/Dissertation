@@ -1,38 +1,18 @@
 import { CardVisitor } from "../calc/cardVisitor";
 import { NumberVisitor } from "../calc/numberVisitor";
 import {
-    AexprContext,
-    AreaContext,
-    ArearefContext,
-    ArgContext,
-    ArgsContext,
     AssignContext,
-    BexprContext,
     CancelContext,
     DefinitionContext,
-    DestinationContext,
     ForContext,
     Function_callContext,
     IfContext,
-    IntsetContext,
     LogContext,
     Move_catchContext,
     MoveContext,
     On_actionContext,
     On_moveContext,
-    PlayerContext,
-    PlayersetContext,
-    PositionContext,
-    PositionsetContext,
-    ProgContext,
-    PropertyContext,
-    SetContext,
-    SourceContext,
-    StackContext,
-    StmtContext,
-    TermContext,
     UpdateTurnContext,
-    VariableContext
 } from "../language/dealParser";
 import { Card, SpecialCard, StandardCard } from "../model/card";
 import { State } from "../state/state";
@@ -48,7 +28,7 @@ import { IntSetVisitor } from "../calc/intSetVisitor";
 import { PositionSetVisitor } from "../calc/positionSetVisitor";
 import { Position } from "../model/area";
 import { MoveCatch } from "../state/move_catch";
-import {deal} from "./functions";
+import { deal } from "./functions";
 
 export class Interpreter implements dealVisitor<void> {
 

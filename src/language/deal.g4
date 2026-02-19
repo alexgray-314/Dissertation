@@ -48,7 +48,10 @@ EMPTY:          'empty';
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
                         | (('=?' | '!?') set)
                         );
-aexpr:          NUMBER | variable (op=('+'|'-'|'*') aexpr)*;
+aexpr:          NUMBER | variable (op=(PLUS|MINUS|TIMES) aexpr)*;
+PLUS:           '+';
+MINUS:          '-';
+TIMES:          '*';
 
 set:            (intset | positionset | playerset) property?;
 intset:         aexpr ':' aexpr?;

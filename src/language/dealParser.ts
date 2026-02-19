@@ -65,13 +65,13 @@ export class dealParser extends Parser {
 	public static readonly T__34 = 35;
 	public static readonly T__35 = 36;
 	public static readonly T__36 = 37;
-	public static readonly T__37 = 38;
-	public static readonly T__38 = 39;
-	public static readonly T__39 = 40;
-	public static readonly COMMENT = 41;
-	public static readonly MOVE_DEST = 42;
-	public static readonly MOVE_SOURCE = 43;
-	public static readonly EMPTY = 44;
+	public static readonly COMMENT = 38;
+	public static readonly MOVE_DEST = 39;
+	public static readonly MOVE_SOURCE = 40;
+	public static readonly EMPTY = 41;
+	public static readonly PLUS = 42;
+	public static readonly MINUS = 43;
+	public static readonly TIMES = 44;
 	public static readonly WILDCARD = 45;
 	public static readonly NUMBER = 46;
 	public static readonly ID = 47;
@@ -127,7 +127,7 @@ export class dealParser extends Parser {
 		"'int'", "'card'", "'move'", "'on'", "'{'", "'}'", "'for'", "'in'", "'if'", 
 		"'else'", "'cancel'", "'='", "'++'", "'log'", "'..'", "'('", "','", "')'", 
 		"':'", "'['", "']'", "'=='", "'!='", "'<<'", "'<='", "'>='", "'>>'", "'=?'", 
-		"'!?'", "'+'", "'-'", "'*'", undefined, "'/'", "'\\'", "'empty'", "'?'",
+		"'!?'", undefined, "'/'", "'\\'", "'empty'", "'+'", "'-'", "'*'", "'?'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
@@ -135,8 +135,8 @@ export class dealParser extends Parser {
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
-		undefined, undefined, undefined, undefined, undefined, undefined, "COMMENT", 
-		"MOVE_DEST", "MOVE_SOURCE", "EMPTY", "WILDCARD", "NUMBER", "ID", "CARD", 
+		undefined, undefined, undefined, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", 
+		"EMPTY", "PLUS", "MINUS", "TIMES", "WILDCARD", "NUMBER", "ID", "CARD", 
 		"STRING", "SPACES", "NEWLINE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(dealParser._LITERAL_NAMES, dealParser._SYMBOLIC_NAMES, []);
@@ -176,7 +176,7 @@ export class dealParser extends Parser {
 			this.state = 71;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__5) | (1 << dealParser.T__10) | (1 << dealParser.T__11) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__21))) !== 0) || ((((_la - 42)) & ~0x1F) === 0 && ((1 << (_la - 42)) & ((1 << (dealParser.MOVE_DEST - 42)) | (1 << (dealParser.MOVE_SOURCE - 42)) | (1 << (dealParser.ID - 42)))) !== 0)) {
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__5) | (1 << dealParser.T__10) | (1 << dealParser.T__11) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__21))) !== 0) || ((((_la - 39)) & ~0x1F) === 0 && ((1 << (_la - 39)) & ((1 << (dealParser.MOVE_DEST - 39)) | (1 << (dealParser.MOVE_SOURCE - 39)) | (1 << (dealParser.ID - 39)))) !== 0)) {
 				{
 				{
 				this.state = 68;
@@ -328,7 +328,7 @@ export class dealParser extends Parser {
 			this.state = 95;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__5) | (1 << dealParser.T__10) | (1 << dealParser.T__11) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__21))) !== 0) || ((((_la - 42)) & ~0x1F) === 0 && ((1 << (_la - 42)) & ((1 << (dealParser.MOVE_DEST - 42)) | (1 << (dealParser.MOVE_SOURCE - 42)) | (1 << (dealParser.ID - 42)))) !== 0)) {
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__5) | (1 << dealParser.T__10) | (1 << dealParser.T__11) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__21))) !== 0) || ((((_la - 39)) & ~0x1F) === 0 && ((1 << (_la - 39)) & ((1 << (dealParser.MOVE_DEST - 39)) | (1 << (dealParser.MOVE_SOURCE - 39)) | (1 << (dealParser.ID - 39)))) !== 0)) {
 				{
 				{
 				this.state = 92;
@@ -875,7 +875,7 @@ export class dealParser extends Parser {
 				this.state = 179;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while (_la === dealParser.T__1 || ((((_la - 42)) & ~0x1F) === 0 && ((1 << (_la - 42)) & ((1 << (dealParser.MOVE_DEST - 42)) | (1 << (dealParser.MOVE_SOURCE - 42)) | (1 << (dealParser.EMPTY - 42)) | (1 << (dealParser.NUMBER - 42)) | (1 << (dealParser.ID - 42)) | (1 << (dealParser.CARD - 42)) | (1 << (dealParser.STRING - 42)))) !== 0));
+			} while (_la === dealParser.T__1 || ((((_la - 39)) & ~0x1F) === 0 && ((1 << (_la - 39)) & ((1 << (dealParser.MOVE_DEST - 39)) | (1 << (dealParser.MOVE_SOURCE - 39)) | (1 << (dealParser.EMPTY - 39)) | (1 << (dealParser.NUMBER - 39)) | (1 << (dealParser.ID - 39)) | (1 << (dealParser.CARD - 39)) | (1 << (dealParser.STRING - 39)))) !== 0));
 			}
 		}
 		catch (re) {
@@ -1453,7 +1453,7 @@ export class dealParser extends Parser {
 						this.state = 260;
 						_localctx._op = this._input.LT(1);
 						_la = this._input.LA(1);
-						if (!(((((_la - 38)) & ~0x1F) === 0 && ((1 << (_la - 38)) & ((1 << (dealParser.T__37 - 38)) | (1 << (dealParser.T__38 - 38)) | (1 << (dealParser.T__39 - 38)))) !== 0))) {
+						if (!(((((_la - 42)) & ~0x1F) === 0 && ((1 << (_la - 42)) & ((1 << (dealParser.PLUS - 42)) | (1 << (dealParser.MINUS - 42)) | (1 << (dealParser.TIMES - 42)))) !== 0))) {
 							_localctx._op = this._errHandler.recoverInline(this);
 						} else {
 							if (this._input.LA(1) === Token.EOF) {
@@ -1633,7 +1633,7 @@ export class dealParser extends Parser {
 			this.state = 289;
 			this.match(dealParser.T__1);
 			this.state = 290;
-			this.match(dealParser.T__39);
+			this.match(dealParser.TIMES);
 			this.state = 291;
 			this.match(dealParser.T__4);
 			}
@@ -1736,7 +1736,7 @@ export class dealParser extends Parser {
 		"\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16" +
 		"\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02" +
 		".\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02\x02\x07\x03" +
-		"\x02\t\f\x04\x020033\x03\x02 %\x03\x02&\'\x03\x02(*\x02\u0138\x02I\x03" +
+		"\x02\t\f\x04\x020033\x03\x02 %\x03\x02&\'\x03\x02,.\x02\u0138\x02I\x03" +
 		"\x02\x02\x02\x04Z\x03\x02\x02\x02\x06a\x03\x02\x02\x02\bd\x03\x02\x02" +
 		"\x02\nm\x03\x02\x02\x02\fs\x03\x02\x02\x02\x0Ez\x03\x02\x02\x02\x10|\x03" +
 		"\x02\x02\x02\x12~\x03\x02\x02\x02\x14\x84\x03\x02\x02\x02\x16\x8C\x03" +
@@ -1758,7 +1758,7 @@ export class dealParser extends Parser {
 		"ZX\x03\x02\x02\x02ZY\x03\x02\x02\x02[\\\x03\x02\x02\x02\\]\x07\x03\x02" +
 		"\x02]\x05\x03\x02\x02\x02^`\x05\x04\x03\x02_^\x03\x02\x02\x02`c\x03\x02" +
 		"\x02\x02a_\x03\x02\x02\x02ab\x03\x02\x02\x02b\x07\x03\x02\x02\x02ca\x03" +
-		"\x02\x02\x02di\x07\x04\x02\x02ej\x07,\x02\x02fj\x07\x05\x02\x02gj\x07" +
+		"\x02\x02\x02di\x07\x04\x02\x02ej\x07)\x02\x02fj\x07\x05\x02\x02gj\x07" +
 		"\x06\x02\x02hj\x05:\x1E\x02ie\x03\x02\x02\x02if\x03\x02\x02\x02ig\x03" +
 		"\x02\x02\x02ih\x03\x02\x02\x02jk\x03\x02\x02\x02kl\x07\x07\x02\x02l\t" +
 		"\x03\x02\x02\x02mn\x07\b\x02\x02no\t\x02\x02\x02oq\x071\x02\x02pr\x05" +
@@ -1803,8 +1803,8 @@ export class dealParser extends Parser {
 		"\x07\x1F\x02\x02\xE01\x03\x02\x02\x02\xE1\xE2\x05,\x17\x02\xE2\xE3\x07" +
 		"\x1E\x02\x02\xE3\xE4\x05:\x1E\x02\xE4\xE5\x07\x1B\x02\x02\xE5\xE6\x05" +
 		":\x1E\x02\xE6\xE7\x07\x1F\x02\x02\xE7\xEB\x03\x02\x02\x02\xE8\xEB\x07" +
-		"-\x02\x02\xE9\xEB\x07,\x02\x02\xEA\xE1\x03\x02\x02\x02\xEA\xE8\x03\x02" +
-		"\x02\x02\xEA\xE9\x03\x02\x02\x02\xEB3\x03\x02\x02\x02\xEC\xF6\x07.\x02" +
+		"*\x02\x02\xE9\xEB\x07)\x02\x02\xEA\xE1\x03\x02\x02\x02\xEA\xE8\x03\x02" +
+		"\x02\x02\xEA\xE9\x03\x02\x02\x02\xEB3\x03\x02\x02\x02\xEC\xF6\x07+\x02" +
 		"\x02\xED\xF6\x072\x02\x02\xEE\xF6\x073\x02\x02\xEF\xF6\x05&\x14\x02\xF0" +
 		"\xF6\x05:\x1E\x02\xF1\xF6\x05\b\x05\x02\xF2\xF6\x05.\x18\x02\xF3\xF6\x05" +
 		"0\x19\x02\xF4\xF6\x052\x1A\x02\xF5\xEC\x03\x02\x02\x02\xF5\xED\x03\x02" +
@@ -1830,7 +1830,7 @@ export class dealParser extends Parser {
 		"\u011D\x05,\x17\x02\u011D\u011E\x07\x1E\x02\x02\u011E\u011F\x05> \x02" +
 		"\u011F\u0120\x07\x1B\x02\x02\u0120\u0121\x05> \x02\u0121\u0122\x07\x1F" +
 		"\x02\x02\u0122A\x03\x02\x02\x02\u0123\u0124\x07\x04\x02\x02\u0124\u0125" +
-		"\x07*\x02\x02\u0125\u0126\x07\x07\x02\x02\u0126C\x03\x02\x02\x02\u0127" +
+		"\x07.\x02\x02\u0125\u0126\x07\x07\x02\x02\u0126C\x03\x02\x02\x02\u0127" +
 		"\u012B\x07/\x02\x02\u0128\u012B\x052\x1A\x02\u0129\u012B\x05@!\x02\u012A" +
 		"\u0127\x03\x02\x02\x02\u012A\u0128\x03\x02\x02\x02\u012A\u0129\x03\x02" +
 		"\x02\x02\u012BE\x03\x02\x02\x02\x19IZaiqz\x9E\xAF\xB5\xBF\xC9\xCC\xD6" +
@@ -2898,6 +2898,33 @@ export class AexprContext extends ParserRuleContext {
 			return this.getRuleContext(i, AexprContext);
 		}
 	}
+	public PLUS(): TerminalNode[];
+	public PLUS(i: number): TerminalNode;
+	public PLUS(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(dealParser.PLUS);
+		} else {
+			return this.getToken(dealParser.PLUS, i);
+		}
+	}
+	public MINUS(): TerminalNode[];
+	public MINUS(i: number): TerminalNode;
+	public MINUS(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(dealParser.MINUS);
+		} else {
+			return this.getToken(dealParser.MINUS, i);
+		}
+	}
+	public TIMES(): TerminalNode[];
+	public TIMES(i: number): TerminalNode;
+	public TIMES(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(dealParser.TIMES);
+		} else {
+			return this.getToken(dealParser.TIMES, i);
+		}
+	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
@@ -3047,6 +3074,7 @@ export class PositionsetContext extends ParserRuleContext {
 
 
 export class PlayersetContext extends ParserRuleContext {
+	public TIMES(): TerminalNode { return this.getToken(dealParser.TIMES, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}

@@ -34,8 +34,8 @@ export class NumberVisitor implements dealVisitor<number> {
     visitUpdateTurn?: ((ctx: UpdateTurnContext) => number) | undefined;
 
     visitVariable (ctx: VariableContext) {
-        let [_, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
-        if (typeof value === typeof 0) {
+        let [type, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
+        if (typeof value === typeof 0 && type === "INT") {
             return Number(value);
         }
         return NaN;
@@ -59,7 +59,22 @@ export class NumberVisitor implements dealVisitor<number> {
     visitProperty?: ((ctx: PropertyContext) => number) | undefined;
     visitBexpr?: ((ctx: BexprContext) => number) | undefined;
     visitAexpr (ctx: AexprContext) {
-        return ctx.getChild(0).accept(this);
+        let result : number = ctx.getChild(0).accept(this);
+        for (let t : number = 2; t < ctx.childCount; t = t+2) {
+            const next : number = ctx.getChild(t).accept(this);
+            switch ((ctx.getChild(t-1) as TerminalNode)?.symbol?.type) {
+                case dealLexer.PLUS:
+                    result = result + next;
+                    break;
+                case dealLexer.MINUS:
+                    result = result - next;
+                    break;
+                case dealLexer.TIMES:
+                    result = result * next;
+                    break;
+            }
+        }
+        return result;
     }
     visitSet?: ((ctx: SetContext) => number) | undefined;
     visitIntset?: ((ctx: IntsetContext) => number) | undefined;

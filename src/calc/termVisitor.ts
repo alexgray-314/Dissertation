@@ -1,15 +1,31 @@
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Primitive } from "../state/comparator";
-import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../language/dealParser";
-import { dealVisitor } from "../language/dealVisitor";
-import { dealLexer } from "../language/dealLexer";
-import { State } from "../state/state";
-import { NumberVisitor } from "./numberVisitor";
-import { CardVisitor } from "./cardVisitor";
-import { StandardCard } from "../model/card";
+import {ErrorNode} from "antlr4ts/tree/ErrorNode";
+import {ParseTree} from "antlr4ts/tree/ParseTree";
+import {RuleNode} from "antlr4ts/tree/RuleNode";
+import {TerminalNode} from "antlr4ts/tree/TerminalNode";
+import {Primitive} from "../state/comparator";
+import {
+    AexprContext,
+    AreaContext,
+    ArearefContext,
+    ArgContext,
+    ArgsContext,
+    Function_callContext,
+    IntsetContext,
+    PlayerContext,
+    PlayersetContext,
+    PositionContext,
+    PositionsetContext,
+    SetContext,
+    StackContext,
+    TermContext,
+    VariableContext
+} from "../language/dealParser";
+import {dealVisitor} from "../language/dealVisitor";
+import {dealLexer} from "../language/dealLexer";
+import {State} from "../state/state";
+import {NumberVisitor} from "./numberVisitor";
+import {CardVisitor} from "./cardVisitor";
+import {SpecialCard, StandardCard} from "../model/card";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 
@@ -68,12 +84,10 @@ export class TermVisitor implements dealVisitor<Primitive> {
         return term;
 
     }
-    visitAexpr?: ((ctx: AexprContext) => Primitive) | undefined;
 
-    visitSet?: ((ctx: SetContext) => Primitive) | undefined;
-    visitIntset?: ((ctx: IntsetContext) => Primitive) | undefined;
-    visitPositionset?: ((ctx: PositionsetContext) => Primitive) | undefined;
-    visitPlayerset?: ((ctx: PlayersetContext) => Primitive) | undefined;
+    visitAexpr (ctx: AexprContext) {
+        return new NumberVisitor(this.state).visit(ctx);
+    }
     
     visit(tree: ParseTree): Primitive {
         return tree.accept(this);
@@ -90,6 +104,8 @@ export class TermVisitor implements dealVisitor<Primitive> {
             return node.text.slice(1,-1); // remove double quotes from either end
         } else if (node.symbol.type === dealLexer.CARD) {
             return new StandardCard(node.text);
+        } else if (node.symbol.type === dealLexer.EMPTY) {
+            return SpecialCard.Empty;
         }
         return undefined;
     }
