@@ -31,6 +31,7 @@ on move x[0,0] </>[1:,0:0] {
     if <.> == chicken {
         log "This is the end of the game";
     };
+    show \ </>; // This card was previsouly invisible. Display it to that player
     \..down(); // Put that card you're taking face down
 };
 

@@ -21,6 +21,7 @@ import { Function_callContext } from "./dealParser";
 import { UpdateTurnContext } from "./dealParser";
 import { LogContext } from "./dealParser";
 import { ModifyContext } from "./dealParser";
+import { ShowContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
@@ -241,6 +242,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitModify?: (ctx: ModifyContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.show`.
+	 * @param ctx the parse tree
+	 */
+	enterShow?: (ctx: ShowContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.show`.
+	 * @param ctx the parse tree
+	 */
+	exitShow?: (ctx: ShowContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.variable`.

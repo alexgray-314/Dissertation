@@ -12,7 +12,7 @@ import {
     Move_catchContext,
     MoveContext,
     On_actionContext,
-    On_moveContext,
+    On_moveContext, ShowContext,
     UpdateTurnContext,
 } from "../language/dealParser";
 import {Card, SpecialCard} from "../model/card";
@@ -30,6 +30,7 @@ import {PositionSetVisitor} from "../calc/positionSetVisitor";
 import {Position} from "../model/area";
 import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
+import {activePlayer} from "../app";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -286,6 +287,14 @@ export class Interpreter implements dealVisitor<void> {
             if (method === "up" || method === "down") {
                 card[method]();
             }
+        }
+    }
+
+    visitShow (ctx: ShowContext) : void {
+        const player : number = ctx.player().accept(this.numberVisitor);
+        const card : Card | undefined = ctx.getChild(1).accept(this.cardVisitor);
+        if (activePlayer === player && card !== undefined) {
+            window.alert("Card : " + card)
         }
     }
 
