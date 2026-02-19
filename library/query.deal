@@ -1,7 +1,5 @@
 define area a;
-define int x;
-x = 1;
-
-for i in 0:2 {
-  move #4D <i>[0,0];
-};
+move #4s a[0,0];
+move #2s a[0,0];
+move #AH <0>[0,0];
+move #kH <0>[0,0];
