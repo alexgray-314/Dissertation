@@ -161,7 +161,6 @@ export class Interpreter implements dealVisitor<void> {
                 }
                 break;
             case "=?":
-                console.log("leftTerm", termA.accept(this.termVisitor));
                 if (this.comparator.contains(termA.accept(this.termVisitor), termB)) {
                     ctx._consequent.accept(this); 
                     return;

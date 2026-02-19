@@ -40,7 +40,8 @@ export class TermVisitor implements dealVisitor<Primitive> {
     visitArearef?: ((ctx: ArearefContext) => Primitive) | undefined;
     visitArea?: ((ctx: AreaContext) => Primitive) | undefined;
     visitStack (ctx: StackContext) {
-        return this.state.areas.get(ctx.arearef().text)?.stacks.length;
+        const stack : number = new NumberVisitor(this.state).visit(ctx.aexpr());
+        return ((this.state.areas.get(ctx.arearef().text)?.stacks[stack])?.cards?.length) ?? 0;
     }
     visitPosition (ctx: PositionContext) {
         return new CardVisitor(this.state).visit(ctx);
