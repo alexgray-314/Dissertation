@@ -33,6 +33,8 @@ on move </>[0:0,0:20] centre[0,0] {
             } else {
                 // The card is in-suit
 
+                log \.rank " less than " winningCard.rank;
+
                 if \.rank >> winningCard.rank {
                     // Card is now the highest in the trick
 

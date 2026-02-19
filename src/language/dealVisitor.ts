@@ -19,6 +19,7 @@ import { CancelContext } from "./dealParser";
 import { AssignContext } from "./dealParser";
 import { Function_callContext } from "./dealParser";
 import { UpdateTurnContext } from "./dealParser";
+import { LogContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
@@ -156,6 +157,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitUpdateTurn?: (ctx: UpdateTurnContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.log`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLog?: (ctx: LogContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.variable`.

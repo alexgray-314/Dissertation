@@ -1,6 +1,39 @@
 import { CardVisitor } from "../calc/cardVisitor";
 import { NumberVisitor } from "../calc/numberVisitor";
-import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, CancelContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "../language/dealParser";
+import {
+    AexprContext,
+    AreaContext,
+    ArearefContext,
+    ArgContext,
+    ArgsContext,
+    AssignContext,
+    BexprContext,
+    CancelContext,
+    DefinitionContext,
+    DestinationContext,
+    ForContext,
+    Function_callContext,
+    IfContext,
+    IntsetContext,
+    LogContext,
+    Move_catchContext,
+    MoveContext,
+    On_actionContext,
+    On_moveContext,
+    PlayerContext,
+    PlayersetContext,
+    PositionContext,
+    PositionsetContext,
+    ProgContext,
+    PropertyContext,
+    SetContext,
+    SourceContext,
+    StackContext,
+    StmtContext,
+    TermContext,
+    UpdateTurnContext,
+    VariableContext
+} from "../language/dealParser";
 import { Card, SpecialCard, StandardCard } from "../model/card";
 import { State } from "../state/state";
 import { PositionVisitor } from "../calc/positionVisitor";
@@ -253,6 +286,14 @@ export class Interpreter implements dealVisitor<void> {
     visitCancel (ctx: CancelContext) {
         this.running = false;
         this.state.move_info.cancelled = true;
+    }
+
+    visitLog (ctx: LogContext) {
+        let output : string = "";
+        for (let c:number = 1; c < ctx.childCount; c++) {
+            output += ((ctx.getChild(c).accept(new TermVisitor(this.state))?.toString()) ?? "") + " ";
+        }
+        console.log(output);
     }
 
     visit(tree: ParseTree): void {
