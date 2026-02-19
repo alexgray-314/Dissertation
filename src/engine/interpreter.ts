@@ -170,26 +170,26 @@ export class Interpreter implements dealVisitor<void> {
                 }
                 break;
             case "<<":
-                if (termA.accept(this.numberVisitor) < termB.accept(this.numberVisitor)) {
-                    ctx._consequent.accept(this); 
+                if (this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
+                    ctx._consequent.accept(this);
                     return;
                 }
                 break;
             case ">>":
-                if (termA.accept(this.numberVisitor) > termB.accept(this.numberVisitor)) {
+                if (this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
                     ctx._consequent.accept(this); 
                     return;
                 }
                 break;
             case ">=":
-                if (termA.accept(this.numberVisitor) >= termB.accept(this.numberVisitor)) {
-                    ctx._consequent.accept(this); 
+                if (!this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
+                    ctx._consequent.accept(this);
                     return;
                 }
                 break;
             case "<=":
-                if (termA.accept(this.numberVisitor) <= termB.accept(this.numberVisitor)) {
-                    ctx._consequent.accept(this); 
+                if (!this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
+                    ctx._consequent.accept(this);
                     return;
                 }
                 break;

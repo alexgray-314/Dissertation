@@ -25,6 +25,32 @@ export class Comparator {
         return a === b;
     }
 
+    less_than(a : Primitive, b : Primitive) : boolean {
+        if (a === undefined || b === undefined) {
+            return false;
+        }
+
+        if (typeof a === 'object' || typeof b === 'object') {
+            return false
+            // TODO maybe implement this for cards???
+        }
+
+        return a < b;
+    }
+
+    greater_than(a : Primitive, b : Primitive) : boolean {
+        if (a === undefined || b === undefined) {
+            return false;
+        }
+
+        if (typeof a === 'object' || typeof b === 'object') {
+            return false
+            // TODO maybe implement this for cards???
+        }
+
+        return a > b;
+    }
+
     contains(left : Primitive, set : ParseTree) : boolean {
 
         let contains : boolean = false;

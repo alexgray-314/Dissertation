@@ -3,12 +3,6 @@ import {Rect} from "./hitbox";
 
 export const CARD_WIDTH = 70;
 export const CARD_HEIGHT = 100;
-const SUIT_MAP = {
-  "spades": "♠",
-  "hearts": "♥",
-  "clubs": "♣",
-  "diamonds": "♦"
-}
 
 export class Card {
 
@@ -33,7 +27,7 @@ export class Card {
       }
 
       ctx.font = "16px Arial";
-      ctx.fillText(this.child.rank.toUpperCase() + SUIT_MAP[this.child.suit], rect.x + rect.width / 8, rect.y + rect.height / 4);
+      ctx.fillText(this.child.toString(), rect.x + rect.width / 8, rect.y + rect.height / 4);
     }
   }
 }

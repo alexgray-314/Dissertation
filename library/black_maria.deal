@@ -31,16 +31,18 @@ on move </>[0:0,0:20] centre[0,0] {
                 // Card can be "thrown away"
 
             } else {
-                // The card is in-suit
-
-                log \.rank " less than " winningCard.rank;
+                // The card is in-suit                
 
                 if \.rank >> winningCard.rank {
                     // Card is now the highest in the trick
-
+                    log \.rank "greater than" winningCard.rank;
                     winningCard = \;
                     winningPlayer = </>.id;
+                } else {
+                    log \.rank "less than" winningCard.rank;
                 };
+
+                log "winner" winningPlayer "with" winningCard;
 
             };
 
