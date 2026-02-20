@@ -67,7 +67,7 @@ move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';
 
 NUMBER:         [0-9]+ ;
-ID:             [a-zA-Z]+ ;
+ID:             [a-zA-Z_]+ ;
 CARD:           '#' ('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs] ;
 STRING:         '"' [A-Za-z ]* '"';
 
