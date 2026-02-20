@@ -1,5 +1,5 @@
-define area x(min:2, max:2, label:""); // x[0] draw x[1] discard
-define action c(label:"Chicken");
+define area x; // x[0] draw x[1] discard
+define action c;
 define int chicken;
 define int newSlot;
 
@@ -77,7 +77,7 @@ on move ? ? {
 
 on c {
     if <.> == <@> {
-        log "Bcawwwrrrkkk";
+        log "Chicken";
         chicken = <.>;
     };
 };

@@ -51,7 +51,7 @@ function init(sourceCode : string) {
 
   const libraryContent = get_tree(lib);
   const tree = get_tree(sourceCode);
-  const state = new State(4);
+  const state = new State(2);
   const interpreter : dealVisitor<void> = new Interpreter(state);
   try {
     interpreter.visit(libraryContent)

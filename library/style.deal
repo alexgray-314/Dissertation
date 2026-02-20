@@ -1,0 +1,28 @@
+$style {
+    player {
+        label "Your hand",
+        0 {
+            location hand, // hand
+            view private,
+            display spread
+        },
+        1: {
+            location centre, // side
+            view private
+        }
+    },
+    x {
+        label "",
+        location centre, // centre
+        0 {
+            view public, // unncessary - this is the default
+            label "Discard"
+        },
+        1 {
+            label "Draw"
+        },
+        2: {
+            view hidden
+        }
+    }
+};
