@@ -22,6 +22,9 @@ import { UpdateTurnContext } from "./dealParser";
 import { LogContext } from "./dealParser";
 import { ModifyContext } from "./dealParser";
 import { ShowContext } from "./dealParser";
+import { ConfigContext } from "./dealParser";
+import { AttributeContext } from "./dealParser";
+import { AttsContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
@@ -180,6 +183,27 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitShow?: (ctx: ShowContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.config`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConfig?: (ctx: ConfigContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.attribute`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAttribute?: (ctx: AttributeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.atts`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAtts?: (ctx: AttsContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.variable`.

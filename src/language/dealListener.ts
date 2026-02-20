@@ -22,6 +22,9 @@ import { UpdateTurnContext } from "./dealParser";
 import { LogContext } from "./dealParser";
 import { ModifyContext } from "./dealParser";
 import { ShowContext } from "./dealParser";
+import { ConfigContext } from "./dealParser";
+import { AttributeContext } from "./dealParser";
+import { AttsContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
@@ -253,6 +256,39 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitShow?: (ctx: ShowContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.config`.
+	 * @param ctx the parse tree
+	 */
+	enterConfig?: (ctx: ConfigContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.config`.
+	 * @param ctx the parse tree
+	 */
+	exitConfig?: (ctx: ConfigContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.attribute`.
+	 * @param ctx the parse tree
+	 */
+	enterAttribute?: (ctx: AttributeContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.attribute`.
+	 * @param ctx the parse tree
+	 */
+	exitAttribute?: (ctx: AttributeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.atts`.
+	 * @param ctx the parse tree
+	 */
+	enterAtts?: (ctx: AttsContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.atts`.
+	 * @param ctx the parse tree
+	 */
+	exitAtts?: (ctx: AttsContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.variable`.

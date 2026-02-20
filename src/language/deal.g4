@@ -3,7 +3,7 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn | log | modify | show) ';' ;
+stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
@@ -26,6 +26,10 @@ log:            'log' (term)+;
 modify:         position '..' function_call
                 | variable '..' function_call;
 show:           'show' (position | CARD | variable) player;
+
+config:         '$' ID atts;
+attribute:      (ID|NUMBER|intset) (ID | STRING | atts);
+atts:           '{' (attribute (',' attribute)*)? '}';
 
 variable:       ID;
 
