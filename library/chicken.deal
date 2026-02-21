@@ -84,16 +84,33 @@ on c {
 
 $style {
     player {
-        label "Your hand",
         0 {
-            location hand, // hand
+            label "Your hand",
+            location hand,
             view private,
             display spread
         },
         1: {
-            location centre, // side
-            view private,
+            label "Player",
+            location side,
+            view public,
             display single
+        }
+    },
+    x {
+        label "",
+        location centre, // centre
+        0 {
+            label "Discard",
+            display single
+        },
+        1 {
+            label "Draw",
+            display single
+        },
+        2: {
+            label "",
+            view hidden
         }
     }
 };

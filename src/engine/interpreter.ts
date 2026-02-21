@@ -2,7 +2,7 @@ import {CardVisitor} from "../calc/cardVisitor";
 import {NumberVisitor} from "../calc/numberVisitor";
 import {
     AssignContext,
-    CancelContext,
+    CancelContext, ConfigContext,
     DefinitionContext,
     ForContext,
     Function_callContext,
@@ -31,6 +31,7 @@ import {Position} from "../model/area";
 import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
+import {Style} from "./style";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -296,6 +297,10 @@ export class Interpreter implements dealVisitor<void> {
         if (activePlayer === player && card !== undefined) {
             window.alert("Card : " + card)
         }
+    }
+
+    visitConfig(ctx: ConfigContext) : void {
+        console.log(ctx.accept(new Style()));
     }
 
     visit(tree: ParseTree): void {
