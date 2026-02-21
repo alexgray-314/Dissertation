@@ -10,6 +10,7 @@ import {Canvas} from "./ui/canvas";
 import {MouseHandler} from "./ui/input/mouseHandler";
 import {Action} from "./ui/input/action";
 import {lib} from "../library/deck";
+import {Style} from "./engine/style";
 
 /**
  * npm run build
@@ -52,7 +53,8 @@ function init(sourceCode : string) {
   const libraryContent = get_tree(lib);
   const tree = get_tree(sourceCode);
   const state = new State(2);
-  const interpreter : dealVisitor<void> = new Interpreter(state);
+  const style = new Style();
+  const interpreter : dealVisitor<void> = new Interpreter(state, style);
   try {
     interpreter.visit(libraryContent)
     interpreter.visit(tree);
@@ -73,7 +75,8 @@ function init(sourceCode : string) {
 
   render();
 
-  console.log(state);
+  console.log("state",state);
+  console.log("style",style);
   console.log("canvas", canvas);
 
 }

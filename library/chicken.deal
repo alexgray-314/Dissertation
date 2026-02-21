@@ -100,13 +100,12 @@ $style {
     x {
         label "",
         location centre, // centre
+        display single,
         0 {
-            label "Discard",
-            display single
+            label "Discard"
         },
         1 {
-            label "Draw",
-            display single
+            label "Draw"
         },
         2: {
             label "",
