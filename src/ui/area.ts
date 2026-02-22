@@ -24,19 +24,24 @@ export class Area {
 
     this.stacks = [];
     // check for min args
-    for (let x = 0; x < Math.max(Number(area.args.min), area.stacks.length); x++) {
-      const label : string | undefined = config.get("style", (!Number.isNaN(Number(area.id)) ? "player" : area.id), x.toString(), "label");
-      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y, label);
+    const min : number = Number(config.get("style", area.id, "min_display") ?? "1");
+    for (let x = 0; x < Math.max(min, area.stacks.length); x++) {
+
+      // Attributes
+      const label : string | undefined = config.get("style", area.id, x.toString(), "label");
+      const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
+
+      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y, label, display);
       this.stacks.push(stack);
 
       // Hitboxes
-      if (area.args.hand !== "true") {
+      if (display === "single") {
         // Users can only take the top card
         hitBoxes.push(new Hitbox(
           stack.rect,
           [area.id, x, 0]
         ));
-      } else {
+      } else if (display === "spread") {
         // This is a hand, users can take any card
 
         for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
@@ -57,26 +62,9 @@ export class Area {
 
   render(ctx : CanvasRenderingContext2D) {
 
-    if (this.child.args.hand === "true") {
-      // The area is a players hand
-      let rect : Rect = {
-        x: AREA_MARGIN,
-        y: AREA_MARGIN + this.y*AREA_SPACING_Y,
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
-      }
-      // Outline
-      ctx.strokeStyle = "rgba(0,0,0,0.4)";
-      ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-      for (let card of this.stacks[0].cards) {
-        card.render(ctx, rect);
-        rect.x += FAN_SPACING;
-      }
-    } else {
       for (let s of this.stacks) {
         s.render(ctx);
       }
-    }
 
   }
 

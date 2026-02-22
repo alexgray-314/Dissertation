@@ -3,7 +3,7 @@ import {Card, CARD_HEIGHT, CARD_WIDTH} from "./card";
 const STACK_SPACING_X = 80;
 
 import * as model from "../model/stack";
-import {AREA_MARGIN, AREA_SPACING_Y} from "./area";
+import {AREA_MARGIN, AREA_SPACING_Y, FAN_SPACING} from "./area";
 import {Rect} from "./hitbox";
 
 export class Stack {
@@ -11,8 +11,9 @@ export class Stack {
   cards : Card[];
   rect : Rect;
   label : string | undefined;
+  display : string;
 
-  constructor(stack : model.Stack, x : number, y : number, label : string | undefined) {
+  constructor(stack : model.Stack, x : number, y : number, label : string | undefined, display : string) {
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
       x: AREA_MARGIN + x*STACK_SPACING_X,
@@ -21,6 +22,7 @@ export class Stack {
       height: CARD_HEIGHT
     };
     this.label = label;
+    this.display = display;
   }
 
   render(ctx : CanvasRenderingContext2D) {
@@ -28,10 +30,22 @@ export class Stack {
     ctx.strokeStyle = "rgba(0,0,0,0.4)";
     ctx.strokeRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
-    // Draw top card
-    // TODO add option to fan out cards (for example, patience)
-    if (this.cards.length > 0) {
-      this.cards[0].render(ctx, this.rect);
+    if (this.display == "single") {
+      // Draw top card
+      if (this.cards.length > 0) {
+        this.cards[0].render(ctx, this.rect);
+      }
+    } else if (this.display === "spread") {
+      let rect : Rect = {
+        x: this.rect.x,
+        y: this.rect.y,
+        width: this.rect.width,
+        height: this.rect.height,
+      }
+      for (let card of this.cards) {
+        card.render(ctx, rect);
+        rect.x += FAN_SPACING;
+      }
     }
 
     // Draw label

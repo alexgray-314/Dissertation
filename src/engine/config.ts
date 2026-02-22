@@ -19,6 +19,10 @@ export class Config implements dealVisitor<Attributes> {
 
     get(group : string, ...args : string[]) : string | undefined {
         let head : Attributes = (group === "config") ? this.config : ((group === "style") ? this.style : {});
+        // Number ids refer to a player
+        if (!Number.isNaN(Number(args[0]))) {
+            args[0] = "player";
+        }
         for (let i : number = 0; i < args.length; i++) {
             if (head[args[i]] === undefined) {
                 return undefined;
