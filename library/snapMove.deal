@@ -1,7 +1,7 @@
-define action snap(text:"SNAP!!");
-define area a(min:1, text:"Discard Pile");
+define action snap;
+define area a;
 
-on move {
+on move ? ? {
   // Can only move cards on your turn
   if </> == <.> {
     // Can only take a card from your hand
@@ -24,14 +24,14 @@ on move {
 on snap {
   if a[0, 0].suit == a[0, 1].suit {
     // The cards matched
-    move a[0,0:52] <@>[0,0];
+    move a[0:0,0:52] <@>[0,0];
   } else {
     // The cards did not match.
     if <@> == <0> {
       // Give the cards to the player who did not snap
-      move a[0,0:52] <1>[0,0];
+      move a[0:0,0:52] <1>[0,0];
     } else {
-      move a[0,0:52] <0>[0,0];
+      move a[0:0,0:52] <0>[0,0];
     };
   };
 };

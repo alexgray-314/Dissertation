@@ -15,68 +15,19 @@ export class Style implements dealVisitor<Config> {
         this.config = {};
     }
 
-    /**
-     * This is used to get global style properties (e.g. table colour, card type, etc)
-    */
-    get_style(attribute : string) : string | undefined {
-        return this.check_attribute(attribute, this.config);
-    }
-
-    /**
-     * This is used to get the formatting for a specific stack before rendering
-     */
-    get_format(attribute : string, area : string, stack: number): string | undefined {
-
-        // Area is a player area
-        if (!Number.isNaN(Number(area))) {
-            area = "player";
-        }
-
-        // return this.config[area]?.[attribute] ?? undefined;
-
-        if (this.config.hasOwnProperty(area)) {
-            // If the area has that attribute defined for all stacks, return that
-            if (this.check_attribute(attribute, this.config[area]) !== undefined) {
-                return this.check_attribute(attribute, this.config[area]);
+    get(...args : string[]) : string | undefined {
+        let head : Config = this.config;
+        for (let i : number = 0; i < args.length; i++) {
+            if (head[args[i]] === undefined) {
+                return undefined;
             }
-
-            if (typeof this.config[area] !== 'string') {
-                return this.interpolate_stack_attribute(attribute, this.config[area] as Config, stack);
-            }
-
-        }
-        return undefined;
-    }
-
-    /**
-     * Given a root within the config, check if an attribute is present
-     */
-    private check_attribute(attribute : string, root : string | Config | undefined) : string | undefined {
-        if (root === undefined || typeof root === "string") {
-            return undefined;
-        }
-        if (root.hasOwnProperty(attribute)) {
-            if (typeof root[attribute] === "string") {
-                return root[attribute];
-            }
-        }
-        return undefined;
-    }
-
-    private interpolate_stack_attribute(attribute : string, area_config : Config, stack: number) : string | undefined {
-        if (area_config.hasOwnProperty(stack.toString())) {
-            if (typeof area_config[stack.toString()] === "string"){
-                return area_config[stack.toString()] as string;
-            } else {
-                let target;
-                for (let key in this.config) {
-                    const lower_bound : number = Number(key.split(":")[0]);
-                    if (stack >= lower_bound) {
-
-                    }
+            if (typeof head[args[i]] === 'string') {
+                if (i === args.length - 1) {
+                    return head[args[i]] as string;
                 }
+            } else {
+                head = head[args[i]] as Config;
             }
-
         }
         return undefined;
     }
@@ -100,6 +51,7 @@ export class Style implements dealVisitor<Config> {
     visitConfig(ctx: ConfigContext): Config {
         if (ctx.ID().text === "style") {
             this.config = ctx.atts().accept(this);
+            console.log(this.get("player","0","label"));
         }
         return this.config;
     }
