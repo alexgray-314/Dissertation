@@ -10,15 +10,17 @@ export class Stack {
 
   cards : Card[];
   rect : Rect;
+  label : string | undefined;
 
-  constructor(stack : model.Stack, x : number, y : number) {
+  constructor(stack : model.Stack, x : number, y : number, label : string | undefined) {
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
       x: AREA_MARGIN + x*STACK_SPACING_X,
       y: AREA_MARGIN + y*AREA_SPACING_Y,
       width: CARD_WIDTH,
       height: CARD_HEIGHT
-    }
+    };
+    this.label = label;
   }
 
   render(ctx : CanvasRenderingContext2D) {
@@ -31,6 +33,14 @@ export class Stack {
     if (this.cards.length > 0) {
       this.cards[0].render(ctx, this.rect);
     }
+
+    // Draw label
+    if (this.label !== undefined) {
+      ctx.fillStyle = "black";
+      ctx.font = "12px Arial";
+      ctx.fillText(this.label, this.rect.x, this.rect.y - 5);
+    }
+
   }
 
 }

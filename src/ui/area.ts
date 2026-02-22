@@ -7,22 +7,26 @@ export const FAN_SPACING = 40;
 import * as model from "../model/area";
 import {Hitbox, Rect} from "./hitbox";
 import {CARD_HEIGHT, CARD_WIDTH} from "./card";
+import {Config} from "../engine/config";
 
 export class Area {
 
   y : number;
   stacks : Stack[];
   child: model.Area;
+  config : Config;
 
   // Will generate a UI area from a state area
-  constructor(area : model.Area, y : number, hitBoxes : Hitbox[]) {
+  constructor(area : model.Area, y : number, hitBoxes : Hitbox[], config : Config) {
     this.child = area;
     this.y = y;
+    this.config = config;
 
     this.stacks = [];
     // check for min args
     for (let x = 0; x < Math.max(Number(area.args.min), area.stacks.length); x++) {
-      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y);
+      const label : string | undefined = config.get("style", (!Number.isNaN(Number(area.id)) ? "player" : area.id), x.toString(), "label");
+      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y, label);
       this.stacks.push(stack);
 
       // Hitboxes
@@ -74,9 +78,6 @@ export class Area {
       }
     }
 
-    ctx.fillStyle = "black";
-    ctx.font = "12px Arial";
-    ctx.fillText(this.child.id, AREA_MARGIN, AREA_MARGIN + this.y*AREA_SPACING_Y - 5);
   }
 
 }

@@ -43,7 +43,7 @@ export class Canvas implements UI{
         if (/\d+/.test(id) && id !== player.toString()) { // if it's an ID, check it's the current players ID
           delete this.areas[id];
         } else {
-          this.areas[id] = new Area(area, y, this.hitBoxes);
+          this.areas[id] = new Area(area, y, this.hitBoxes, this.config);
           y++;
         }
       }
