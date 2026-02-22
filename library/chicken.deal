@@ -88,6 +88,9 @@ $config{
 };
 
 $style {
+    c {
+        label "Chicken"
+    },
     player {
         0 {
             label "Your hand",

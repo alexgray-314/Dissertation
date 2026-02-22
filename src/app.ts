@@ -90,12 +90,12 @@ function init(sourceCode : string) {
     console.error(error);
   }
 
-  canvas = new Canvas(state);
+  canvas = new Canvas(state, config);
   handler = new Handler(state, canvas);
 
   // setup actions
-  actions = Array.from(state.action_catches.keys()).map((action : string) => {
-    return new Action(action, handler);
+  actions = Array.from(state.action_catches.keys()).map((id : string) => {
+    return new Action(id, handler, config);
   });
 
   // Mouse input
