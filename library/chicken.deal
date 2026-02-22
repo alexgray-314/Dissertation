@@ -82,10 +82,6 @@ on c {
     };
 };
 
-move #4s <0>[0,0];
-move #5s <0>[0,0];
-move #6s <0>[0,0];
-
 $config{
     title "Chicken",
     num_players 4
@@ -97,13 +93,10 @@ $style {
     },
     player {
         location north,
-        view public,
+        visibility private,
         display single,
         0 {
-            label "Your hand",
-            location hand,
-            view private,
-            display spread
+            visibility hidden
         },
         1 {
             label "Player Area"
@@ -111,8 +104,9 @@ $style {
     },
     x {
         min_display 2,
-        location centre, // centre
+        location south, // centre
         display single,
+        visibility public,
         0 {
             label "Discard"
         },

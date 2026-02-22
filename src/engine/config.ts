@@ -17,6 +17,9 @@ export class Config implements dealVisitor<Attributes> {
         this.style = {};
     }
 
+    /**
+     * Note: Will also return if attribute present in parent, but not child
+     */
     get(group : string, ...args : string[]) : string | undefined {
         let head : Attributes = (group === "config") ? this.config : ((group === "style") ? this.style : {});
         // Number ids refer to a player
@@ -25,7 +28,7 @@ export class Config implements dealVisitor<Attributes> {
         }
         for (let i : number = 0; i < args.length; i++) {
             if (head[args[i]] === undefined) {
-                return undefined;
+                break;
             }
             if (typeof head[args[i]] === 'string') {
                 if (i === args.length - 1) {
@@ -34,6 +37,9 @@ export class Config implements dealVisitor<Attributes> {
             } else {
                 head = head[args[i]] as Attributes;
             }
+        }
+        if (args.length >= 2) {
+            return this.get(group, ...args.slice(0, -2).concat(args.slice(-1)));
         }
         return undefined;
     }

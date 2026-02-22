@@ -8,10 +8,10 @@ import * as model from "../model/area";
 import {Hitbox, Rect} from "./hitbox";
 import {CARD_HEIGHT, CARD_WIDTH} from "./card";
 import {Config} from "../engine/config";
+import {activePlayer} from "../app";
 
 export class Area {
 
-  y : number;
   stacks : Stack[];
   child: model.Area;
   config : Config;
@@ -19,7 +19,6 @@ export class Area {
   // Will generate a UI area from a state area
   constructor(area : model.Area, yDefault : number, hitBoxes : Hitbox[], config : Config) {
     this.child = area;
-    this.y = this.map_location_to_y(config.get("style", area.id, "location")) ?? yDefault;
     this.config = config;
 
     this.stacks = [];
@@ -30,32 +29,35 @@ export class Area {
       // Attributes
       const label : string | undefined = config.get("style", area.id, x.toString(), "label");
       const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
+      const visibility : string = config.get("style", area.id, x.toString(), "visibility") ?? "public";
+      const visible : boolean = visibility === "public" || (visibility === "private" && activePlayer === Number(area.id));
+      const y: number = this.map_location_to_y(config.get("style", area.id, x.toString(), "location")) ?? yDefault;
 
-      const y : number = this.map_location_to_y(config.get("style", area.id, x.toString(), "location")) ?? this.y;
-
-      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y, label, display);
+      const stack = new Stack(area.stacks[x] ?? {cards: []}, x, y, label, display, visible);
       this.stacks.push(stack);
 
-      // Hitboxes
-      if (display === "single") {
-        // Users can only take the top card
-        hitBoxes.push(new Hitbox(
-          stack.rect,
-          [area.id, x, 0]
-        ));
-      } else if (display === "spread") {
-        // This is a hand, users can take any card
-
-        for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
+      if (visible) {
+        // Hitboxes
+        if (display === "single") {
+          // Users can only take the top card
           hitBoxes.push(new Hitbox(
-            {
-              x: AREA_MARGIN + pos*FAN_SPACING,
-              y: AREA_MARGIN + y*AREA_SPACING_Y,
-              width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
-              height: CARD_HEIGHT,
-            },
-            [area.id, 0, pos]
+              stack.rect,
+              [area.id, x, 0]
           ));
+        } else if (display === "spread") {
+          // This is a hand, users can take any card
+
+          for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
+            hitBoxes.push(new Hitbox(
+                {
+                  x: AREA_MARGIN + pos * FAN_SPACING,
+                  y: AREA_MARGIN + y * AREA_SPACING_Y,
+                  width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
+                  height: CARD_HEIGHT,
+                },
+                [area.id, 0, pos]
+            ));
+          }
         }
       }
 
