@@ -72,3 +72,27 @@ on move ? ? {
 
 winningPlayer = 0;
 deal(distribute:"even");
+
+$config {
+    num_players 4,
+    title "Black Maria"
+};
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Your Hand",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    centre {
+        visibility public,
+        location north,
+        0 {
+            label "Discard Pile"
+        }
+    }
+};

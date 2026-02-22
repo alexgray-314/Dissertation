@@ -92,10 +92,10 @@ $style {
         label "Chicken"
     },
     player {
-        location north,
-        visibility private,
         display single,
+        visibility public,
         0 {
+            location hand,
             visibility hidden
         },
         1 {
@@ -104,7 +104,7 @@ $style {
     },
     x {
         min_display 2,
-        location south, // centre
+        // location a, // centre
         display single,
         visibility public,
         0 {
