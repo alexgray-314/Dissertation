@@ -11,6 +11,7 @@ import {MouseHandler} from "./ui/input/mouseHandler";
 import {Action} from "./ui/input/action";
 import {lib} from "../library/deck";
 import {Config} from "./engine/config";
+import {i} from "vite/dist/node/chunks/moduleRunnerTransport";
 
 /**
  * npm run build
@@ -39,14 +40,14 @@ export var activePlayer : number = 0;
 let mouseHandler : MouseHandler;
 
 // Player selector
-document.getElementById("playerSelector")?.addEventListener("change", event => {
+const playerSelector = document.getElementById("playerSelector");
+playerSelector?.addEventListener("change", event => {
   const target = event.target as HTMLSelectElement;
   activePlayer = Number(target.value);
   if (handler) {
     handler.notify();
   }
 });
-
 
 function init(sourceCode : string) {
 
@@ -69,6 +70,14 @@ function init(sourceCode : string) {
     }
   } catch (error) {
     console.error(error);
+  }
+
+  // Update player selector based on number of players
+  for (let i = 0; i < num_players; i++) {
+    const opt = document.createElement('option');
+    opt.value = i.toString();
+    opt.innerHTML = "Player " + i.toString();
+    playerSelector?.appendChild(opt);
   }
 
   // Loading the game

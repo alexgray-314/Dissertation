@@ -84,7 +84,7 @@ on c {
 
 $config{
     title "Chicken",
-    num_players 2
+    num_players 4
 };
 
 $style {
