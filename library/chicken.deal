@@ -82,6 +82,11 @@ on c {
     };
 };
 
+$config{
+    title "Chicken",
+    num_players 2
+};
+
 $style {
     player {
         0 {

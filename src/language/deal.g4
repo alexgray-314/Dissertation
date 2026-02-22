@@ -28,7 +28,7 @@ modify:         position '..' function_call
 show:           'show' (position | CARD | variable) player;
 
 config:         '$' ID atts;
-attribute:      (ID|NUMBER|intset) (ID | STRING | atts);
+attribute:      (ID|NUMBER|intset) (ID | STRING | NUMBER | atts);
 atts:           '{' (attribute (',' attribute)*)? '}';
 
 variable:       ID;

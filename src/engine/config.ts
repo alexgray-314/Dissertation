@@ -5,18 +5,20 @@ import {RuleNode} from "antlr4ts/tree/RuleNode";
 import {ErrorNode} from "antlr4ts/tree/ErrorNode";
 import {TerminalNode} from "antlr4ts/tree/TerminalNode";
 
-interface Config { [key: string]: string | Config }
+interface Attributes { [key: string]: string | Attributes }
 
-export class Style implements dealVisitor<Config> {
+export class Config implements dealVisitor<Attributes> {
 
-    config : Config;
+    config : Attributes;
+    style: Attributes;
 
     constructor() {
         this.config = {};
+        this.style = {};
     }
 
-    get(...args : string[]) : string | undefined {
-        let head : Config = this.config;
+    get(group : string, ...args : string[]) : string | undefined {
+        let head : Attributes = (group === "config") ? this.config : ((group === "style") ? this.style : {});
         for (let i : number = 0; i < args.length; i++) {
             if (head[args[i]] === undefined) {
                 return undefined;
@@ -26,49 +28,53 @@ export class Style implements dealVisitor<Config> {
                     return head[args[i]] as string;
                 }
             } else {
-                head = head[args[i]] as Config;
+                head = head[args[i]] as Attributes;
             }
         }
         return undefined;
     }
 
-    visitAttribute(ctx: AttributeContext): Config {
+    visitAttribute(ctx: AttributeContext): Attributes {
         const key : string = ctx.getChild(0).text;
-        const val : string | Config = ctx.atts()?.accept(this) ?? (ctx.STRING()?.text.slice(1,-1) ?? ctx.getChild(1).text);
+        const val : string | Attributes = ctx.atts()?.accept(this) ?? (ctx.STRING()?.text.slice(1,-1) ?? ctx.getChild(1).text);
         return {
             [key]:val,
         }
     }
 
-    visitAtts(ctx: AttsContext): Config {
-        const config : Config = {};
+    visitAtts(ctx: AttsContext): Attributes {
+        const config : Attributes = {};
         for (let i = 1; i < ctx.childCount - 1; i = i + 2) {
             Object.assign(config, ctx.getChild(i).accept(this));
         }
         return config;
     }
 
-    visitConfig(ctx: ConfigContext): Config {
+    visitConfig(ctx: ConfigContext): Attributes {
         if (ctx.ID().text === "style") {
+            this.style = ctx.atts().accept(this);
+        } else if (ctx.ID().text === "config") {
             this.config = ctx.atts().accept(this);
-            console.log(this.get("player","0","label"));
         }
-        return this.config;
+        return {};
     }
 
-    visit(tree: ParseTree): Config {
+    visit(tree: ParseTree): Attributes {
         return tree.accept(this);
     }
 
-    visitChildren(node: RuleNode): Config {
+    visitChildren(node: RuleNode): Attributes {
+        for (let i = 0; i < node.childCount; i++) {
+            node.getChild(i).accept(this);
+        }
         return {};
     }
 
-    visitErrorNode(node: ErrorNode): Config {
+    visitErrorNode(node: ErrorNode): Attributes {
         return {};
     }
 
-    visitTerminal(node: TerminalNode): Config {
+    visitTerminal(node: TerminalNode): Attributes {
         return {};
     }
 

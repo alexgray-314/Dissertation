@@ -31,21 +31,18 @@ import {Position} from "../model/area";
 import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
-import {Style} from "./style";
 
 export class Interpreter implements dealVisitor<void> {
 
     state : State;
-    style : Style;
     positionVisitor : PositionVisitor;
     cardVisitor : CardVisitor;
     numberVisitor : NumberVisitor;
     termVisitor : TermVisitor;
     comparator : Comparator;
     running : boolean;
-    constructor(state : State, style: Style) {
+    constructor(state : State) {
         this.state = state;
-        this.style = style;
         this.positionVisitor = new PositionVisitor(state);
         this.cardVisitor = new CardVisitor(this.state);
         this.numberVisitor = new NumberVisitor(this.state);
@@ -301,9 +298,7 @@ export class Interpreter implements dealVisitor<void> {
         }
     }
 
-    visitConfig(ctx: ConfigContext) : void {
-        ctx.accept(this.style);
-    }
+    visitConfig(ctx: ConfigContext) : void {}
 
     visit(tree: ParseTree): void {
         tree.accept(this);
