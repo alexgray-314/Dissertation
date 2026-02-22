@@ -6,16 +6,19 @@ import {UI} from "../api/ui";
 
 import * as model from "../model/area";
 import {Position} from "../model/area";
+import {Config} from "../engine/config";
 
 export class Canvas implements UI{
 
   canvas : HTMLCanvasElement;
   areas: Record<string, Area>;
   hitBoxes : Hitbox[];
+  config: Config;
 
-  constructor(initialState : State) {
+  constructor(initialState : State, config : Config) {
     this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
+    this.config = config;
     this.areas = {};
     this.hitBoxes = [];
     this.update(initialState, 0);

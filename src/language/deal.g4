@@ -8,7 +8,7 @@ block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
 
-definition:     'define' type=('area' | 'action' | 'int' | 'card') ID args? ;
+definition:     'define' type=('area' | 'action' | 'int' | 'card') ID ;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
