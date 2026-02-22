@@ -96,22 +96,21 @@ $style {
         label "Chicken"
     },
     player {
-        min_display 2,
+        location north,
+        view public,
+        display single,
         0 {
             label "Your hand",
             location hand,
             view private,
             display spread
         },
-        1: {
-            label "Player",
-            location side,
-            view public,
-            display single
+        1 {
+            label "Player Area"
         }
     },
     x {
-        label "",
+        min_display 2,
         location centre, // centre
         display single,
         0 {

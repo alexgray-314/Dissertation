@@ -17,9 +17,9 @@ export class Area {
   config : Config;
 
   // Will generate a UI area from a state area
-  constructor(area : model.Area, y : number, hitBoxes : Hitbox[], config : Config) {
+  constructor(area : model.Area, yDefault : number, hitBoxes : Hitbox[], config : Config) {
     this.child = area;
-    this.y = y;
+    this.y = this.map_location_to_y(config.get("style", area.id, "location")) ?? yDefault;
     this.config = config;
 
     this.stacks = [];
@@ -30,6 +30,8 @@ export class Area {
       // Attributes
       const label : string | undefined = config.get("style", area.id, x.toString(), "label");
       const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
+
+      const y : number = this.map_location_to_y(config.get("style", area.id, x.toString(), "location")) ?? this.y;
 
       const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y, label, display);
       this.stacks.push(stack);
@@ -48,7 +50,7 @@ export class Area {
           hitBoxes.push(new Hitbox(
             {
               x: AREA_MARGIN + pos*FAN_SPACING,
-              y: AREA_MARGIN + this.y*AREA_SPACING_Y,
+              y: AREA_MARGIN + y*AREA_SPACING_Y,
               width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
               height: CARD_HEIGHT,
             },
@@ -59,6 +61,19 @@ export class Area {
 
     }
   }
+
+  private map_location_to_y (location: string | undefined) : number | undefined {
+    if (location === "hand") {
+      return 0;
+    } else if (location === "north") {
+      return 1;
+    } else if (location === "centre") {
+      return 2;
+    } else if (location === "south") {
+      return 3;
+    }
+    return undefined;
+}
 
   render(ctx : CanvasRenderingContext2D) {
 

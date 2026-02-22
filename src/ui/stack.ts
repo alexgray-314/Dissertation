@@ -13,11 +13,11 @@ export class Stack {
   label : string | undefined;
   display : string;
 
-  constructor(stack : model.Stack, x : number, y : number, label : string | undefined, display : string) {
+  constructor(stack : model.Stack, x : number, yDefault : number, label : string | undefined, display : string) {
     this.cards = stack.cards.map(function(card) {return new Card(card)});
     this.rect = {
       x: AREA_MARGIN + x*STACK_SPACING_X,
-      y: AREA_MARGIN + y*AREA_SPACING_Y,
+      y: AREA_MARGIN + yDefault*AREA_SPACING_Y,
       width: CARD_WIDTH,
       height: CARD_HEIGHT
     };

@@ -1,9 +1,7 @@
-define int x;
-x = 5;
+define area x;
+define area y;
+define area z;
 
-if x + 4 == 9 {
-    x = x - 3;
-    log "yep this works" x;
-} else {
-    log "oops";
-};
+move #4s x[0,0];
+move #5s y[0,0];
+move #6s z[0,0];
