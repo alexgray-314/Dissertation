@@ -212,6 +212,8 @@ export class Interpreter implements dealVisitor<void> {
 
         }
 
+        this.state.variables.delete(loopVar);
+
     }
 
     visitOn_move (ctx: On_moveContext) : void {
@@ -274,8 +276,6 @@ export class Interpreter implements dealVisitor<void> {
                 this.state.define_variable(paramTypes[i], paramIds[i]);
                 this.update_variable(paramIds[i], argTerms[i]);
             }
-
-            console.log(this.state.variables);
 
             if (run) {
                 new Interpreter(state).visit(ctx.block());
