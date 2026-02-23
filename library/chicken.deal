@@ -2,6 +2,9 @@ define area x; // x[0] draw x[1] discard
 define action c;
 define int chicken;
 define int newSlot;
+define int special; // used to store player that has played a queen or a jack
+special = -1; // -1 means that there is no special player
+define card magicCard;
 
 shuffle();
 
@@ -24,6 +27,9 @@ x[1,0]..up();
 on move x[0,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
 
     /..up(); // flip the card the right way around
     move / x[1,0]; // move your card to discard pile
@@ -33,12 +39,29 @@ on move x[0,0] </>[1:,0:0] {
     };
     show \ </>; // This card was previsouly invisible. Display it to that player
     \..down(); // Put that card you're taking face down
+    
+    move \ /;
+
+    // Check for special cards
+    if x[1,0].rank == #JC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "swap two cards";
+    };
+    if x[1,0].rank == #QC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "double click on a card in your hand to reveal it";
+    };
 };
 
 // Take a card from discard pile
 on move x[1,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
 
     /..up(); // flip the card the right way around
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
@@ -47,11 +70,30 @@ on move x[1,0] </>[1:,0:0] {
         log "this is the end of the game";
     };
     \..down(); // Put the card you're taking face down
+
+    move \ /;
+
+    // Check for special cards
+    if x[1,0].rank == #JC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "swap two cards";
+    };
+    if x[1,0].rank == #QC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "double click on a card in your hand to reveal it";
+    };
 };
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
 on move </>[1:,0:0] x[1, 0] {
+
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
+
     if \.rank != /.rank {
         // Wrong card, you must take a new one
 
@@ -69,10 +111,60 @@ on move </>[1:,0:0] x[1, 0] {
         cancel; 
     }; 
     \..up();
+
+    move \ /;
+
+    // Check for special cards
+    if x[1,0].rank == #JC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "swap two cards";
+    };
+    if x[1,0].rank == #QC.rank {
+        special = </>;
+        magicCard = x[1,0];
+        log "Player" </> "double click on a card in your hand to reveal it";
+    };
 };
 
 on move ? ? {
-    cancel;
+    if \ == / { // can't swap a card with itself
+        cancel;
+    };
+    if special == </> {
+        if magicCard.rank == #JC.rank {
+
+            if \ =? x[0:,0:] {
+                cancel;
+            };
+            if / =? x[0:,0:] {
+                cancel;
+            };
+
+            // swap source and dest
+            move / deck[0,0];
+            move \ /;
+            move deck[0,0] \;
+
+            // movement goes through
+            special = -1; // play returns to normal
+            log "back to normal play";
+        } else {
+            cancel;
+        };
+    } else {
+        cancel;
+    };
+};
+
+on interact <@>[1:,0:0] {
+    if <@> == special {
+        if magicCard.rank == #QC.rank {
+            show @ <@>; // Show the user the card they have clicked on
+            special = -1; // Play can continue as normal
+            log "Back to normal play";
+        };
+    };
 };
 
 on c {
@@ -81,6 +173,8 @@ on c {
         chicken = <.>;
     };
 };
+
+move #JC <0>[1,0];
 
 $config {
     title "Chicken",
