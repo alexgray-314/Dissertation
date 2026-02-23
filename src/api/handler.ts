@@ -77,6 +77,10 @@ export class Handler {
     // Notify the UI that there has been some change to the state
     notify() {
         this.ui.update(this.state, activePlayer);
+        const turnDisplay = document.getElementById("turn-display");
+        if (turnDisplay) {
+            turnDisplay.innerHTML = this.state.turn.toString();
+        }
     }
 
 }

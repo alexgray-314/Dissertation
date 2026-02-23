@@ -82,7 +82,7 @@ on c {
     };
 };
 
-$config{
+$config {
     title "Chicken",
     num_players 4
 };

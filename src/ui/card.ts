@@ -2,7 +2,7 @@ import * as model from "../model/card";
 import {Rect} from "./hitbox";
 
 export const CARD_WIDTH = 70;
-export const CARD_HEIGHT = 100;
+export const CARD_HEIGHT = 95;
 
 export class Card {
 

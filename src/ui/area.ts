@@ -1,6 +1,6 @@
 import {Stack} from "./stack";
 
-export const AREA_SPACING_Y = 130;
+export const AREA_SPACING_Y = 120;
 export const AREA_MARGIN = 20;
 export const FAN_SPACING = 40;
 
