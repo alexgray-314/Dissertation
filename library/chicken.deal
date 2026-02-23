@@ -54,8 +54,8 @@ on move x[0,0] </>[1:,0:0] {
         cancel; // block movement if someone has a special card to play
     };
 
-    move / x[1,0]; // move your card to discard pile
     update_turn();
+    move / x[1,0]; // move your card to discard pile
     show \ </>; // This card was previsouly invisible. Display it to that player
     move \ /;
 
@@ -70,8 +70,8 @@ on move x[1,0] </>[1:,0:0] {
         cancel; // block movement if someone has a special card to play
     };
 
-    move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     update_turn();
+    move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     move \ /;
 
     check_for_special_cards(</>);

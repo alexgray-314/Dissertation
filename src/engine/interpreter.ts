@@ -249,31 +249,40 @@ export class Interpreter implements dealVisitor<void> {
     visitDefine_function(ctx : Define_functionContext) {
         const funcID : string = ctx.ID().text;
         this.state.functions.set(funcID, (state : State, args : ArgsContext) => {
-            const params : string[] = [];
-            let iArg : number = 1; // needs to account for commas
-            for (let iParam = 2; iParam < ((ctx.argdef()?.childCount) ?? 0); iParam = iParam+3) {
 
-                if (iArg >= args.childCount - 1) {
+            const argTerms : TermContext[] = args.arg().map((argCtx : ArgContext) => {return argCtx.term()});
+            const paramTypes : string[] = ctx.argdef()?.VARTYPE().map((node : TerminalNode) => {return node.text.toUpperCase()}) ?? [];
+            const paramIds : string[] = ctx.argdef()?.ID().map((node : TerminalNode) => {return node.text}) ?? [];
+            let run : boolean = true;
+
+            for (let i = 0; i < paramIds.length; i++) {
+                const arg = argTerms[i];
+                const type = paramTypes[i];
+                const id = paramIds[i];
+
+                if (arg === undefined) {
                     console.error("Line", args.start.line + 1, ": Insufficient args in function ", funcID);
+                    run = false;
+                    break;
+                }
+                if (type === undefined || id === undefined) {
+                    console.error("Function", funcID, "is incorrectly defined");
+                    run = false;
                     break;
                 }
 
-                const arg = args.getChild(iArg);
-                const paramType = ctx.argdef()?.getChild(iParam).text;
-                const paramID = ctx.argdef()?.getChild(iParam+1).text;
-
-                if (paramID === undefined || paramType === undefined) {
-                    break;
-                }
-
-                state.define_variable(paramType, paramID);
-                this.update_variable(paramID, arg as TermContext)
-                params.push(paramID);
-
-                iArg = iArg + 2;
+                this.state.define_variable(paramTypes[i], paramIds[i]);
+                this.update_variable(paramIds[i], argTerms[i]);
             }
-            new Interpreter(state).visit(ctx.block());
-            for (let p of params) {
+
+            console.log(this.state.variables);
+
+            if (run) {
+                new Interpreter(state).visit(ctx.block());
+            }
+
+            // Clean scope
+            for (let p of paramIds) {
                 this.state.variables.delete(p);
             }
         });
@@ -333,9 +342,9 @@ export class Interpreter implements dealVisitor<void> {
     }
 
     private update_variable(id: string, term: TermContext) {
-        const [type, _] = this.state.variables.get(id) ?? [undefined, undefined];
-        switch(type) {
-            case undefined:
+        const [type, _] = this.state.variables.get(id) ?? ["NULL", undefined];
+        switch(type.toUpperCase()) {
+            case "NULL":
                 break;
             // It is safe to use forced types (!) from this points on as undefined variables will have type NULL
             case "INT":
