@@ -99,7 +99,7 @@ $style {
             visibility hidden
         },
         1 {
-            label "Player Area"
+            label "Player %a"
         }
     },
     x {
@@ -108,10 +108,10 @@ $style {
         display single,
         visibility public,
         0 {
-            label "Discard"
+            label "Draw"
         },
         1 {
-            label "Draw"
+            label "Discard"
         }
     }
 };

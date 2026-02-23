@@ -27,7 +27,7 @@ export class Area {
     for (let x = 0; x < Math.max(min, area.stacks.length); x++) {
 
       // Attributes
-      const label : string | undefined = config.get("style", area.id, x.toString(), "label");
+      const label : string | undefined = this.format_string(config.get("style", area.id, x.toString(), "label"), area.id, x.toString());
       const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
       const visibility : string = config.get("style", area.id, x.toString(), "visibility") ?? "public";
       const visible : boolean = visibility === "public" || (visibility === "private" && activePlayer === Number(area.id));
@@ -75,7 +75,14 @@ export class Area {
       return 3;
     }
     return undefined;
-}
+  }
+
+  private format_string(str : string | undefined, a : string, s : string) : string | undefined {
+    if (str === undefined) {
+      return undefined;
+    }
+    return str.replaceAll("%a", a).replaceAll("%s", s);
+  }
 
   render(ctx : CanvasRenderingContext2D) {
 
