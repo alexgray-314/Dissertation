@@ -25,6 +25,9 @@ export class PositionVisitor implements dealVisitor<Position | undefined> {
         if (ctx.MOVE_SOURCE() !== undefined) {
             return this.state.move_info.source;
         }
+        if (ctx.INTERACT_CARD() !== undefined) {
+            return this.state.interaction_card;
+        }
         const areaID = new StringVisitor(this.state).visit(ctx.arearef()!) ?? "";
         const stack = this.numberEvaluator.visit(ctx.getChild(2));
         const pos = this.numberEvaluator.visit(ctx.getChild(4));

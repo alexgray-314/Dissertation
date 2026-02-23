@@ -13,6 +13,7 @@ import { SourceContext } from "./dealParser";
 import { DestinationContext } from "./dealParser";
 import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
+import { On_interactContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
 import { CancelContext } from "./dealParser";
@@ -120,6 +121,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitOn_move?: (ctx: On_moveContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.on_interact`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitOn_interact?: (ctx: On_interactContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.for`.

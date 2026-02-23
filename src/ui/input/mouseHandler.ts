@@ -87,6 +87,30 @@ export class MouseHandler {
       this.draggedCard = undefined;
     });
 
+    ui.canvas.addEventListener("dblclick", (e) => {
+      const rect = ui.canvas.getBoundingClientRect();
+      this.mouseX = e.clientX - rect.left;
+      this.mouseY = e.clientY - rect.top;
+
+      for (const box of this.ui.hitBoxes) {
+
+        if (box.contains(this.mouseX, this.mouseY)) {
+          handler.call({
+            type: "INTERACT",
+            player: activePlayer,
+            target: {
+              area: box.position[0],
+              stack: box.position[1],
+              position: box.position[2]
+            }
+          })
+          return;
+        }
+
+      }
+
+    });
+
   }
 
   render(ctx: CanvasRenderingContext2D) {

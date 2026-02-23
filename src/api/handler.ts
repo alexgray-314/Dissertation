@@ -23,6 +23,14 @@ type Request = {
         stack: number,
         position: number
     }
+} | {
+    type: "INTERACT",
+    player: number,
+    target: {
+        area: string,
+        stack: number,
+        position: number
+    }
 }
 
 export class Handler {
@@ -43,6 +51,7 @@ export class Handler {
             this.state.move_info.source = [request.source.area, request.source.stack, request.source.position];
             this.state.move_info.dest = [request.destination.area, request.destination.stack, request.destination.position];
             this.state.move_info.card = this.state.get_card(this.state.move_info.source);
+
             for (let moveCatch of this.state.move_catches) {
                 if (moveCatch.caught(this.state)) {
                     // If movement has been canceled, stop future move catch clauses from being executed
@@ -60,17 +69,36 @@ export class Handler {
                     this.state.move_info.dest
                 );
             }
+
             this.state.reset_move_info();
             break;
         case "ACTION":
             this.state.action_player = request.player;
+
             const subTree : ParseTree | undefined = this.state.action_catches.get(request.id);
             if (subTree !== undefined) {
                 new Interpreter(this.state).visit(subTree);
             }
+
             this.state.action_player = NaN;
             break;
+        case "INTERACT":
+            this.state.action_player = request.player;
+            this.state.interaction_card = [request.target.area, request.target.stack, request.target.position]
+
+            // Interaction
+            for (let intCatch of this.state.interaction_catches) {
+                if (intCatch.caught(this.state)) {
+                    break;
+                }
+            }
+
+            this.state.action_player = NaN;
+            this.state.interaction_card = undefined;
+            break;
         }
+
+
         this.notify();
     }
 

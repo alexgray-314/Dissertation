@@ -11,7 +11,7 @@ import {
     ModifyContext,
     Move_catchContext,
     MoveContext,
-    On_actionContext,
+    On_actionContext, On_interactContext,
     On_moveContext, ShowContext,
     UpdateTurnContext,
 } from "../language/dealParser";
@@ -31,6 +31,7 @@ import {Position} from "../model/area";
 import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
+import {Catch} from "../state/catch";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -299,6 +300,10 @@ export class Interpreter implements dealVisitor<void> {
     }
 
     visitConfig(ctx: ConfigContext) : void {}
+
+    visitOn_interact (ctx: On_interactContext) : void {
+        this.state.interaction_catches.push(new Catch(ctx.move_catch(), ctx.block()));
+    }
 
     visit(tree: ParseTree): void {
         tree.accept(this);

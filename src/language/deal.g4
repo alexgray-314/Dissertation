@@ -3,7 +3,7 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
+stmt:           (definition | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
@@ -16,6 +16,7 @@ destination:    position;
 
 on_action:      'on' ID '{' block '}';
 on_move:        'on' 'move' move_catch move_catch '{' block '}';
+on_interact:    'on' 'interact' move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
 if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block '}')? ;
 cancel:         'cancel';
@@ -41,10 +42,12 @@ area:           arearef '[' ']';
 stack:          arearef '[' aexpr ']';
 position:       arearef '[' aexpr ',' aexpr ']'
                 | MOVE_SOURCE
-                | MOVE_DEST;
+                | MOVE_DEST
+                | INTERACT_CARD;
 
 MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
+INTERACT_CARD:  '@';
 
 term:           (EMPTY | CARD | STRING | variable | aexpr | player | area | stack | position) property?;
 property:       '.' ID;
@@ -66,10 +69,10 @@ playerset:      '<' '*' '>';
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';
 
-NUMBER:         [0-9]+ ;
+NUMBER:         ('-')? [0-9]+ ;
 ID:             [a-zA-Z_]+ ;
 CARD:           '#' ('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs] ;
-STRING:         '"' ~["]* '"' ;
+STRING          : '"' ~["]* '"' ;
 
 SPACES:         [\t\r\n ]+ -> skip;
 NEWLINE:        [\r\n]+ -> skip;

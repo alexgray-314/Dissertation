@@ -174,7 +174,8 @@ on c {
     };
 };
 
-move #JC <0>[1,0];
+move <0>[1,0] deck[0,0];
+move #QH <0>[1,0];
 
 $config {
     title "Chicken",
