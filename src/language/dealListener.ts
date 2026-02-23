@@ -8,6 +8,8 @@ import { StmtContext } from "./dealParser";
 import { BlockContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
+import { Define_functionContext } from "./dealParser";
+import { ArgdefContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
 import { SourceContext } from "./dealParser";
 import { DestinationContext } from "./dealParser";
@@ -103,6 +105,28 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDefinition?: (ctx: DefinitionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.define_function`.
+	 * @param ctx the parse tree
+	 */
+	enterDefine_function?: (ctx: Define_functionContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.define_function`.
+	 * @param ctx the parse tree
+	 */
+	exitDefine_function?: (ctx: Define_functionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.argdef`.
+	 * @param ctx the parse tree
+	 */
+	enterArgdef?: (ctx: ArgdefContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.argdef`.
+	 * @param ctx the parse tree
+	 */
+	exitArgdef?: (ctx: ArgdefContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.move`.

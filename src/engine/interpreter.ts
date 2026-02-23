@@ -1,8 +1,10 @@
 import {CardVisitor} from "../calc/cardVisitor";
 import {NumberVisitor} from "../calc/numberVisitor";
 import {
+    ArgContext,
+    ArgsContext,
     AssignContext,
-    CancelContext, ConfigContext,
+    CancelContext, ConfigContext, Define_functionContext,
     DefinitionContext,
     ForContext,
     Function_callContext,
@@ -12,7 +14,7 @@ import {
     Move_catchContext,
     MoveContext,
     On_actionContext, On_interactContext,
-    On_moveContext, ShowContext,
+    On_moveContext, ShowContext, TermContext,
     UpdateTurnContext,
 } from "../language/dealParser";
 import {Card, SpecialCard} from "../model/card";
@@ -23,7 +25,7 @@ import {ErrorNode} from "antlr4ts/tree/ErrorNode";
 import {ParseTree} from "antlr4ts/tree/ParseTree";
 import {RuleNode} from "antlr4ts/tree/RuleNode";
 import {TerminalNode} from "antlr4ts/tree/TerminalNode";
-import {Comparator} from "../state/comparator";
+import {Comparator, Primitive} from "../state/comparator";
 import {TermVisitor} from "../calc/termVisitor";
 import {IntSetVisitor} from "../calc/intSetVisitor";
 import {PositionSetVisitor} from "../calc/positionSetVisitor";
@@ -119,18 +121,7 @@ export class Interpreter implements dealVisitor<void> {
 
     visitAssign(ctx: AssignContext) : void {
         const id : string = ctx.variable().text;
-        const [type, _] = this.state.variables.get(id) ?? ["NULL", undefined];
-        switch(type) {
-            case "NULL":
-                break;
-                // It is safe to use forced types (!) from this points on as undefined variables will have type NULL
-            case "INT":
-                this.state.variables.get(id)![1] = ctx.term().accept(this.numberVisitor);
-                break;
-            case "CARD":
-                this.state.variables.get(id)![1] = ctx.term().accept(this.cardVisitor);
-                break;
-        }
+        this.update_variable(id, ctx.term());
     }
 
     visitIf (ctx: IfContext) : void {
@@ -255,8 +246,42 @@ export class Interpreter implements dealVisitor<void> {
 
     }
 
+    visitDefine_function(ctx : Define_functionContext) {
+        const funcID : string = ctx.ID().text;
+        this.state.functions.set(funcID, (state : State, args : ArgsContext) => {
+            const params : string[] = [];
+            let iArg : number = 1; // needs to account for commas
+            for (let iParam = 2; iParam < ((ctx.argdef()?.childCount) ?? 0); iParam = iParam+3) {
+
+                if (iArg >= args.childCount - 1) {
+                    console.error("Line", args.start.line + 1, ": Insufficient args in function ", funcID);
+                    break;
+                }
+
+                const arg = args.getChild(iArg);
+                const paramType = ctx.argdef()?.getChild(iParam).text;
+                const paramID = ctx.argdef()?.getChild(iParam+1).text;
+
+                if (paramID === undefined || paramType === undefined) {
+                    break;
+                }
+
+                state.define_variable(paramType, paramID);
+                this.update_variable(paramID, arg as TermContext)
+                params.push(paramID);
+
+                iArg = iArg + 2;
+            }
+            new Interpreter(state).visit(ctx.block());
+            for (let p of params) {
+                this.state.variables.delete(p);
+            }
+        });
+    }
+
     visitFunction_call (ctx: Function_callContext) {
-        switch(ctx.ID().text) {
+        const id : string = ctx.ID().text;
+        switch(id) {
             case "deal":
                 deal(this.state, {});
                 break;
@@ -264,7 +289,9 @@ export class Interpreter implements dealVisitor<void> {
                 shuffle(this.state);
                 break;
             default:
-                console.log(ctx.ID().text);
+                if (this.state.functions.has(id)) {
+                    this.state.functions.get(id)!(this.state, ctx.args());
+                }
         }
     }
 
@@ -303,6 +330,21 @@ export class Interpreter implements dealVisitor<void> {
 
     visitOn_interact (ctx: On_interactContext) : void {
         this.state.interaction_catches.push(new Catch(ctx.move_catch(), ctx.block()));
+    }
+
+    private update_variable(id: string, term: TermContext) {
+        const [type, _] = this.state.variables.get(id) ?? [undefined, undefined];
+        switch(type) {
+            case undefined:
+                break;
+            // It is safe to use forced types (!) from this points on as undefined variables will have type NULL
+            case "INT":
+                this.state.variables.get(id)![1] = term.accept(this.numberVisitor);
+                break;
+            case "CARD":
+                this.state.variables.get(id)![1] = term.accept(this.cardVisitor);
+                break;
+        }
     }
 
     visit(tree: ParseTree): void {

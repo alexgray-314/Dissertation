@@ -8,6 +8,8 @@ import { StmtContext } from "./dealParser";
 import { BlockContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
+import { Define_functionContext } from "./dealParser";
+import { ArgdefContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
 import { SourceContext } from "./dealParser";
 import { DestinationContext } from "./dealParser";
@@ -86,6 +88,20 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitDefinition?: (ctx: DefinitionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.define_function`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDefine_function?: (ctx: Define_functionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.argdef`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArgdef?: (ctx: ArgdefContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.move`.

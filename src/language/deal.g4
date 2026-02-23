@@ -3,12 +3,16 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
+stmt:           (definition | define_function | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
+VARTYPE:        'int' | 'card';
 
-definition:     'define' type=('area' | 'action' | 'int' | 'card') ID ;
+definition:     'define' type=('area' | 'action' | VARTYPE) ID ;
+
+define_function:'define' 'function' ID '(' argdef? ')' '{' block '}' ;
+argdef:         VARTYPE ID (',' VARTYPE ID)*;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
@@ -35,7 +39,7 @@ atts:           '{' (attribute (',' attribute)*)? '}';
 variable:       ID;
 
 args:           '(' (arg (',' arg)*)? ')' ;
-arg:            ID ':' (STRING | NUMBER) ;
+arg:            term ;
 
 arearef:        ID | player;
 area:           arearef '[' ']';

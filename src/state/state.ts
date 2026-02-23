@@ -4,6 +4,8 @@ import { Card, SpecialCard } from "../model/card";
 import { MoveCatch } from "./move_catch";
 import { Stack } from "../model/stack";
 import {Catch} from "./catch";
+import {ArgsContext} from "../language/dealParser";
+import {Primitive} from "./comparator";
 
 export type MoveInfo = {
     source: undefined | Position,
@@ -17,7 +19,7 @@ export type MoveInfo = {
 export class State {
 
     areas : Map<string, Area>;
-    variables : Map<string, [string, Card|number|undefined]>;
+    variables : Map<string, [string, Primitive]>;
     num_players : number;
     turn : number;
     action_player : number;
@@ -26,6 +28,7 @@ export class State {
     interaction_catches : Catch[];
     action_catches : Map<string, ParseTree | undefined>;
     move_info : MoveInfo;
+    functions : Map<string, (state : State, args : ArgsContext) => void>;
 
     constructor (num_players : number) {
 
@@ -38,6 +41,7 @@ export class State {
         this.move_catches = [];
         this.interaction_catches = [];
         this.action_catches = new Map<string, ParseTree | undefined>();
+        this.functions = new Map<string, (state : State, args : ArgsContext) => void>();
         this.move_info = {
             source: undefined,
             dest: undefined,
