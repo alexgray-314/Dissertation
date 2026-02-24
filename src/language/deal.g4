@@ -53,9 +53,9 @@ MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
 INTERACT_CARD:  '@';
 
-term:           (EMPTY | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
+term:           (primitives | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
 property:       '.' ID;
-EMPTY:          'empty';
+primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING | ACE;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
                         | (('=?' | '!?') set)
@@ -71,6 +71,16 @@ playerset:      '<' '*' '>';
 
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';
+
+EMPTY:          'empty';
+SPADES:         'spades';
+HEARTS:         'hearts';
+CLUBS:          'clubs';
+DIAMONDS:       'diamonds';
+JACK:           'jack';
+QUEEN:          'queen';
+KING:           'king';
+ACE:            'ace';
 
 NUMBER:         ('-')? [0-9]+ ;
 ID:             [a-zA-Z_]+ ;

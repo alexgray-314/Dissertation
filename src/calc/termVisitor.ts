@@ -6,7 +6,7 @@ import {Primitive} from "../state/comparator";
 import {
     AreaContext,
     PlayerContext,
-    PositionContext,
+    PositionContext, PrimitivesContext,
     StackContext,
     TermContext,
     VariableContext
@@ -16,7 +16,7 @@ import {dealLexer} from "../language/dealLexer";
 import {State} from "../state/state";
 import {NumberVisitor} from "./numberVisitor";
 import {CardVisitor} from "./cardVisitor";
-import {Card, SpecialCard, StandardCard} from "../model/card";
+import {Card, Ranks, SpecialCard, StandardCard} from "../model/card";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 
@@ -72,6 +72,29 @@ export class TermVisitor implements dealVisitor<Primitive> {
 
     visitPosition (ctx: PositionContext) : Card | undefined {
         return new CardVisitor(this.state).visit(ctx);
+    }
+
+    visitPrimitives(ctx: PrimitivesContext) : Primitive {
+        switch(ctx.start.type) {
+            case dealLexer.EMPTY:
+                return SpecialCard.Empty;
+            case dealLexer.ACE:
+                return Ranks.ACE; // TODO add option to $config to set ace as high or low
+            case dealLexer.KING:
+                return Ranks.KING;
+            case dealLexer.QUEEN:
+                return Ranks.QUEEN;
+            case dealLexer.JACK:
+                return Ranks.JACK;
+            case dealLexer.SPADES:
+                return "spades";
+            case dealLexer.CLUBS:
+                return "clubs";
+            case dealLexer.HEARTS:
+                return "hearts";
+            case dealLexer.DIAMONDS:
+                return "diamonds";
+        }
     }
 
     visitTerm (ctx: TermContext) : Primitive {
@@ -139,8 +162,6 @@ export class TermVisitor implements dealVisitor<Primitive> {
             return node.text.slice(1,-1); // remove double quotes from either end
         } else if (node.symbol.type === dealLexer.CARD) {
             return new StandardCard(node.text);
-        } else if (node.symbol.type === dealLexer.EMPTY) {
-            return SpecialCard.Empty;
         }
         return undefined;
     }

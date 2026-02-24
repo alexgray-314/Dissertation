@@ -1,7 +1,7 @@
 type Suit = "hearts" | "diamonds" | "clubs" | "spades";
 type Rank = Ranks | -1;
 
-enum Ranks {
+export enum Ranks {
     TWO=2,
     THREE=3,
     FOUR=4,

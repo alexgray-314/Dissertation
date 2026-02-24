@@ -71,17 +71,25 @@ export class dealParser extends Parser {
 	public static readonly MOVE_DEST = 41;
 	public static readonly MOVE_SOURCE = 42;
 	public static readonly INTERACT_CARD = 43;
-	public static readonly EMPTY = 44;
-	public static readonly PLUS = 45;
-	public static readonly MINUS = 46;
-	public static readonly TIMES = 47;
-	public static readonly WILDCARD = 48;
-	public static readonly NUMBER = 49;
-	public static readonly ID = 50;
-	public static readonly CARD = 51;
-	public static readonly STRING = 52;
-	public static readonly SPACES = 53;
-	public static readonly NEWLINE = 54;
+	public static readonly PLUS = 44;
+	public static readonly MINUS = 45;
+	public static readonly TIMES = 46;
+	public static readonly WILDCARD = 47;
+	public static readonly EMPTY = 48;
+	public static readonly SPADES = 49;
+	public static readonly HEARTS = 50;
+	public static readonly CLUBS = 51;
+	public static readonly DIAMONDS = 52;
+	public static readonly JACK = 53;
+	public static readonly QUEEN = 54;
+	public static readonly KING = 55;
+	public static readonly ACE = 56;
+	public static readonly NUMBER = 57;
+	public static readonly ID = 58;
+	public static readonly CARD = 59;
+	public static readonly STRING = 60;
+	public static readonly SPACES = 61;
+	public static readonly NEWLINE = 62;
 	public static readonly RULE_prog = 0;
 	public static readonly RULE_stmt = 1;
 	public static readonly RULE_block = 2;
@@ -116,20 +124,21 @@ export class dealParser extends Parser {
 	public static readonly RULE_position = 31;
 	public static readonly RULE_term = 32;
 	public static readonly RULE_property = 33;
-	public static readonly RULE_bexpr = 34;
-	public static readonly RULE_set = 35;
-	public static readonly RULE_intset = 36;
-	public static readonly RULE_positionset = 37;
-	public static readonly RULE_playerset = 38;
-	public static readonly RULE_move_catch = 39;
+	public static readonly RULE_primitives = 34;
+	public static readonly RULE_bexpr = 35;
+	public static readonly RULE_set = 36;
+	public static readonly RULE_intset = 37;
+	public static readonly RULE_positionset = 38;
+	public static readonly RULE_playerset = 39;
+	public static readonly RULE_move_catch = 40;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"prog", "stmt", "block", "player", "definition", "define_function", "argdef", 
 		"move", "source", "destination", "on_action", "on_move", "on_interact", 
 		"for", "if", "cancel", "assign", "function_call", "updateTurn", "log", 
 		"modify", "show", "config", "attribute", "atts", "variable", "args", "arg", 
-		"arearef", "area", "stack", "position", "term", "property", "bexpr", "set", 
-		"intset", "positionset", "playerset", "move_catch",
+		"arearef", "area", "stack", "position", "term", "property", "primitives", 
+		"bexpr", "set", "intset", "positionset", "playerset", "move_catch",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
@@ -138,7 +147,8 @@ export class dealParser extends Parser {
 		"'for'", "'in'", "'if'", "'else'", "'cancel'", "'='", "'++'", "'log'", 
 		"'..'", "'show'", "'$'", "'['", "']'", "'=='", "'!='", "'<<'", "'<='", 
 		"'>='", "'>>'", "'=?'", "'!?'", "':'", undefined, undefined, "'/'", "'\\'", 
-		"'@'", "'empty'", "'+'", "'-'", "'*'", "'?'",
+		"'@'", "'+'", "'-'", "'*'", "'?'", "'empty'", "'spades'", "'hearts'", 
+		"'clubs'", "'diamonds'", "'jack'", "'queen'", "'king'", "'ace'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
@@ -147,8 +157,9 @@ export class dealParser extends Parser {
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
 		undefined, undefined, undefined, undefined, "COMMENT", "VARTYPE", "MOVE_DEST", 
-		"MOVE_SOURCE", "INTERACT_CARD", "EMPTY", "PLUS", "MINUS", "TIMES", "WILDCARD", 
-		"NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE",
+		"MOVE_SOURCE", "INTERACT_CARD", "PLUS", "MINUS", "TIMES", "WILDCARD", 
+		"EMPTY", "SPADES", "HEARTS", "CLUBS", "DIAMONDS", "JACK", "QUEEN", "KING", 
+		"ACE", "NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(dealParser._LITERAL_NAMES, dealParser._SYMBOLIC_NAMES, []);
 
@@ -184,21 +195,21 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 83;
+			this.state = 85;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__4) | (1 << dealParser.T__13) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__20) | (1 << dealParser.T__23) | (1 << dealParser.T__25) | (1 << dealParser.T__26))) !== 0) || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.ID - 41)))) !== 0)) {
 				{
 				{
-				this.state = 80;
+				this.state = 82;
 				this.stmt();
 				}
 				}
-				this.state = 85;
+				this.state = 87;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 86;
+			this.state = 88;
 			this.match(dealParser.EOF);
 			}
 		}
@@ -223,122 +234,122 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 104;
+			this.state = 106;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 1, this._ctx) ) {
 			case 1:
 				{
-				this.state = 88;
+				this.state = 90;
 				this.definition();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 89;
+				this.state = 91;
 				this.define_function();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 90;
+				this.state = 92;
 				this.move();
 				}
 				break;
 
 			case 4:
 				{
-				this.state = 91;
+				this.state = 93;
 				this.on_action();
 				}
 				break;
 
 			case 5:
 				{
-				this.state = 92;
+				this.state = 94;
 				this.on_move();
 				}
 				break;
 
 			case 6:
 				{
-				this.state = 93;
+				this.state = 95;
 				this.on_interact();
 				}
 				break;
 
 			case 7:
 				{
-				this.state = 94;
+				this.state = 96;
 				this.for();
 				}
 				break;
 
 			case 8:
 				{
-				this.state = 95;
+				this.state = 97;
 				this.if();
 				}
 				break;
 
 			case 9:
 				{
-				this.state = 96;
+				this.state = 98;
 				this.cancel();
 				}
 				break;
 
 			case 10:
 				{
-				this.state = 97;
+				this.state = 99;
 				this.assign();
 				}
 				break;
 
 			case 11:
 				{
-				this.state = 98;
+				this.state = 100;
 				this.function_call();
 				}
 				break;
 
 			case 12:
 				{
-				this.state = 99;
+				this.state = 101;
 				this.updateTurn();
 				}
 				break;
 
 			case 13:
 				{
-				this.state = 100;
+				this.state = 102;
 				this.log();
 				}
 				break;
 
 			case 14:
 				{
-				this.state = 101;
+				this.state = 103;
 				this.modify();
 				}
 				break;
 
 			case 15:
 				{
-				this.state = 102;
+				this.state = 104;
 				this.show();
 				}
 				break;
 
 			case 16:
 				{
-				this.state = 103;
+				this.state = 105;
 				this.config();
 				}
 				break;
 			}
-			this.state = 106;
+			this.state = 108;
 			this.match(dealParser.T__0);
 			}
 		}
@@ -364,17 +375,17 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 111;
+			this.state = 113;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << dealParser.T__1) | (1 << dealParser.T__4) | (1 << dealParser.T__13) | (1 << dealParser.T__14) | (1 << dealParser.T__16) | (1 << dealParser.T__18) | (1 << dealParser.T__20) | (1 << dealParser.T__23) | (1 << dealParser.T__25) | (1 << dealParser.T__26))) !== 0) || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.ID - 41)))) !== 0)) {
 				{
 				{
-				this.state = 108;
+				this.state = 110;
 				this.stmt();
 				}
 				}
-				this.state = 113;
+				this.state = 115;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -401,40 +412,40 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 114;
+			this.state = 116;
 			this.match(dealParser.T__1);
-			this.state = 119;
+			this.state = 121;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 3, this._ctx) ) {
 			case 1:
 				{
-				this.state = 115;
+				this.state = 117;
 				this.match(dealParser.MOVE_DEST);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 116;
+				this.state = 118;
 				this.match(dealParser.T__2);
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 117;
+				this.state = 119;
 				this.match(dealParser.INTERACT_CARD);
 				}
 				break;
 
 			case 4:
 				{
-				this.state = 118;
+				this.state = 120;
 				this.term();
 				}
 				break;
 			}
-			this.state = 121;
+			this.state = 123;
 			this.match(dealParser.T__3);
 			}
 		}
@@ -460,9 +471,9 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 123;
+			this.state = 125;
 			this.match(dealParser.T__4);
-			this.state = 124;
+			this.state = 126;
 			_localctx._type = this._input.LT(1);
 			_la = this._input.LA(1);
 			if (!(_la === dealParser.T__5 || _la === dealParser.T__6 || _la === dealParser.VARTYPE)) {
@@ -475,7 +486,7 @@ export class dealParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
-			this.state = 125;
+			this.state = 127;
 			this.match(dealParser.ID);
 			}
 		}
@@ -501,31 +512,31 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 127;
-			this.match(dealParser.T__4);
-			this.state = 128;
-			this.match(dealParser.T__7);
 			this.state = 129;
-			this.match(dealParser.ID);
+			this.match(dealParser.T__4);
 			this.state = 130;
-			this.match(dealParser.T__8);
+			this.match(dealParser.T__7);
+			this.state = 131;
+			this.match(dealParser.ID);
 			this.state = 132;
+			this.match(dealParser.T__8);
+			this.state = 134;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === dealParser.VARTYPE) {
 				{
-				this.state = 131;
+				this.state = 133;
 				this.argdef();
 				}
 			}
 
-			this.state = 134;
-			this.match(dealParser.T__9);
-			this.state = 135;
-			this.match(dealParser.T__10);
 			this.state = 136;
-			this.block();
+			this.match(dealParser.T__9);
 			this.state = 137;
+			this.match(dealParser.T__10);
+			this.state = 138;
+			this.block();
+			this.state = 139;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -551,25 +562,25 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 139;
+			this.state = 141;
 			this.match(dealParser.VARTYPE);
-			this.state = 140;
+			this.state = 142;
 			this.match(dealParser.ID);
-			this.state = 146;
+			this.state = 148;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la === dealParser.T__12) {
 				{
 				{
-				this.state = 141;
-				this.match(dealParser.T__12);
-				this.state = 142;
-				this.match(dealParser.VARTYPE);
 				this.state = 143;
+				this.match(dealParser.T__12);
+				this.state = 144;
+				this.match(dealParser.VARTYPE);
+				this.state = 145;
 				this.match(dealParser.ID);
 				}
 				}
-				this.state = 148;
+				this.state = 150;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -596,11 +607,11 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 149;
-			this.match(dealParser.T__13);
-			this.state = 150;
-			this.source();
 			this.state = 151;
+			this.match(dealParser.T__13);
+			this.state = 152;
+			this.source();
+			this.state = 153;
 			this.destination();
 			}
 		}
@@ -625,26 +636,26 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 156;
+			this.state = 158;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 6, this._ctx) ) {
 			case 1:
 				{
-				this.state = 153;
+				this.state = 155;
 				this.match(dealParser.CARD);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 154;
+				this.state = 156;
 				this.position();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 155;
+				this.state = 157;
 				this.positionset();
 				}
 				break;
@@ -672,7 +683,7 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 158;
+			this.state = 160;
 			this.position();
 			}
 		}
@@ -697,15 +708,15 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 160;
-			this.match(dealParser.T__14);
-			this.state = 161;
-			this.match(dealParser.ID);
 			this.state = 162;
-			this.match(dealParser.T__10);
+			this.match(dealParser.T__14);
 			this.state = 163;
-			this.block();
+			this.match(dealParser.ID);
 			this.state = 164;
+			this.match(dealParser.T__10);
+			this.state = 165;
+			this.block();
+			this.state = 166;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -730,19 +741,19 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 166;
-			this.match(dealParser.T__14);
-			this.state = 167;
-			this.match(dealParser.T__13);
 			this.state = 168;
-			this.move_catch();
+			this.match(dealParser.T__14);
 			this.state = 169;
-			this.move_catch();
+			this.match(dealParser.T__13);
 			this.state = 170;
-			this.match(dealParser.T__10);
+			this.move_catch();
 			this.state = 171;
-			this.block();
+			this.move_catch();
 			this.state = 172;
+			this.match(dealParser.T__10);
+			this.state = 173;
+			this.block();
+			this.state = 174;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -767,17 +778,17 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 174;
-			this.match(dealParser.T__14);
-			this.state = 175;
-			this.match(dealParser.T__15);
 			this.state = 176;
-			this.move_catch();
+			this.match(dealParser.T__14);
 			this.state = 177;
-			this.match(dealParser.T__10);
+			this.match(dealParser.T__15);
 			this.state = 178;
-			this.block();
+			this.move_catch();
 			this.state = 179;
+			this.match(dealParser.T__10);
+			this.state = 180;
+			this.block();
+			this.state = 181;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -802,19 +813,19 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 181;
-			this.match(dealParser.T__16);
-			this.state = 182;
-			this.match(dealParser.ID);
 			this.state = 183;
-			this.match(dealParser.T__17);
+			this.match(dealParser.T__16);
 			this.state = 184;
-			this.set();
+			this.match(dealParser.ID);
 			this.state = 185;
-			this.match(dealParser.T__10);
+			this.match(dealParser.T__17);
 			this.state = 186;
-			this.block();
+			this.set();
 			this.state = 187;
+			this.match(dealParser.T__10);
+			this.state = 188;
+			this.block();
+			this.state = 189;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -840,28 +851,28 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 189;
-			this.match(dealParser.T__18);
-			this.state = 190;
-			this.bexpr();
 			this.state = 191;
-			this.match(dealParser.T__10);
+			this.match(dealParser.T__18);
 			this.state = 192;
-			_localctx._consequent = this.block();
+			this.bexpr();
 			this.state = 193;
+			this.match(dealParser.T__10);
+			this.state = 194;
+			_localctx._consequent = this.block();
+			this.state = 195;
 			this.match(dealParser.T__11);
-			this.state = 199;
+			this.state = 201;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === dealParser.T__19) {
 				{
-				this.state = 194;
-				this.match(dealParser.T__19);
-				this.state = 195;
-				this.match(dealParser.T__10);
 				this.state = 196;
-				_localctx._antecedent = this.block();
+				this.match(dealParser.T__19);
 				this.state = 197;
+				this.match(dealParser.T__10);
+				this.state = 198;
+				_localctx._antecedent = this.block();
+				this.state = 199;
 				this.match(dealParser.T__11);
 				}
 			}
@@ -889,7 +900,7 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 201;
+			this.state = 203;
 			this.match(dealParser.T__20);
 			}
 		}
@@ -914,11 +925,11 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 203;
-			this.variable();
-			this.state = 204;
-			this.match(dealParser.T__21);
 			this.state = 205;
+			this.variable();
+			this.state = 206;
+			this.match(dealParser.T__21);
+			this.state = 207;
 			this.term();
 			}
 		}
@@ -943,9 +954,9 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 207;
+			this.state = 209;
 			this.match(dealParser.ID);
-			this.state = 208;
+			this.state = 210;
 			this.args();
 			}
 		}
@@ -970,26 +981,26 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 210;
-			this.match(dealParser.T__1);
-			this.state = 211;
-			this.match(dealParser.T__2);
 			this.state = 212;
+			this.match(dealParser.T__1);
+			this.state = 213;
+			this.match(dealParser.T__2);
+			this.state = 214;
 			this.match(dealParser.T__3);
-			this.state = 216;
+			this.state = 218;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case dealParser.T__22:
 				{
-				this.state = 213;
+				this.state = 215;
 				this.match(dealParser.T__22);
 				}
 				break;
 			case dealParser.T__21:
 				{
-				this.state = 214;
+				this.state = 216;
 				this.match(dealParser.T__21);
-				this.state = 215;
+				this.state = 217;
 				this.player();
 				}
 				break;
@@ -1020,22 +1031,22 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 218;
-			this.match(dealParser.T__23);
 			this.state = 220;
+			this.match(dealParser.T__23);
+			this.state = 222;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 219;
+				this.state = 221;
 				this.term();
 				}
 				}
-				this.state = 222;
+				this.state = 224;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0));
+			} while (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.SPADES - 41)) | (1 << (dealParser.HEARTS - 41)) | (1 << (dealParser.CLUBS - 41)) | (1 << (dealParser.DIAMONDS - 41)) | (1 << (dealParser.JACK - 41)) | (1 << (dealParser.QUEEN - 41)) | (1 << (dealParser.KING - 41)) | (1 << (dealParser.ACE - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0));
 			}
 		}
 		catch (re) {
@@ -1057,17 +1068,17 @@ export class dealParser extends Parser {
 		let _localctx: ModifyContext = new ModifyContext(this._ctx, this.state);
 		this.enterRule(_localctx, 40, dealParser.RULE_modify);
 		try {
-			this.state = 232;
+			this.state = 234;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 10, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 224;
-				this.position();
-				this.state = 225;
-				this.match(dealParser.T__24);
 				this.state = 226;
+				this.position();
+				this.state = 227;
+				this.match(dealParser.T__24);
+				this.state = 228;
 				this.function_call();
 				}
 				break;
@@ -1075,11 +1086,11 @@ export class dealParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 228;
-				this.variable();
-				this.state = 229;
-				this.match(dealParser.T__24);
 				this.state = 230;
+				this.variable();
+				this.state = 231;
+				this.match(dealParser.T__24);
+				this.state = 232;
 				this.function_call();
 				}
 				break;
@@ -1106,33 +1117,33 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 234;
+			this.state = 236;
 			this.match(dealParser.T__25);
-			this.state = 238;
+			this.state = 240;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 11, this._ctx) ) {
 			case 1:
 				{
-				this.state = 235;
+				this.state = 237;
 				this.position();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 236;
+				this.state = 238;
 				this.match(dealParser.CARD);
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 237;
+				this.state = 239;
 				this.variable();
 				}
 				break;
 			}
-			this.state = 240;
+			this.state = 242;
 			this.player();
 			}
 		}
@@ -1157,11 +1168,11 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 242;
-			this.match(dealParser.T__26);
-			this.state = 243;
-			this.match(dealParser.ID);
 			this.state = 244;
+			this.match(dealParser.T__26);
+			this.state = 245;
+			this.match(dealParser.ID);
+			this.state = 246;
 			this.atts();
 			}
 		}
@@ -1186,54 +1197,54 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 249;
+			this.state = 251;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 12, this._ctx) ) {
 			case 1:
 				{
-				this.state = 246;
+				this.state = 248;
 				this.match(dealParser.ID);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 247;
+				this.state = 249;
 				this.match(dealParser.NUMBER);
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 248;
+				this.state = 250;
 				this.intset();
 				}
 				break;
 			}
-			this.state = 255;
+			this.state = 257;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case dealParser.ID:
 				{
-				this.state = 251;
+				this.state = 253;
 				this.match(dealParser.ID);
 				}
 				break;
 			case dealParser.STRING:
 				{
-				this.state = 252;
+				this.state = 254;
 				this.match(dealParser.STRING);
 				}
 				break;
 			case dealParser.NUMBER:
 				{
-				this.state = 253;
+				this.state = 255;
 				this.match(dealParser.NUMBER);
 				}
 				break;
 			case dealParser.T__10:
 				{
-				this.state = 254;
+				this.state = 256;
 				this.atts();
 				}
 				break;
@@ -1264,35 +1275,35 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 257;
+			this.state = 259;
 			this.match(dealParser.T__10);
-			this.state = 266;
+			this.state = 268;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0)) {
+			if (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.SPADES - 41)) | (1 << (dealParser.HEARTS - 41)) | (1 << (dealParser.CLUBS - 41)) | (1 << (dealParser.DIAMONDS - 41)) | (1 << (dealParser.JACK - 41)) | (1 << (dealParser.QUEEN - 41)) | (1 << (dealParser.KING - 41)) | (1 << (dealParser.ACE - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0)) {
 				{
-				this.state = 258;
+				this.state = 260;
 				this.attribute();
-				this.state = 263;
+				this.state = 265;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === dealParser.T__12) {
 					{
 					{
-					this.state = 259;
+					this.state = 261;
 					this.match(dealParser.T__12);
-					this.state = 260;
+					this.state = 262;
 					this.attribute();
 					}
 					}
-					this.state = 265;
+					this.state = 267;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
 				}
 			}
 
-			this.state = 268;
+			this.state = 270;
 			this.match(dealParser.T__11);
 			}
 		}
@@ -1317,7 +1328,7 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 270;
+			this.state = 272;
 			this.match(dealParser.ID);
 			}
 		}
@@ -1343,35 +1354,35 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 272;
+			this.state = 274;
 			this.match(dealParser.T__8);
-			this.state = 281;
+			this.state = 283;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0)) {
+			if (_la === dealParser.T__1 || ((((_la - 41)) & ~0x1F) === 0 && ((1 << (_la - 41)) & ((1 << (dealParser.MOVE_DEST - 41)) | (1 << (dealParser.MOVE_SOURCE - 41)) | (1 << (dealParser.INTERACT_CARD - 41)) | (1 << (dealParser.EMPTY - 41)) | (1 << (dealParser.SPADES - 41)) | (1 << (dealParser.HEARTS - 41)) | (1 << (dealParser.CLUBS - 41)) | (1 << (dealParser.DIAMONDS - 41)) | (1 << (dealParser.JACK - 41)) | (1 << (dealParser.QUEEN - 41)) | (1 << (dealParser.KING - 41)) | (1 << (dealParser.ACE - 41)) | (1 << (dealParser.NUMBER - 41)) | (1 << (dealParser.ID - 41)) | (1 << (dealParser.CARD - 41)) | (1 << (dealParser.STRING - 41)))) !== 0)) {
 				{
-				this.state = 273;
+				this.state = 275;
 				this.arg();
-				this.state = 278;
+				this.state = 280;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === dealParser.T__12) {
 					{
 					{
-					this.state = 274;
+					this.state = 276;
 					this.match(dealParser.T__12);
-					this.state = 275;
+					this.state = 277;
 					this.arg();
 					}
 					}
-					this.state = 280;
+					this.state = 282;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
 				}
 			}
 
-			this.state = 283;
+			this.state = 285;
 			this.match(dealParser.T__9);
 			}
 		}
@@ -1396,7 +1407,7 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 285;
+			this.state = 287;
 			this.term();
 			}
 		}
@@ -1419,20 +1430,20 @@ export class dealParser extends Parser {
 		let _localctx: ArearefContext = new ArearefContext(this._ctx, this.state);
 		this.enterRule(_localctx, 56, dealParser.RULE_arearef);
 		try {
-			this.state = 289;
+			this.state = 291;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case dealParser.ID:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 287;
+				this.state = 289;
 				this.match(dealParser.ID);
 				}
 				break;
 			case dealParser.T__1:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 288;
+				this.state = 290;
 				this.player();
 				}
 				break;
@@ -1461,11 +1472,11 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 291;
-			this.arearef();
-			this.state = 292;
-			this.match(dealParser.T__27);
 			this.state = 293;
+			this.arearef();
+			this.state = 294;
+			this.match(dealParser.T__27);
+			this.state = 295;
 			this.match(dealParser.T__28);
 			}
 		}
@@ -1490,13 +1501,13 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 295;
-			this.arearef();
-			this.state = 296;
-			this.match(dealParser.T__27);
 			this.state = 297;
-			this.term();
+			this.arearef();
 			this.state = 298;
+			this.match(dealParser.T__27);
+			this.state = 299;
+			this.term();
+			this.state = 300;
 			this.match(dealParser.T__28);
 			}
 		}
@@ -1519,45 +1530,45 @@ export class dealParser extends Parser {
 		let _localctx: PositionContext = new PositionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 62, dealParser.RULE_position);
 		try {
-			this.state = 310;
+			this.state = 312;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case dealParser.T__1:
 			case dealParser.ID:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 300;
-				this.arearef();
-				this.state = 301;
-				this.match(dealParser.T__27);
 				this.state = 302;
-				this.term();
+				this.arearef();
 				this.state = 303;
-				this.match(dealParser.T__12);
+				this.match(dealParser.T__27);
 				this.state = 304;
 				this.term();
 				this.state = 305;
+				this.match(dealParser.T__12);
+				this.state = 306;
+				this.term();
+				this.state = 307;
 				this.match(dealParser.T__28);
 				}
 				break;
 			case dealParser.MOVE_SOURCE:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 307;
+				this.state = 309;
 				this.match(dealParser.MOVE_SOURCE);
 				}
 				break;
 			case dealParser.MOVE_DEST:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 308;
+				this.state = 310;
 				this.match(dealParser.MOVE_DEST);
 				}
 				break;
 			case dealParser.INTERACT_CARD:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 309;
+				this.state = 311;
 				this.match(dealParser.INTERACT_CARD);
 				}
 				break;
@@ -1587,91 +1598,91 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 321;
+			this.state = 323;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 20, this._ctx) ) {
 			case 1:
 				{
-				this.state = 312;
-				this.match(dealParser.EMPTY);
+				this.state = 314;
+				this.primitives();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 313;
+				this.state = 315;
 				this.match(dealParser.CARD);
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 314;
+				this.state = 316;
 				this.match(dealParser.STRING);
 				}
 				break;
 
 			case 4:
 				{
-				this.state = 315;
+				this.state = 317;
 				this.variable();
 				}
 				break;
 
 			case 5:
 				{
-				this.state = 316;
+				this.state = 318;
 				this.match(dealParser.NUMBER);
 				}
 				break;
 
 			case 6:
 				{
-				this.state = 317;
+				this.state = 319;
 				this.player();
 				}
 				break;
 
 			case 7:
 				{
-				this.state = 318;
+				this.state = 320;
 				this.area();
 				}
 				break;
 
 			case 8:
 				{
-				this.state = 319;
+				this.state = 321;
 				this.stack();
 				}
 				break;
 
 			case 9:
 				{
-				this.state = 320;
+				this.state = 322;
 				this.position();
 				}
 				break;
 			}
-			this.state = 324;
+			this.state = 326;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 21, this._ctx) ) {
 			case 1:
 				{
-				this.state = 323;
+				this.state = 325;
 				this.property();
 				}
 				break;
 			}
-			this.state = 328;
+			this.state = 330;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (((((_la - 45)) & ~0x1F) === 0 && ((1 << (_la - 45)) & ((1 << (dealParser.PLUS - 45)) | (1 << (dealParser.MINUS - 45)) | (1 << (dealParser.TIMES - 45)))) !== 0)) {
+			if (((((_la - 44)) & ~0x1F) === 0 && ((1 << (_la - 44)) & ((1 << (dealParser.PLUS - 44)) | (1 << (dealParser.MINUS - 44)) | (1 << (dealParser.TIMES - 44)))) !== 0)) {
 				{
-				this.state = 326;
+				this.state = 328;
 				_localctx._op = this._input.LT(1);
 				_la = this._input.LA(1);
-				if (!(((((_la - 45)) & ~0x1F) === 0 && ((1 << (_la - 45)) & ((1 << (dealParser.PLUS - 45)) | (1 << (dealParser.MINUS - 45)) | (1 << (dealParser.TIMES - 45)))) !== 0))) {
+				if (!(((((_la - 44)) & ~0x1F) === 0 && ((1 << (_la - 44)) & ((1 << (dealParser.PLUS - 44)) | (1 << (dealParser.MINUS - 44)) | (1 << (dealParser.TIMES - 44)))) !== 0))) {
 					_localctx._op = this._errHandler.recoverInline(this);
 				} else {
 					if (this._input.LA(1) === Token.EOF) {
@@ -1681,7 +1692,7 @@ export class dealParser extends Parser {
 					this._errHandler.reportMatch(this);
 					this.consume();
 				}
-				this.state = 327;
+				this.state = 329;
 				this.term();
 				}
 			}
@@ -1709,10 +1720,46 @@ export class dealParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 330;
+			this.state = 332;
 			this.match(dealParser.T__2);
-			this.state = 331;
+			this.state = 333;
 			this.match(dealParser.ID);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public primitives(): PrimitivesContext {
+		let _localctx: PrimitivesContext = new PrimitivesContext(this._ctx, this.state);
+		this.enterRule(_localctx, 68, dealParser.RULE_primitives);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 335;
+			_la = this._input.LA(1);
+			if (!(((((_la - 48)) & ~0x1F) === 0 && ((1 << (_la - 48)) & ((1 << (dealParser.EMPTY - 48)) | (1 << (dealParser.SPADES - 48)) | (1 << (dealParser.HEARTS - 48)) | (1 << (dealParser.CLUBS - 48)) | (1 << (dealParser.DIAMONDS - 48)) | (1 << (dealParser.JACK - 48)) | (1 << (dealParser.QUEEN - 48)) | (1 << (dealParser.KING - 48)) | (1 << (dealParser.ACE - 48)))) !== 0))) {
+			this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
+				}
+
+				this._errHandler.reportMatch(this);
+				this.consume();
+			}
 			}
 		}
 		catch (re) {
@@ -1732,14 +1779,14 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public bexpr(): BexprContext {
 		let _localctx: BexprContext = new BexprContext(this._ctx, this.state);
-		this.enterRule(_localctx, 68, dealParser.RULE_bexpr);
+		this.enterRule(_localctx, 70, dealParser.RULE_bexpr);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 333;
+			this.state = 337;
 			this.term();
-			this.state = 338;
+			this.state = 342;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case dealParser.T__29:
@@ -1750,7 +1797,7 @@ export class dealParser extends Parser {
 			case dealParser.T__34:
 				{
 				{
-				this.state = 334;
+				this.state = 338;
 				_la = this._input.LA(1);
 				if (!(((((_la - 30)) & ~0x1F) === 0 && ((1 << (_la - 30)) & ((1 << (dealParser.T__29 - 30)) | (1 << (dealParser.T__30 - 30)) | (1 << (dealParser.T__31 - 30)) | (1 << (dealParser.T__32 - 30)) | (1 << (dealParser.T__33 - 30)) | (1 << (dealParser.T__34 - 30)))) !== 0))) {
 				this._errHandler.recoverInline(this);
@@ -1762,7 +1809,7 @@ export class dealParser extends Parser {
 					this._errHandler.reportMatch(this);
 					this.consume();
 				}
-				this.state = 335;
+				this.state = 339;
 				this.term();
 				}
 				}
@@ -1771,7 +1818,7 @@ export class dealParser extends Parser {
 			case dealParser.T__36:
 				{
 				{
-				this.state = 336;
+				this.state = 340;
 				_la = this._input.LA(1);
 				if (!(_la === dealParser.T__35 || _la === dealParser.T__36)) {
 				this._errHandler.recoverInline(this);
@@ -1783,7 +1830,7 @@ export class dealParser extends Parser {
 					this._errHandler.reportMatch(this);
 					this.consume();
 				}
-				this.state = 337;
+				this.state = 341;
 				this.set();
 				}
 				}
@@ -1810,41 +1857,41 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public set(): SetContext {
 		let _localctx: SetContext = new SetContext(this._ctx, this.state);
-		this.enterRule(_localctx, 70, dealParser.RULE_set);
+		this.enterRule(_localctx, 72, dealParser.RULE_set);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 343;
+			this.state = 347;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 24, this._ctx) ) {
 			case 1:
 				{
-				this.state = 340;
+				this.state = 344;
 				this.intset();
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 341;
+				this.state = 345;
 				this.positionset();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 342;
+				this.state = 346;
 				this.playerset();
 				}
 				break;
 			}
-			this.state = 346;
+			this.state = 350;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === dealParser.T__2) {
 				{
-				this.state = 345;
+				this.state = 349;
 				this.property();
 				}
 			}
@@ -1868,20 +1915,20 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public intset(): IntsetContext {
 		let _localctx: IntsetContext = new IntsetContext(this._ctx, this.state);
-		this.enterRule(_localctx, 72, dealParser.RULE_intset);
+		this.enterRule(_localctx, 74, dealParser.RULE_intset);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 348;
+			this.state = 352;
 			this.term();
-			this.state = 349;
+			this.state = 353;
 			this.match(dealParser.T__37);
-			this.state = 351;
+			this.state = 355;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 26, this._ctx) ) {
 			case 1:
 				{
-				this.state = 350;
+				this.state = 354;
 				this.term();
 				}
 				break;
@@ -1905,21 +1952,21 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public positionset(): PositionsetContext {
 		let _localctx: PositionsetContext = new PositionsetContext(this._ctx, this.state);
-		this.enterRule(_localctx, 74, dealParser.RULE_positionset);
+		this.enterRule(_localctx, 76, dealParser.RULE_positionset);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 353;
-			this.arearef();
-			this.state = 354;
-			this.match(dealParser.T__27);
-			this.state = 355;
-			this.intset();
-			this.state = 356;
-			this.match(dealParser.T__12);
 			this.state = 357;
-			this.intset();
+			this.arearef();
 			this.state = 358;
+			this.match(dealParser.T__27);
+			this.state = 359;
+			this.intset();
+			this.state = 360;
+			this.match(dealParser.T__12);
+			this.state = 361;
+			this.intset();
+			this.state = 362;
 			this.match(dealParser.T__28);
 			}
 		}
@@ -1940,15 +1987,15 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public playerset(): PlayersetContext {
 		let _localctx: PlayersetContext = new PlayersetContext(this._ctx, this.state);
-		this.enterRule(_localctx, 76, dealParser.RULE_playerset);
+		this.enterRule(_localctx, 78, dealParser.RULE_playerset);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 360;
+			this.state = 364;
 			this.match(dealParser.T__1);
-			this.state = 361;
+			this.state = 365;
 			this.match(dealParser.TIMES);
-			this.state = 362;
+			this.state = 366;
 			this.match(dealParser.T__3);
 			}
 		}
@@ -1969,15 +2016,15 @@ export class dealParser extends Parser {
 	// @RuleVersion(0)
 	public move_catch(): Move_catchContext {
 		let _localctx: Move_catchContext = new Move_catchContext(this._ctx, this.state);
-		this.enterRule(_localctx, 78, dealParser.RULE_move_catch);
+		this.enterRule(_localctx, 80, dealParser.RULE_move_catch);
 		try {
-			this.state = 367;
+			this.state = 371;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 27, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 364;
+				this.state = 368;
 				this.match(dealParser.WILDCARD);
 				}
 				break;
@@ -1985,7 +2032,7 @@ export class dealParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 365;
+				this.state = 369;
 				this.position();
 				}
 				break;
@@ -1993,7 +2040,7 @@ export class dealParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 366;
+				this.state = 370;
 				this.positionset();
 				}
 				break;
@@ -2015,177 +2062,179 @@ export class dealParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x038\u0174\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03@\u0178\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
 		"\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x04\x17\t\x17\x04" +
 		"\x18\t\x18\x04\x19\t\x19\x04\x1A\t\x1A\x04\x1B\t\x1B\x04\x1C\t\x1C\x04" +
 		"\x1D\t\x1D\x04\x1E\t\x1E\x04\x1F\t\x1F\x04 \t \x04!\t!\x04\"\t\"\x04#" +
-		"\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t)\x03\x02\x07\x02" +
-		"T\n\x02\f\x02\x0E\x02W\v\x02\x03\x02\x03\x02\x03\x03\x03\x03\x03\x03\x03" +
+		"\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t)\x04*\t*\x03\x02" +
+		"\x07\x02V\n\x02\f\x02\x0E\x02Y\v\x02\x03\x02\x03\x02\x03\x03\x03\x03\x03" +
 		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03" +
-		"\x03\x03\x03\x03\x03\x03\x03\x05\x03k\n\x03\x03\x03\x03\x03\x03\x04\x07" +
-		"\x04p\n\x04\f\x04\x0E\x04s\v\x04\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05" +
-		"\x05\x05z\n\x05\x03\x05\x03\x05\x03\x06\x03\x06\x03\x06\x03\x06\x03\x07" +
-		"\x03\x07\x03\x07\x03\x07\x03\x07\x05\x07\x87\n\x07\x03\x07\x03\x07\x03" +
-		"\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x07\b\x93\n\b\f\b\x0E" +
-		"\b\x96\v\b\x03\t\x03\t\x03\t\x03\t\x03\n\x03\n\x03\n\x05\n\x9F\n\n\x03" +
-		"\v\x03\v\x03\f\x03\f\x03\f\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03\r\x03" +
-		"\r\x03\r\x03\r\x03\r\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x03" +
-		"\x0E\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03" +
-		"\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03" +
-		"\x10\x05\x10\xCA\n\x10\x03\x11\x03\x11\x03\x12\x03\x12\x03\x12\x03\x12" +
-		"\x03\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14\x03\x14\x03\x14\x03\x14" +
-		"\x05\x14\xDB\n\x14\x03\x15\x03\x15\x06\x15\xDF\n\x15\r\x15\x0E\x15\xE0" +
-		"\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x05\x16" +
-		"\xEB\n\x16\x03\x17\x03\x17\x03\x17\x03\x17\x05\x17\xF1\n\x17\x03\x17\x03" +
-		"\x17\x03\x18\x03\x18\x03\x18\x03\x18\x03\x19\x03\x19\x03\x19\x05\x19\xFC" +
-		"\n\x19\x03\x19\x03\x19\x03\x19\x03\x19\x05\x19\u0102\n\x19\x03\x1A\x03" +
-		"\x1A\x03\x1A\x03\x1A\x07\x1A\u0108\n\x1A\f\x1A\x0E\x1A\u010B\v\x1A\x05" +
-		"\x1A\u010D\n\x1A\x03\x1A\x03\x1A\x03\x1B\x03\x1B\x03\x1C\x03\x1C\x03\x1C" +
-		"\x03\x1C\x07\x1C\u0117\n\x1C\f\x1C\x0E\x1C\u011A\v\x1C\x05\x1C\u011C\n" +
-		"\x1C\x03\x1C\x03\x1C\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x05\x1E\u0124\n\x1E" +
-		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 \x03!\x03!\x03" +
-		"!\x03!\x03!\x03!\x03!\x03!\x03!\x03!\x05!\u0139\n!\x03\"\x03\"\x03\"\x03" +
-		"\"\x03\"\x03\"\x03\"\x03\"\x03\"\x05\"\u0144\n\"\x03\"\x05\"\u0147\n\"" +
-		"\x03\"\x03\"\x05\"\u014B\n\"\x03#\x03#\x03#\x03$\x03$\x03$\x03$\x03$\x05" +
-		"$\u0155\n$\x03%\x03%\x03%\x05%\u015A\n%\x03%\x05%\u015D\n%\x03&\x03&\x03" +
-		"&\x05&\u0162\n&\x03\'\x03\'\x03\'\x03\'\x03\'\x03\'\x03\'\x03(\x03(\x03" +
-		"(\x03(\x03)\x03)\x03)\x05)\u0172\n)\x03)\x02\x02\x02*\x02\x02\x04\x02" +
-		"\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18" +
-		"\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02.\x02" +
-		"0\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02" +
-		"L\x02N\x02P\x02\x02\x06\x04\x02\b\t**\x03\x02/1\x03\x02 %\x03\x02&\'\x02" +
-		"\u0187\x02U\x03\x02\x02\x02\x04j\x03\x02\x02\x02\x06q\x03\x02\x02\x02" +
-		"\bt\x03\x02\x02\x02\n}\x03\x02\x02\x02\f\x81\x03\x02\x02\x02\x0E\x8D\x03" +
-		"\x02\x02\x02\x10\x97\x03\x02\x02\x02\x12\x9E\x03\x02\x02\x02\x14\xA0\x03" +
-		"\x02\x02\x02\x16\xA2\x03\x02\x02\x02\x18\xA8\x03\x02\x02\x02\x1A\xB0\x03" +
-		"\x02\x02\x02\x1C\xB7\x03\x02\x02\x02\x1E\xBF\x03\x02\x02\x02 \xCB\x03" +
-		"\x02\x02\x02\"\xCD\x03\x02\x02\x02$\xD1\x03\x02\x02\x02&\xD4\x03\x02\x02" +
-		"\x02(\xDC\x03\x02\x02\x02*\xEA\x03\x02\x02\x02,\xEC\x03\x02\x02\x02.\xF4" +
-		"\x03\x02\x02\x020\xFB\x03\x02\x02\x022\u0103\x03\x02\x02\x024\u0110\x03" +
-		"\x02\x02\x026\u0112\x03\x02\x02\x028\u011F\x03\x02\x02\x02:\u0123\x03" +
-		"\x02\x02\x02<\u0125\x03\x02\x02\x02>\u0129\x03\x02\x02\x02@\u0138\x03" +
-		"\x02\x02\x02B\u0143\x03\x02\x02\x02D\u014C\x03\x02\x02\x02F\u014F\x03" +
-		"\x02\x02\x02H\u0159\x03\x02\x02\x02J\u015E\x03\x02\x02\x02L\u0163\x03" +
-		"\x02\x02\x02N\u016A\x03\x02\x02\x02P\u0171\x03\x02\x02\x02RT\x05\x04\x03" +
-		"\x02SR\x03\x02\x02\x02TW\x03\x02\x02\x02US\x03\x02\x02\x02UV\x03\x02\x02" +
-		"\x02VX\x03\x02\x02\x02WU\x03\x02\x02\x02XY\x07\x02\x02\x03Y\x03\x03\x02" +
-		"\x02\x02Zk\x05\n\x06\x02[k\x05\f\x07\x02\\k\x05\x10\t\x02]k\x05\x16\f" +
-		"\x02^k\x05\x18\r\x02_k\x05\x1A\x0E\x02`k\x05\x1C\x0F\x02ak\x05\x1E\x10" +
-		"\x02bk\x05 \x11\x02ck\x05\"\x12\x02dk\x05$\x13\x02ek\x05&\x14\x02fk\x05" +
-		"(\x15\x02gk\x05*\x16\x02hk\x05,\x17\x02ik\x05.\x18\x02jZ\x03\x02\x02\x02" +
-		"j[\x03\x02\x02\x02j\\\x03\x02\x02\x02j]\x03\x02\x02\x02j^\x03\x02\x02" +
-		"\x02j_\x03\x02\x02\x02j`\x03\x02\x02\x02ja\x03\x02\x02\x02jb\x03\x02\x02" +
-		"\x02jc\x03\x02\x02\x02jd\x03\x02\x02\x02je\x03\x02\x02\x02jf\x03\x02\x02" +
-		"\x02jg\x03\x02\x02\x02jh\x03\x02\x02\x02ji\x03\x02\x02\x02kl\x03\x02\x02" +
-		"\x02lm\x07\x03\x02\x02m\x05\x03\x02\x02\x02np\x05\x04\x03\x02on\x03\x02" +
-		"\x02\x02ps\x03\x02\x02\x02qo\x03\x02\x02\x02qr\x03\x02\x02\x02r\x07\x03" +
-		"\x02\x02\x02sq\x03\x02\x02\x02ty\x07\x04\x02\x02uz\x07+\x02\x02vz\x07" +
-		"\x05\x02\x02wz\x07-\x02\x02xz\x05B\"\x02yu\x03\x02\x02\x02yv\x03\x02\x02" +
-		"\x02yw\x03\x02\x02\x02yx\x03\x02\x02\x02z{\x03\x02\x02\x02{|\x07\x06\x02" +
-		"\x02|\t\x03\x02\x02\x02}~\x07\x07\x02\x02~\x7F\t\x02\x02\x02\x7F\x80\x07" +
-		"4\x02\x02\x80\v\x03\x02\x02\x02\x81\x82\x07\x07\x02\x02\x82\x83\x07\n" +
-		"\x02\x02\x83\x84\x074\x02\x02\x84\x86\x07\v\x02\x02\x85\x87\x05\x0E\b" +
-		"\x02\x86\x85\x03\x02\x02\x02\x86\x87\x03\x02\x02\x02\x87\x88\x03\x02\x02" +
-		"\x02\x88\x89\x07\f\x02\x02\x89\x8A\x07\r\x02\x02\x8A\x8B\x05\x06\x04\x02" +
-		"\x8B\x8C\x07\x0E\x02\x02\x8C\r\x03\x02\x02\x02\x8D\x8E\x07*\x02\x02\x8E" +
-		"\x94\x074\x02\x02\x8F\x90\x07\x0F\x02\x02\x90\x91\x07*\x02\x02\x91\x93" +
-		"\x074\x02\x02\x92\x8F\x03\x02\x02\x02\x93\x96\x03\x02\x02\x02\x94\x92" +
-		"\x03\x02\x02\x02\x94\x95\x03\x02\x02\x02\x95\x0F\x03\x02\x02\x02\x96\x94" +
-		"\x03\x02\x02\x02\x97\x98\x07\x10\x02\x02\x98\x99\x05\x12\n\x02\x99\x9A" +
-		"\x05\x14\v\x02\x9A\x11\x03\x02\x02\x02\x9B\x9F\x075\x02\x02\x9C\x9F\x05" +
-		"@!\x02\x9D\x9F\x05L\'\x02\x9E\x9B\x03\x02\x02\x02\x9E\x9C\x03\x02\x02" +
-		"\x02\x9E\x9D\x03\x02\x02\x02\x9F\x13\x03\x02\x02\x02\xA0\xA1\x05@!\x02" +
-		"\xA1\x15\x03\x02\x02\x02\xA2\xA3\x07\x11\x02\x02\xA3\xA4\x074\x02\x02" +
-		"\xA4\xA5\x07\r\x02\x02\xA5\xA6\x05\x06\x04\x02\xA6\xA7\x07\x0E\x02\x02" +
-		"\xA7\x17\x03\x02\x02\x02\xA8\xA9\x07\x11\x02\x02\xA9\xAA\x07\x10\x02\x02" +
-		"\xAA\xAB\x05P)\x02\xAB\xAC\x05P)\x02\xAC\xAD\x07\r\x02\x02\xAD\xAE\x05" +
-		"\x06\x04\x02\xAE\xAF\x07\x0E\x02\x02\xAF\x19\x03\x02\x02\x02\xB0\xB1\x07" +
-		"\x11\x02\x02\xB1\xB2\x07\x12\x02\x02\xB2\xB3\x05P)\x02\xB3\xB4\x07\r\x02" +
-		"\x02\xB4\xB5\x05\x06\x04\x02\xB5\xB6\x07\x0E\x02\x02\xB6\x1B\x03\x02\x02" +
-		"\x02\xB7\xB8\x07\x13\x02\x02\xB8\xB9\x074\x02\x02\xB9\xBA\x07\x14\x02" +
-		"\x02\xBA\xBB\x05H%\x02\xBB\xBC\x07\r\x02\x02\xBC\xBD\x05\x06\x04\x02\xBD" +
-		"\xBE\x07\x0E\x02\x02\xBE\x1D\x03\x02\x02\x02\xBF\xC0\x07\x15\x02\x02\xC0" +
-		"\xC1\x05F$\x02\xC1\xC2\x07\r\x02\x02\xC2\xC3\x05\x06\x04\x02\xC3\xC9\x07" +
-		"\x0E\x02\x02\xC4\xC5\x07\x16\x02\x02\xC5\xC6\x07\r\x02\x02\xC6\xC7\x05" +
-		"\x06\x04\x02\xC7\xC8\x07\x0E\x02\x02\xC8\xCA\x03\x02\x02\x02\xC9\xC4\x03" +
-		"\x02\x02\x02\xC9\xCA\x03\x02\x02\x02\xCA\x1F\x03\x02\x02\x02\xCB\xCC\x07" +
-		"\x17\x02\x02\xCC!\x03\x02\x02\x02\xCD\xCE\x054\x1B\x02\xCE\xCF\x07\x18" +
-		"\x02\x02\xCF\xD0\x05B\"\x02\xD0#\x03\x02\x02\x02\xD1\xD2\x074\x02\x02" +
-		"\xD2\xD3\x056\x1C\x02\xD3%\x03\x02\x02\x02\xD4\xD5\x07\x04\x02\x02\xD5" +
-		"\xD6\x07\x05\x02\x02\xD6\xDA\x07\x06\x02\x02\xD7\xDB\x07\x19\x02\x02\xD8" +
-		"\xD9\x07\x18\x02\x02\xD9\xDB\x05\b\x05\x02\xDA\xD7\x03\x02\x02\x02\xDA" +
-		"\xD8\x03\x02\x02\x02\xDB\'\x03\x02\x02\x02\xDC\xDE\x07\x1A\x02\x02\xDD" +
-		"\xDF\x05B\"\x02\xDE\xDD\x03\x02\x02\x02\xDF\xE0\x03\x02\x02\x02\xE0\xDE" +
-		"\x03\x02\x02\x02\xE0\xE1\x03\x02\x02\x02\xE1)\x03\x02\x02\x02\xE2\xE3" +
-		"\x05@!\x02\xE3\xE4\x07\x1B\x02\x02\xE4\xE5\x05$\x13\x02\xE5\xEB\x03\x02" +
-		"\x02\x02\xE6\xE7\x054\x1B\x02\xE7\xE8\x07\x1B\x02\x02\xE8\xE9\x05$\x13" +
-		"\x02\xE9\xEB\x03\x02\x02\x02\xEA\xE2\x03\x02\x02\x02\xEA\xE6\x03\x02\x02" +
-		"\x02\xEB+\x03\x02\x02\x02\xEC\xF0\x07\x1C\x02\x02\xED\xF1\x05@!\x02\xEE" +
-		"\xF1\x075\x02\x02\xEF\xF1\x054\x1B\x02\xF0\xED\x03\x02\x02\x02\xF0\xEE" +
-		"\x03\x02\x02\x02\xF0\xEF\x03\x02\x02\x02\xF1\xF2\x03\x02\x02\x02\xF2\xF3" +
-		"\x05\b\x05\x02\xF3-\x03\x02\x02\x02\xF4\xF5\x07\x1D\x02\x02\xF5\xF6\x07" +
-		"4\x02\x02\xF6\xF7\x052\x1A\x02\xF7/\x03\x02\x02\x02\xF8\xFC\x074\x02\x02" +
-		"\xF9\xFC\x073\x02\x02\xFA\xFC\x05J&\x02\xFB\xF8\x03\x02\x02\x02\xFB\xF9" +
-		"\x03\x02\x02\x02\xFB\xFA\x03\x02\x02\x02\xFC\u0101\x03\x02\x02\x02\xFD" +
-		"\u0102\x074\x02\x02\xFE\u0102\x076\x02\x02\xFF\u0102\x073\x02\x02\u0100" +
-		"\u0102\x052\x1A\x02\u0101\xFD\x03\x02\x02\x02\u0101\xFE\x03\x02\x02\x02" +
-		"\u0101\xFF\x03\x02\x02\x02\u0101\u0100\x03\x02\x02\x02\u01021\x03\x02" +
-		"\x02\x02\u0103\u010C\x07\r\x02\x02\u0104\u0109\x050\x19\x02\u0105\u0106" +
-		"\x07\x0F\x02\x02\u0106\u0108\x050\x19\x02\u0107\u0105\x03\x02\x02\x02" +
-		"\u0108\u010B\x03\x02\x02\x02\u0109\u0107\x03\x02\x02\x02\u0109\u010A\x03" +
-		"\x02\x02\x02\u010A\u010D\x03\x02\x02\x02\u010B\u0109\x03\x02\x02\x02\u010C" +
-		"\u0104\x03\x02\x02\x02\u010C\u010D\x03\x02\x02\x02\u010D\u010E\x03\x02" +
-		"\x02\x02\u010E\u010F\x07\x0E\x02\x02\u010F3\x03\x02\x02\x02\u0110\u0111" +
-		"\x074\x02\x02\u01115\x03\x02\x02\x02\u0112\u011B\x07\v\x02\x02\u0113\u0118" +
-		"\x058\x1D\x02\u0114\u0115\x07\x0F\x02\x02\u0115\u0117\x058\x1D\x02\u0116" +
-		"\u0114\x03\x02\x02\x02\u0117\u011A\x03\x02\x02\x02\u0118\u0116\x03\x02" +
-		"\x02\x02\u0118\u0119\x03\x02\x02\x02\u0119\u011C\x03\x02\x02\x02\u011A" +
-		"\u0118\x03\x02\x02\x02\u011B\u0113\x03\x02\x02\x02\u011B\u011C\x03\x02" +
-		"\x02\x02\u011C\u011D\x03\x02\x02\x02\u011D\u011E\x07\f\x02\x02\u011E7" +
-		"\x03\x02\x02\x02\u011F\u0120\x05B\"\x02\u01209\x03\x02\x02\x02\u0121\u0124" +
-		"\x074\x02\x02\u0122\u0124\x05\b\x05\x02\u0123\u0121\x03\x02\x02\x02\u0123" +
-		"\u0122\x03\x02\x02\x02\u0124;\x03\x02\x02\x02\u0125\u0126\x05:\x1E\x02" +
-		"\u0126\u0127\x07\x1E\x02\x02\u0127\u0128\x07\x1F\x02\x02\u0128=\x03\x02" +
-		"\x02\x02\u0129\u012A\x05:\x1E\x02\u012A\u012B\x07\x1E\x02\x02\u012B\u012C" +
-		"\x05B\"\x02\u012C\u012D\x07\x1F\x02\x02\u012D?\x03\x02\x02\x02\u012E\u012F" +
-		"\x05:\x1E\x02\u012F\u0130\x07\x1E\x02\x02\u0130\u0131\x05B\"\x02\u0131" +
-		"\u0132\x07\x0F\x02\x02\u0132\u0133\x05B\"\x02\u0133\u0134\x07\x1F\x02" +
-		"\x02\u0134\u0139\x03\x02\x02\x02\u0135\u0139\x07,\x02\x02\u0136\u0139" +
-		"\x07+\x02\x02\u0137\u0139\x07-\x02\x02\u0138\u012E\x03\x02\x02\x02\u0138" +
-		"\u0135\x03\x02\x02\x02\u0138\u0136\x03\x02\x02\x02\u0138\u0137\x03\x02" +
-		"\x02\x02\u0139A\x03\x02\x02\x02\u013A\u0144\x07.\x02\x02\u013B\u0144\x07" +
-		"5\x02\x02\u013C\u0144\x076\x02\x02\u013D\u0144\x054\x1B\x02\u013E\u0144" +
-		"\x073\x02\x02\u013F\u0144\x05\b\x05\x02\u0140\u0144\x05<\x1F\x02\u0141" +
-		"\u0144\x05> \x02\u0142\u0144\x05@!\x02\u0143\u013A\x03\x02\x02\x02\u0143" +
-		"\u013B\x03\x02\x02\x02\u0143\u013C\x03\x02\x02\x02\u0143\u013D\x03\x02" +
-		"\x02\x02\u0143\u013E\x03\x02\x02\x02\u0143\u013F\x03\x02\x02\x02\u0143" +
-		"\u0140\x03\x02\x02\x02\u0143\u0141\x03\x02\x02\x02\u0143\u0142\x03\x02" +
-		"\x02\x02\u0144\u0146\x03\x02\x02\x02\u0145\u0147\x05D#\x02\u0146\u0145" +
-		"\x03\x02\x02\x02\u0146\u0147\x03\x02\x02\x02\u0147\u014A\x03\x02\x02\x02" +
-		"\u0148\u0149\t\x03\x02\x02\u0149\u014B\x05B\"\x02\u014A\u0148\x03\x02" +
-		"\x02\x02\u014A\u014B\x03\x02\x02\x02\u014BC\x03\x02\x02\x02\u014C\u014D" +
-		"\x07\x05\x02\x02\u014D\u014E\x074\x02\x02\u014EE\x03\x02\x02\x02\u014F" +
-		"\u0154\x05B\"\x02\u0150\u0151\t\x04\x02\x02\u0151\u0155\x05B\"\x02\u0152" +
-		"\u0153\t\x05\x02\x02\u0153\u0155\x05H%\x02\u0154\u0150\x03\x02\x02\x02" +
-		"\u0154\u0152\x03\x02\x02\x02\u0155G\x03\x02\x02\x02\u0156\u015A\x05J&" +
-		"\x02\u0157\u015A\x05L\'\x02\u0158\u015A\x05N(\x02\u0159\u0156\x03\x02" +
-		"\x02\x02\u0159\u0157\x03\x02\x02\x02\u0159\u0158\x03\x02\x02\x02\u015A" +
-		"\u015C\x03\x02\x02\x02\u015B\u015D\x05D#\x02\u015C\u015B\x03\x02\x02\x02" +
-		"\u015C\u015D\x03\x02\x02\x02\u015DI\x03\x02\x02\x02\u015E\u015F\x05B\"" +
-		"\x02\u015F\u0161\x07(\x02\x02\u0160\u0162\x05B\"\x02\u0161\u0160\x03\x02" +
-		"\x02\x02\u0161\u0162\x03\x02\x02\x02\u0162K\x03\x02\x02\x02\u0163\u0164" +
-		"\x05:\x1E\x02\u0164\u0165\x07\x1E\x02\x02\u0165\u0166\x05J&\x02\u0166" +
-		"\u0167\x07\x0F\x02\x02\u0167\u0168\x05J&\x02\u0168\u0169\x07\x1F\x02\x02" +
-		"\u0169M\x03\x02\x02\x02\u016A\u016B\x07\x04\x02\x02\u016B\u016C\x071\x02" +
-		"\x02\u016C\u016D\x07\x06\x02\x02\u016DO\x03\x02\x02\x02\u016E\u0172\x07" +
-		"2\x02\x02\u016F\u0172\x05@!\x02\u0170\u0172\x05L\'\x02\u0171\u016E\x03" +
-		"\x02\x02\x02\u0171\u016F\x03\x02\x02\x02\u0171\u0170\x03\x02\x02\x02\u0172" +
-		"Q\x03\x02\x02\x02\x1EUjqy\x86\x94\x9E\xC9\xDA\xE0\xEA\xF0\xFB\u0101\u0109" +
-		"\u010C\u0118\u011B\u0123\u0138\u0143\u0146\u014A\u0154\u0159\u015C\u0161" +
-		"\u0171";
+		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x05\x03m\n\x03\x03\x03\x03\x03\x03" +
+		"\x04\x07\x04r\n\x04\f\x04\x0E\x04u\v\x04\x03\x05\x03\x05\x03\x05\x03\x05" +
+		"\x03\x05\x05\x05|\n\x05\x03\x05\x03\x05\x03\x06\x03\x06\x03\x06\x03\x06" +
+		"\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x05\x07\x89\n\x07\x03\x07\x03" +
+		"\x07\x03\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x07\b\x95\n" +
+		"\b\f\b\x0E\b\x98\v\b\x03\t\x03\t\x03\t\x03\t\x03\n\x03\n\x03\n\x05\n\xA1" +
+		"\n\n\x03\v\x03\v\x03\f\x03\f\x03\f\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r" +
+		"\x03\r\x03\r\x03\r\x03\r\x03\r\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E" +
+		"\x03\x0E\x03\x0E\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F" +
+		"\x03\x0F\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10" +
+		"\x03\x10\x03\x10\x05\x10\xCC\n\x10\x03\x11\x03\x11\x03\x12\x03\x12\x03" +
+		"\x12\x03\x12\x03\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14\x03\x14\x03" +
+		"\x14\x03\x14\x05\x14\xDD\n\x14\x03\x15\x03\x15\x06\x15\xE1\n\x15\r\x15" +
+		"\x0E\x15\xE2\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03" +
+		"\x16\x05\x16\xED\n\x16\x03\x17\x03\x17\x03\x17\x03\x17\x05\x17\xF3\n\x17" +
+		"\x03\x17\x03\x17\x03\x18\x03\x18\x03\x18\x03\x18\x03\x19\x03\x19\x03\x19" +
+		"\x05\x19\xFE\n\x19\x03\x19\x03\x19\x03\x19\x03\x19\x05\x19\u0104\n\x19" +
+		"\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x07\x1A\u010A\n\x1A\f\x1A\x0E\x1A\u010D" +
+		"\v\x1A\x05\x1A\u010F\n\x1A\x03\x1A\x03\x1A\x03\x1B\x03\x1B\x03\x1C\x03" +
+		"\x1C\x03\x1C\x03\x1C\x07\x1C\u0119\n\x1C\f\x1C\x0E\x1C\u011C\v\x1C\x05" +
+		"\x1C\u011E\n\x1C\x03\x1C\x03\x1C\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x05\x1E" +
+		"\u0126\n\x1E\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 " +
+		"\x03!\x03!\x03!\x03!\x03!\x03!\x03!\x03!\x03!\x03!\x05!\u013B\n!\x03\"" +
+		"\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x05\"\u0146\n\"\x03\"" +
+		"\x05\"\u0149\n\"\x03\"\x03\"\x05\"\u014D\n\"\x03#\x03#\x03#\x03$\x03$" +
+		"\x03%\x03%\x03%\x03%\x03%\x05%\u0159\n%\x03&\x03&\x03&\x05&\u015E\n&\x03" +
+		"&\x05&\u0161\n&\x03\'\x03\'\x03\'\x05\'\u0166\n\'\x03(\x03(\x03(\x03(" +
+		"\x03(\x03(\x03(\x03)\x03)\x03)\x03)\x03*\x03*\x03*\x05*\u0176\n*\x03*" +
+		"\x02\x02\x02+\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02" +
+		"\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02" +
+		"&\x02(\x02*\x02,\x02.\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02" +
+		"B\x02D\x02F\x02H\x02J\x02L\x02N\x02P\x02R\x02\x02\x07\x04\x02\b\t**\x03" +
+		"\x02.0\x03\x022:\x03\x02 %\x03\x02&\'\x02\u018A\x02W\x03\x02\x02\x02\x04" +
+		"l\x03\x02\x02\x02\x06s\x03\x02\x02\x02\bv\x03\x02\x02\x02\n\x7F\x03\x02" +
+		"\x02\x02\f\x83\x03\x02\x02\x02\x0E\x8F\x03\x02\x02\x02\x10\x99\x03\x02" +
+		"\x02\x02\x12\xA0\x03\x02\x02\x02\x14\xA2\x03\x02\x02\x02\x16\xA4\x03\x02" +
+		"\x02\x02\x18\xAA\x03\x02\x02\x02\x1A\xB2\x03\x02\x02\x02\x1C\xB9\x03\x02" +
+		"\x02\x02\x1E\xC1\x03\x02\x02\x02 \xCD\x03\x02\x02\x02\"\xCF\x03\x02\x02" +
+		"\x02$\xD3\x03\x02\x02\x02&\xD6\x03\x02\x02\x02(\xDE\x03\x02\x02\x02*\xEC" +
+		"\x03\x02\x02\x02,\xEE\x03\x02\x02\x02.\xF6\x03\x02\x02\x020\xFD\x03\x02" +
+		"\x02\x022\u0105\x03\x02\x02\x024\u0112\x03\x02\x02\x026\u0114\x03\x02" +
+		"\x02\x028\u0121\x03\x02\x02\x02:\u0125\x03\x02\x02\x02<\u0127\x03\x02" +
+		"\x02\x02>\u012B\x03\x02\x02\x02@\u013A\x03\x02\x02\x02B\u0145\x03\x02" +
+		"\x02\x02D\u014E\x03\x02\x02\x02F\u0151\x03\x02\x02\x02H\u0153\x03\x02" +
+		"\x02\x02J\u015D\x03\x02\x02\x02L\u0162\x03\x02\x02\x02N\u0167\x03\x02" +
+		"\x02\x02P\u016E\x03\x02\x02\x02R\u0175\x03\x02\x02\x02TV\x05\x04\x03\x02" +
+		"UT\x03\x02\x02\x02VY\x03\x02\x02\x02WU\x03\x02\x02\x02WX\x03\x02\x02\x02" +
+		"XZ\x03\x02\x02\x02YW\x03\x02\x02\x02Z[\x07\x02\x02\x03[\x03\x03\x02\x02" +
+		"\x02\\m\x05\n\x06\x02]m\x05\f\x07\x02^m\x05\x10\t\x02_m\x05\x16\f\x02" +
+		"`m\x05\x18\r\x02am\x05\x1A\x0E\x02bm\x05\x1C\x0F\x02cm\x05\x1E\x10\x02" +
+		"dm\x05 \x11\x02em\x05\"\x12\x02fm\x05$\x13\x02gm\x05&\x14\x02hm\x05(\x15" +
+		"\x02im\x05*\x16\x02jm\x05,\x17\x02km\x05.\x18\x02l\\\x03\x02\x02\x02l" +
+		"]\x03\x02\x02\x02l^\x03\x02\x02\x02l_\x03\x02\x02\x02l`\x03\x02\x02\x02" +
+		"la\x03\x02\x02\x02lb\x03\x02\x02\x02lc\x03\x02\x02\x02ld\x03\x02\x02\x02" +
+		"le\x03\x02\x02\x02lf\x03\x02\x02\x02lg\x03\x02\x02\x02lh\x03\x02\x02\x02" +
+		"li\x03\x02\x02\x02lj\x03\x02\x02\x02lk\x03\x02\x02\x02mn\x03\x02\x02\x02" +
+		"no\x07\x03\x02\x02o\x05\x03\x02\x02\x02pr\x05\x04\x03\x02qp\x03\x02\x02" +
+		"\x02ru\x03\x02\x02\x02sq\x03\x02\x02\x02st\x03\x02\x02\x02t\x07\x03\x02" +
+		"\x02\x02us\x03\x02\x02\x02v{\x07\x04\x02\x02w|\x07+\x02\x02x|\x07\x05" +
+		"\x02\x02y|\x07-\x02\x02z|\x05B\"\x02{w\x03\x02\x02\x02{x\x03\x02\x02\x02" +
+		"{y\x03\x02\x02\x02{z\x03\x02\x02\x02|}\x03\x02\x02\x02}~\x07\x06\x02\x02" +
+		"~\t\x03\x02\x02\x02\x7F\x80\x07\x07\x02\x02\x80\x81\t\x02\x02\x02\x81" +
+		"\x82\x07<\x02\x02\x82\v\x03\x02\x02\x02\x83\x84\x07\x07\x02\x02\x84\x85" +
+		"\x07\n\x02\x02\x85\x86\x07<\x02\x02\x86\x88\x07\v\x02\x02\x87\x89\x05" +
+		"\x0E\b\x02\x88\x87\x03\x02\x02\x02\x88\x89\x03\x02\x02\x02\x89\x8A\x03" +
+		"\x02\x02\x02\x8A\x8B\x07\f\x02\x02\x8B\x8C\x07\r\x02\x02\x8C\x8D\x05\x06" +
+		"\x04\x02\x8D\x8E\x07\x0E\x02\x02\x8E\r\x03\x02\x02\x02\x8F\x90\x07*\x02" +
+		"\x02\x90\x96\x07<\x02\x02\x91\x92\x07\x0F\x02\x02\x92\x93\x07*\x02\x02" +
+		"\x93\x95\x07<\x02\x02\x94\x91\x03\x02\x02\x02\x95\x98\x03\x02\x02\x02" +
+		"\x96\x94\x03\x02\x02\x02\x96\x97\x03\x02\x02\x02\x97\x0F\x03\x02\x02\x02" +
+		"\x98\x96\x03\x02\x02\x02\x99\x9A\x07\x10\x02\x02\x9A\x9B\x05\x12\n\x02" +
+		"\x9B\x9C\x05\x14\v\x02\x9C\x11\x03\x02\x02\x02\x9D\xA1\x07=\x02\x02\x9E" +
+		"\xA1\x05@!\x02\x9F\xA1\x05N(\x02\xA0\x9D\x03\x02\x02\x02\xA0\x9E\x03\x02" +
+		"\x02\x02\xA0\x9F\x03\x02\x02\x02\xA1\x13\x03\x02\x02\x02\xA2\xA3\x05@" +
+		"!\x02\xA3\x15\x03\x02\x02\x02\xA4\xA5\x07\x11\x02\x02\xA5\xA6\x07<\x02" +
+		"\x02\xA6\xA7\x07\r\x02\x02\xA7\xA8\x05\x06\x04\x02\xA8\xA9\x07\x0E\x02" +
+		"\x02\xA9\x17\x03\x02\x02\x02\xAA\xAB\x07\x11\x02\x02\xAB\xAC\x07\x10\x02" +
+		"\x02\xAC\xAD\x05R*\x02\xAD\xAE\x05R*\x02\xAE\xAF\x07\r\x02\x02\xAF\xB0" +
+		"\x05\x06\x04\x02\xB0\xB1\x07\x0E\x02\x02\xB1\x19\x03\x02\x02\x02\xB2\xB3" +
+		"\x07\x11\x02\x02\xB3\xB4\x07\x12\x02\x02\xB4\xB5\x05R*\x02\xB5\xB6\x07" +
+		"\r\x02\x02\xB6\xB7\x05\x06\x04\x02\xB7\xB8\x07\x0E\x02\x02\xB8\x1B\x03" +
+		"\x02\x02\x02\xB9\xBA\x07\x13\x02\x02\xBA\xBB\x07<\x02\x02\xBB\xBC\x07" +
+		"\x14\x02\x02\xBC\xBD\x05J&\x02\xBD\xBE\x07\r\x02\x02\xBE\xBF\x05\x06\x04" +
+		"\x02\xBF\xC0\x07\x0E\x02\x02\xC0\x1D\x03\x02\x02\x02\xC1\xC2\x07\x15\x02" +
+		"\x02\xC2\xC3\x05H%\x02\xC3\xC4\x07\r\x02\x02\xC4\xC5\x05\x06\x04\x02\xC5" +
+		"\xCB\x07\x0E\x02\x02\xC6\xC7\x07\x16\x02\x02\xC7\xC8\x07\r\x02\x02\xC8" +
+		"\xC9\x05\x06\x04\x02\xC9\xCA\x07\x0E\x02\x02\xCA\xCC\x03\x02\x02\x02\xCB" +
+		"\xC6\x03\x02\x02\x02\xCB\xCC\x03\x02\x02\x02\xCC\x1F\x03\x02\x02\x02\xCD" +
+		"\xCE\x07\x17\x02\x02\xCE!\x03\x02\x02\x02\xCF\xD0\x054\x1B\x02\xD0\xD1" +
+		"\x07\x18\x02\x02\xD1\xD2\x05B\"\x02\xD2#\x03\x02\x02\x02\xD3\xD4\x07<" +
+		"\x02\x02\xD4\xD5\x056\x1C\x02\xD5%\x03\x02\x02\x02\xD6\xD7\x07\x04\x02" +
+		"\x02\xD7\xD8\x07\x05\x02\x02\xD8\xDC\x07\x06\x02\x02\xD9\xDD\x07\x19\x02" +
+		"\x02\xDA\xDB\x07\x18\x02\x02\xDB\xDD\x05\b\x05\x02\xDC\xD9\x03\x02\x02" +
+		"\x02\xDC\xDA\x03\x02\x02\x02\xDD\'\x03\x02\x02\x02\xDE\xE0\x07\x1A\x02" +
+		"\x02\xDF\xE1\x05B\"\x02\xE0\xDF\x03\x02\x02\x02\xE1\xE2\x03\x02\x02\x02" +
+		"\xE2\xE0\x03\x02\x02\x02\xE2\xE3\x03\x02\x02\x02\xE3)\x03\x02\x02\x02" +
+		"\xE4\xE5\x05@!\x02\xE5\xE6\x07\x1B\x02\x02\xE6\xE7\x05$\x13\x02\xE7\xED" +
+		"\x03\x02\x02\x02\xE8\xE9\x054\x1B\x02\xE9\xEA\x07\x1B\x02\x02\xEA\xEB" +
+		"\x05$\x13\x02\xEB\xED\x03\x02\x02\x02\xEC\xE4\x03\x02\x02\x02\xEC\xE8" +
+		"\x03\x02\x02\x02\xED+\x03\x02\x02\x02\xEE\xF2\x07\x1C\x02\x02\xEF\xF3" +
+		"\x05@!\x02\xF0\xF3\x07=\x02\x02\xF1\xF3\x054\x1B\x02\xF2\xEF\x03\x02\x02" +
+		"\x02\xF2\xF0\x03\x02\x02\x02\xF2\xF1\x03\x02\x02\x02\xF3\xF4\x03\x02\x02" +
+		"\x02\xF4\xF5\x05\b\x05\x02\xF5-\x03\x02\x02\x02\xF6\xF7\x07\x1D\x02\x02" +
+		"\xF7\xF8\x07<\x02\x02\xF8\xF9\x052\x1A\x02\xF9/\x03\x02\x02\x02\xFA\xFE" +
+		"\x07<\x02\x02\xFB\xFE\x07;\x02\x02\xFC\xFE\x05L\'\x02\xFD\xFA\x03\x02" +
+		"\x02\x02\xFD\xFB\x03\x02\x02\x02\xFD\xFC\x03\x02\x02\x02\xFE\u0103\x03" +
+		"\x02\x02\x02\xFF\u0104\x07<\x02\x02\u0100\u0104\x07>\x02\x02\u0101\u0104" +
+		"\x07;\x02\x02\u0102\u0104\x052\x1A\x02\u0103\xFF\x03\x02\x02\x02\u0103" +
+		"\u0100\x03\x02\x02\x02\u0103\u0101\x03\x02\x02\x02\u0103\u0102\x03\x02" +
+		"\x02\x02\u01041\x03\x02\x02\x02\u0105\u010E\x07\r\x02\x02\u0106\u010B" +
+		"\x050\x19\x02\u0107\u0108\x07\x0F\x02\x02\u0108\u010A\x050\x19\x02\u0109" +
+		"\u0107\x03\x02\x02\x02\u010A\u010D\x03\x02\x02\x02\u010B\u0109\x03\x02" +
+		"\x02\x02\u010B\u010C\x03\x02\x02\x02\u010C\u010F\x03\x02\x02\x02\u010D" +
+		"\u010B\x03\x02\x02\x02\u010E\u0106\x03\x02\x02\x02\u010E\u010F\x03\x02" +
+		"\x02\x02\u010F\u0110\x03\x02\x02\x02\u0110\u0111\x07\x0E\x02\x02\u0111" +
+		"3\x03\x02\x02\x02\u0112\u0113\x07<\x02\x02\u01135\x03\x02\x02\x02\u0114" +
+		"\u011D\x07\v\x02\x02\u0115\u011A\x058\x1D\x02\u0116\u0117\x07\x0F\x02" +
+		"\x02\u0117\u0119\x058\x1D\x02\u0118\u0116\x03\x02\x02\x02\u0119\u011C" +
+		"\x03\x02\x02\x02\u011A\u0118\x03\x02\x02\x02\u011A\u011B\x03\x02\x02\x02" +
+		"\u011B\u011E\x03\x02\x02\x02\u011C\u011A\x03\x02\x02\x02\u011D\u0115\x03" +
+		"\x02\x02\x02\u011D\u011E\x03\x02\x02\x02\u011E\u011F\x03\x02\x02\x02\u011F" +
+		"\u0120\x07\f\x02\x02\u01207\x03\x02\x02\x02\u0121\u0122\x05B\"\x02\u0122" +
+		"9\x03\x02\x02\x02\u0123\u0126\x07<\x02\x02\u0124\u0126\x05\b\x05\x02\u0125" +
+		"\u0123\x03\x02\x02\x02\u0125\u0124\x03\x02\x02\x02\u0126;\x03\x02\x02" +
+		"\x02\u0127\u0128\x05:\x1E\x02\u0128\u0129\x07\x1E\x02\x02\u0129\u012A" +
+		"\x07\x1F\x02\x02\u012A=\x03\x02\x02\x02\u012B\u012C\x05:\x1E\x02\u012C" +
+		"\u012D\x07\x1E\x02\x02\u012D\u012E\x05B\"\x02\u012E\u012F\x07\x1F\x02" +
+		"\x02\u012F?\x03\x02\x02\x02\u0130\u0131\x05:\x1E\x02\u0131\u0132\x07\x1E" +
+		"\x02\x02\u0132\u0133\x05B\"\x02\u0133\u0134\x07\x0F\x02\x02\u0134\u0135" +
+		"\x05B\"\x02\u0135\u0136\x07\x1F\x02\x02\u0136\u013B\x03\x02\x02\x02\u0137" +
+		"\u013B\x07,\x02\x02\u0138\u013B\x07+\x02\x02\u0139\u013B\x07-\x02\x02" +
+		"\u013A\u0130\x03\x02\x02\x02\u013A\u0137\x03\x02\x02\x02\u013A\u0138\x03" +
+		"\x02\x02\x02\u013A\u0139\x03\x02\x02\x02\u013BA\x03\x02\x02\x02\u013C" +
+		"\u0146\x05F$\x02\u013D\u0146\x07=\x02\x02\u013E\u0146\x07>\x02\x02\u013F" +
+		"\u0146\x054\x1B\x02\u0140\u0146\x07;\x02\x02\u0141\u0146\x05\b\x05\x02" +
+		"\u0142\u0146\x05<\x1F\x02\u0143\u0146\x05> \x02\u0144\u0146\x05@!\x02" +
+		"\u0145\u013C\x03\x02\x02\x02\u0145\u013D\x03\x02\x02\x02\u0145\u013E\x03" +
+		"\x02\x02\x02\u0145\u013F\x03\x02\x02\x02\u0145\u0140\x03\x02\x02\x02\u0145" +
+		"\u0141\x03\x02\x02\x02\u0145\u0142\x03\x02\x02\x02\u0145\u0143\x03\x02" +
+		"\x02\x02\u0145\u0144\x03\x02\x02\x02\u0146\u0148\x03\x02\x02\x02\u0147" +
+		"\u0149\x05D#\x02\u0148\u0147\x03\x02\x02\x02\u0148\u0149\x03\x02\x02\x02" +
+		"\u0149\u014C\x03\x02\x02\x02\u014A\u014B\t\x03\x02\x02\u014B\u014D\x05" +
+		"B\"\x02\u014C\u014A\x03\x02\x02\x02\u014C\u014D\x03\x02\x02\x02\u014D" +
+		"C\x03\x02\x02\x02\u014E\u014F\x07\x05\x02\x02\u014F\u0150\x07<\x02\x02" +
+		"\u0150E\x03\x02\x02\x02\u0151\u0152\t\x04\x02\x02\u0152G\x03\x02\x02\x02" +
+		"\u0153\u0158\x05B\"\x02\u0154\u0155\t\x05\x02\x02\u0155\u0159\x05B\"\x02" +
+		"\u0156\u0157\t\x06\x02\x02\u0157\u0159\x05J&\x02\u0158\u0154\x03\x02\x02" +
+		"\x02\u0158\u0156\x03\x02\x02\x02\u0159I\x03\x02\x02\x02\u015A\u015E\x05" +
+		"L\'\x02\u015B\u015E\x05N(\x02\u015C\u015E\x05P)\x02\u015D\u015A\x03\x02" +
+		"\x02\x02\u015D\u015B\x03\x02\x02\x02\u015D\u015C\x03\x02\x02\x02\u015E" +
+		"\u0160\x03\x02\x02\x02\u015F\u0161\x05D#\x02\u0160\u015F\x03\x02\x02\x02" +
+		"\u0160\u0161\x03\x02\x02\x02\u0161K\x03\x02\x02\x02\u0162\u0163\x05B\"" +
+		"\x02\u0163\u0165\x07(\x02\x02\u0164\u0166\x05B\"\x02\u0165\u0164\x03\x02" +
+		"\x02\x02\u0165\u0166\x03\x02\x02\x02\u0166M\x03\x02\x02\x02\u0167\u0168" +
+		"\x05:\x1E\x02\u0168\u0169\x07\x1E\x02\x02\u0169\u016A\x05L\'\x02\u016A" +
+		"\u016B\x07\x0F\x02\x02\u016B\u016C\x05L\'\x02\u016C\u016D\x07\x1F\x02" +
+		"\x02\u016DO\x03\x02\x02\x02\u016E\u016F\x07\x04\x02\x02\u016F\u0170\x07" +
+		"0\x02\x02\u0170\u0171\x07\x06\x02\x02\u0171Q\x03\x02\x02\x02\u0172\u0176" +
+		"\x071\x02\x02\u0173\u0176\x05@!\x02\u0174\u0176\x05N(\x02\u0175\u0172" +
+		"\x03\x02\x02\x02\u0175\u0173\x03\x02\x02\x02\u0175\u0174\x03\x02\x02\x02" +
+		"\u0176S\x03\x02\x02\x02\x1EWls{\x88\x96\xA0\xCB\xDC\xE2\xEC\xF2\xFD\u0103" +
+		"\u010B\u010E\u011A\u011D\u0125\u013A\u0145\u0148\u014C\u0158\u015D\u0160" +
+		"\u0165\u0175";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!dealParser.__ATN) {
@@ -3406,7 +3455,9 @@ export class PositionContext extends ParserRuleContext {
 
 export class TermContext extends ParserRuleContext {
 	public _op!: Token;
-	public EMPTY(): TerminalNode | undefined { return this.tryGetToken(dealParser.EMPTY, 0); }
+	public primitives(): PrimitivesContext | undefined {
+		return this.tryGetRuleContext(0, PrimitivesContext);
+	}
 	public CARD(): TerminalNode | undefined { return this.tryGetToken(dealParser.CARD, 0); }
 	public STRING(): TerminalNode | undefined { return this.tryGetToken(dealParser.STRING, 0); }
 	public variable(): VariableContext | undefined {
@@ -3485,6 +3536,44 @@ export class PropertyContext extends ParserRuleContext {
 	public accept<Result>(visitor: dealVisitor<Result>): Result {
 		if (visitor.visitProperty) {
 			return visitor.visitProperty(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class PrimitivesContext extends ParserRuleContext {
+	public EMPTY(): TerminalNode | undefined { return this.tryGetToken(dealParser.EMPTY, 0); }
+	public SPADES(): TerminalNode | undefined { return this.tryGetToken(dealParser.SPADES, 0); }
+	public HEARTS(): TerminalNode | undefined { return this.tryGetToken(dealParser.HEARTS, 0); }
+	public CLUBS(): TerminalNode | undefined { return this.tryGetToken(dealParser.CLUBS, 0); }
+	public DIAMONDS(): TerminalNode | undefined { return this.tryGetToken(dealParser.DIAMONDS, 0); }
+	public JACK(): TerminalNode | undefined { return this.tryGetToken(dealParser.JACK, 0); }
+	public QUEEN(): TerminalNode | undefined { return this.tryGetToken(dealParser.QUEEN, 0); }
+	public KING(): TerminalNode | undefined { return this.tryGetToken(dealParser.KING, 0); }
+	public ACE(): TerminalNode | undefined { return this.tryGetToken(dealParser.ACE, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return dealParser.RULE_primitives; }
+	// @Override
+	public enterRule(listener: dealListener): void {
+		if (listener.enterPrimitives) {
+			listener.enterPrimitives(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: dealListener): void {
+		if (listener.exitPrimitives) {
+			listener.exitPrimitives(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitPrimitives) {
+			return visitor.visitPrimitives(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

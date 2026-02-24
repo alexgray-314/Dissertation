@@ -37,6 +37,7 @@ import { StackContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
+import { PrimitivesContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
@@ -423,6 +424,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitProperty?: (ctx: PropertyContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.primitives`.
+	 * @param ctx the parse tree
+	 */
+	enterPrimitives?: (ctx: PrimitivesContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.primitives`.
+	 * @param ctx the parse tree
+	 */
+	exitPrimitives?: (ctx: PrimitivesContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.bexpr`.

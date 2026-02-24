@@ -37,6 +37,7 @@ import { StackContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
+import { PrimitivesContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
@@ -290,6 +291,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitProperty?: (ctx: PropertyContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.primitives`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPrimitives?: (ctx: PrimitivesContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.bexpr`.

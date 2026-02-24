@@ -71,11 +71,12 @@ on move ? ? {
 };
 
 winningPlayer = 0;
-deal(distribute:"even");
+deal();
 
 $config {
     num_players 4,
-    title "Black Maria"
+    title "Black Maria",
+    ace_weight high
 };
 
 $style {
