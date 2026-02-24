@@ -62,16 +62,19 @@ export class NumberVisitor implements dealVisitor<number> {
         let result : number = ctx.getChild(0).accept(this);
         for (let t : number = 2; t < ctx.childCount; t = t+2) {
             const next : number = ctx.getChild(t).accept(this);
-            switch ((ctx.getChild(t-1) as TerminalNode)?.symbol?.type) {
-                case dealLexer.PLUS:
-                    result = result + next;
-                    break;
-                case dealLexer.MINUS:
-                    result = result - next;
-                    break;
-                case dealLexer.TIMES:
-                    result = result * next;
-                    break;
+            console.log("next", ctx.getChild(t).text, next);
+            if (!Number.isNaN(next)) {
+                switch ((ctx.getChild(t - 1) as TerminalNode)?.symbol?.type) {
+                    case dealLexer.PLUS:
+                        result = result + next;
+                        break;
+                    case dealLexer.MINUS:
+                        result = result - next;
+                        break;
+                    case dealLexer.TIMES:
+                        result = result * next;
+                        break;
+                }
             }
         }
         return result;

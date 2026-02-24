@@ -1,10 +1,55 @@
 define area x; // x[0] draw x[1] discard
 define action c;
 define int chicken;
+chicken = -1;
 define int newSlot;
 define int special; // used to store player that has played a queen or a jack
 special = -1; // -1 means that there is no special player
 define card magicCard;
+
+define function determine_winner() {
+    define int winning_player;
+    define int winning_score;
+    define int current_score;
+    for p in <*> {
+        current_score = 0;
+        for c in <p>[1:, 0:0] {
+
+            if c != empty {
+                c..up(); // display the card
+                if c.rank == 14 { // 14 is an ace
+                    current_score = current_score + 1;
+                } else {
+                    if c.rank == 13 { // 13 is a king
+                        if c.suit == "hearts"{
+                            current_score = current_score - 1;
+                        } else {
+                            if c.suit == "diamonds" {
+                                current_score = current_score - 1;
+                            } else {
+                                current_score = current_score + 13;
+                            };
+                        };
+                    } else { // all other cards are worth their value
+                        current_score = current_score + c.rank;
+                    };
+                };
+            };
+            
+        };
+        log p "has score" current_score;
+        // Update winner
+        if current_score >> winning_score{
+            // Doing it this way means that an undefined winning score will also be updated
+        } else {
+            winning_score = current_score;
+            winning_player = p;
+        };
+    };
+
+    log "player" winning_player "wins with score" winning_score;
+
+};
 
 define function check_for_special_cards(int p) {
     // Check for special cards
@@ -21,12 +66,12 @@ define function check_for_special_cards(int p) {
 }; 
 
 define function update_turn() {
-    /..up(); // flip the card the right way around
+    x[1,0]..up(); // Put the draw pile face up
+    /..down(); // Put the card you're taking face down
     <.>++;
     if <.> == chicken {
-        log "this is the end of the game";
+        determine_winner();
     };
-    \..down(); // Put the card you're taking face down
 };
 
 shuffle();
@@ -54,12 +99,12 @@ on move x[0,0] </>[1:,0:0] {
         cancel; // block movement if someone has a special card to play
     };
 
-    update_turn();
     move / x[1,0]; // move your card to discard pile
     show \ </>; // This card was previsouly invisible. Display it to that player
     move \ /;
 
     check_for_special_cards(</>);
+    update_turn();
 };
 
 // Take a card from discard pile
@@ -70,11 +115,11 @@ on move x[1,0] </>[1:,0:0] {
         cancel; // block movement if someone has a special card to play
     };
 
-    update_turn();
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     move \ /;
 
     check_for_special_cards(</>);
+    update_turn();
 };
 
 // Moving one of your cards to the discard pile
@@ -149,9 +194,11 @@ on interact <@>[1:,0:0] {
 };
 
 on c {
-    if <.> == <@> {
-        log "Chicken";
-        chicken = <.>;
+    if chicken == -1 {
+        if <.> == <@> {
+            log "Chicken";
+            chicken = <.>;
+        };
     };
 };
 

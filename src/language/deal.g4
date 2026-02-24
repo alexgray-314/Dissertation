@@ -6,7 +6,7 @@ prog:           stmt* EOF ;
 stmt:           (definition | define_function | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
 block:          stmt* ;
 
-player:         '<' ('/' | '.' | '@' | aexpr) '>';
+player:         '<' ('/' | '.' | '@' | term) '>';
 VARTYPE:        'int' | 'card';
 
 definition:     'define' type=('area' | 'action' | VARTYPE) ID ;
@@ -43,8 +43,8 @@ arg:            term ;
 
 arearef:        ID | player;
 area:           arearef '[' ']';
-stack:          arearef '[' aexpr ']';
-position:       arearef '[' aexpr ',' aexpr ']'
+stack:          arearef '[' term ']';
+position:       arearef '[' term ',' term ']'
                 | MOVE_SOURCE
                 | MOVE_DEST
                 | INTERACT_CARD;
@@ -53,20 +53,19 @@ MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
 INTERACT_CARD:  '@';
 
-term:           (EMPTY | CARD | STRING | variable | aexpr | player | area | stack | position) property?;
+term:           (EMPTY | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
 property:       '.' ID;
 EMPTY:          'empty';
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
                         | (('=?' | '!?') set)
                         );
-aexpr:          NUMBER | variable (op=(PLUS|MINUS|TIMES) aexpr)*;
 PLUS:           '+';
 MINUS:          '-';
 TIMES:          '*';
 
 set:            (intset | positionset | playerset) property?;
-intset:         aexpr ':' aexpr?;
+intset:         term ':' term?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
