@@ -1,82 +1,95 @@
 import {Stack} from "./stack";
 
-export const AREA_SPACING_Y = 130;
+export const AREA_SPACING_Y = 120;
 export const AREA_MARGIN = 20;
 export const FAN_SPACING = 40;
 
 import * as model from "../model/area";
 import {Hitbox, Rect} from "./hitbox";
 import {CARD_HEIGHT, CARD_WIDTH} from "./card";
+import {Config} from "../engine/config";
+import {activePlayer} from "../app";
 
 export class Area {
 
-  y : number;
   stacks : Stack[];
   child: model.Area;
+  config : Config;
 
   // Will generate a UI area from a state area
-  constructor(area : model.Area, y : number, hitBoxes : Hitbox[]) {
+  constructor(area : model.Area, yDefault : number, hitBoxes : Hitbox[], config : Config) {
     this.child = area;
-    this.y = y;
+    this.config = config;
 
     this.stacks = [];
     // check for min args
-    for (let x = 0; x < Math.max(Number(area.args.min), area.stacks.length); x++) {
-      const stack = new Stack(area.stacks[x] ?? {cards:[]}, x, y);
+    const min : number = Number(config.get("style", area.id, "min_display") ?? "1");
+    for (let x = 0; x < Math.max(min, area.stacks.length); x++) {
+
+      // Attributes
+      const label : string | undefined = this.format_string(config.get("style", area.id, x.toString(), "label"), area.id, x.toString());
+      const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
+      const visibility : string = config.get("style", area.id, x.toString(), "visibility") ?? "public";
+      const visible : boolean = visibility === "public" || (visibility === "private" && activePlayer === Number(area.id));
+      const y: number = this.map_location_to_y(config.get("style", area.id, x.toString(), "location")) ?? yDefault;
+
+      const stack = new Stack(area.stacks[x] ?? {cards: []}, x, y, label, display, visible);
       this.stacks.push(stack);
 
-      // Hitboxes
-      if (area.args.hand !== "true") {
-        // Users can only take the top card
-        hitBoxes.push(new Hitbox(
-          stack.rect,
-          [area.id, x, 0]
-        ));
-      } else {
-        // This is a hand, users can take any card
-
-        for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
+      if (visible) {
+        // Hitboxes
+        if (display === "single") {
+          // Users can only take the top card
           hitBoxes.push(new Hitbox(
-            {
-              x: AREA_MARGIN + pos*FAN_SPACING,
-              y: AREA_MARGIN + this.y*AREA_SPACING_Y,
-              width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
-              height: CARD_HEIGHT,
-            },
-            [area.id, 0, pos]
+              stack.rect,
+              [area.id, x, 0]
           ));
+        } else if (display === "spread") {
+          // This is a hand, users can take any card
+
+          for (let pos = 0; pos < Math.max(this.stacks[0].cards.length, 1); pos++) {
+            hitBoxes.push(new Hitbox(
+                {
+                  x: AREA_MARGIN + pos * FAN_SPACING,
+                  y: AREA_MARGIN + y * AREA_SPACING_Y,
+                  width: (pos < this.stacks[0].cards.length - 1) ? FAN_SPACING : CARD_WIDTH,
+                  height: CARD_HEIGHT,
+                },
+                [area.id, 0, pos]
+            ));
+          }
         }
       }
 
     }
   }
 
+  private map_location_to_y (location: string | undefined) : number | undefined {
+    if (location === "hand") {
+      return 0;
+    } else if (location === "north") {
+      return 1;
+    } else if (location === "centre") {
+      return 2;
+    } else if (location === "south") {
+      return 3;
+    }
+    return undefined;
+  }
+
+  private format_string(str : string | undefined, a : string, s : string) : string | undefined {
+    if (str === undefined) {
+      return undefined;
+    }
+    return str.replaceAll("%a", a).replaceAll("%s", s);
+  }
+
   render(ctx : CanvasRenderingContext2D) {
 
-    if (this.child.args.hand === "true") {
-      // The area is a players hand
-      let rect : Rect = {
-        x: AREA_MARGIN,
-        y: AREA_MARGIN + this.y*AREA_SPACING_Y,
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
-      }
-      // Outline
-      ctx.strokeStyle = "rgba(0,0,0,0.4)";
-      ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-      for (let card of this.stacks[0].cards) {
-        card.render(ctx, rect);
-        rect.x += FAN_SPACING;
-      }
-    } else {
       for (let s of this.stacks) {
         s.render(ctx);
       }
-    }
 
-    ctx.fillStyle = "black";
-    ctx.font = "12px Arial";
-    ctx.fillText(this.child.id, AREA_MARGIN, AREA_MARGIN + this.y*AREA_SPACING_Y - 5);
   }
 
 }

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Deal</title>
   <link rel="stylesheet" href="css/style.css">
+  <link href="./img/logo-light-mode.png" rel="icon" media="(prefers-color-scheme: light)">
+  <link href="./img/logo-dark-mode.png" rel="icon" media="(prefers-color-scheme: dark)">
 </head>
 <body>
 
@@ -11,13 +13,21 @@
 
 <canvas id="canvas" width="1000" height="600"></canvas>
 
-<label for="playerSelector">Current Player:</label>
-<select name="Player" id="playerSelector">
-  <option value="0">Alex</option>
-  <option value="1">Ben</option>
-  <option value="2">Charlie</option>
-  <option value="3">Danielle</option>
-</select>
+<table>
+  <tr>
+    <td>
+      <label for="playerSelector">Current Player:</label>
+      <select name="Player" id="playerSelector">
+      </select>
+    </td>
+    <td>
+      <label for="turn-display">Turn:</label>
+    </td>
+    <td>
+      <div id="turn-display">0</div>
+    </td>
+  </tr>
+</table>
 
 <table>
   <tr id="actions">

@@ -5,10 +5,8 @@ export type Position = [string, number, number];
 export class Area {
     id : string;
     stacks : Stack[];
-    args: Record<string, string | number>;
-    constructor (id: string, args: Record<string, string|number>) {
+    constructor (id: string) {
         this.id = id;
         this.stacks = [];
-        this.args = args;
     }
 }

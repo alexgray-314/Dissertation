@@ -5,17 +5,15 @@ import { Move_catchContext } from "../language/dealParser";
 import { PositionVisitor } from "../calc/positionVisitor";
 import { PositionSetVisitor } from "../calc/positionSetVisitor";
 import {Interpreter} from "../engine/interpreter";
+import {Catch} from "./catch";
 
-export class MoveCatch {
+export class MoveCatch extends Catch {
 
-    source: Move_catchContext;
     dest: Move_catchContext;
-    subTree: ParseTree;
 
     constructor(source: Move_catchContext, dest: Move_catchContext, subTree: ParseTree) {
-        this.source = source;
+        super(source, subTree);
         this.dest = dest;
-        this.subTree = subTree;
     }
 
     /**
@@ -33,43 +31,6 @@ export class MoveCatch {
         ) {
             this.subTree.accept(new Interpreter(state));
             return true;
-        }
-        return false;
-
-    }
-
-    private compare_position (state : State, position : Position | undefined, target : Move_catchContext) : boolean {
-
-        if (position === undefined) {
-            return false;
-        }
-
-        if (target.WILDCARD() !== undefined) {
-            return true;
-        } else if (target.positionset() !== undefined) {
-            let contains : boolean = false;
-            target.positionset()!.accept(new PositionSetVisitor(state, (evaluated_target : Position) => {
-                if (
-                    evaluated_target[0] === position[0] &&
-                    evaluated_target[1] === position[1] &&
-                    evaluated_target[2] === position[2]
-                ) {
-                    contains = true;
-                    return false;
-                }
-                return true;
-            }));
-            return contains;
-        } else if (target.position() !== undefined) {
-            const evaluated_target : Position | undefined = target.accept(new PositionVisitor(state));
-            if (evaluated_target === undefined) {
-                return false;
-            }
-            return (
-                evaluated_target[0] === position[0] &&
-                evaluated_target[1] === position[1] &&
-                evaluated_target[2] === position[2]
-            );
         }
         return false;
 

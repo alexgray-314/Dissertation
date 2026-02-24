@@ -1,6 +1,85 @@
-define area x(min:2, max:2, label:""); // x[0] draw x[1] discard
-define action c(label:"Chicken");
+define area x; // x[0] draw x[1] discard
+define action c;
 define int chicken;
+chicken = -1;
+define int newSlot;
+define int special; // used to store player that has played a queen or a jack
+special = -1; // -1 means that there is no special player
+define card magicCard;
+
+define function determine_winner() {
+    define int winning_player;
+    define int winning_score;
+    define int current_score;
+    for p in <*> {
+        current_score = 0;
+        for c in <p>[1:, 0:0] {
+
+            if c != empty {
+                c..up(); // display the card
+                if c.rank == ace { // 14 is an ace
+                    current_score = current_score + 1;
+                } else {
+                    if c.rank == king {
+                        if c.suit == hearts {
+                            current_score = current_score - 1;
+                        } else {
+                            if c.suit == diamonds {
+                                current_score = current_score - 1;
+                            } else {
+                                current_score = current_score + 13;
+                            };
+                        };
+                    } else { // all other cards are worth their value
+                        current_score = current_score + c.rank;
+                    };
+                };
+            };
+            
+        };
+        log p "has score" current_score;
+        // Update winner
+        if current_score >> winning_score{
+            // Doing it this way means that an undefined winning score will also be updated
+        } else {
+            winning_score = current_score;
+            winning_player = p;
+        };
+    };
+
+    log "player" winning_player "wins with score" winning_score;
+
+};
+
+define function check_for_special_cards(int p) {
+    // Check for special cards
+    if x[1,0].rank == jack {
+        special = p;
+        magicCard = x[1,0];
+        log "Player" p "swap two cards";
+    };
+    if x[1,0].rank == queen {
+        special = p;
+        magicCard = x[1,0];
+        log "Player" p "double click on a card in your hand to reveal it";
+    };
+}; 
+
+define function update_turn() {
+    x[1,0]..up(); // Put the draw pile face up
+    /..down(); // Put the card you're taking face down
+    <.>++;
+    if <.> == chicken {
+        determine_winner();
+    };
+};
+
+shuffle();
+
+// Flip all the cards face down
+for c in deck[0:0, 0:] {
+    c..down();
+};
 
 // Custom Dealing
 for i in 1:4 { // give each player 4 cards
@@ -9,49 +88,150 @@ for i in 1:4 { // give each player 4 cards
     };
 };
 move deck[0:0,0:] x[0,0]; // Put the rest of the deck in the draw pile
+move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
+x[1,0]..up();
 
 // Take a card from draw pile
 on move x[0,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
 
     move / x[1,0]; // move your card to discard pile
-    <.>++;
-    if <.>.id == chicken {
-        
-    };
+    show \ </>; // This card was previsouly invisible. Display it to that player
+    move \ /;
+
+    check_for_special_cards(</>);
+    update_turn();
 };
 
 // Take a card from discard pile
 on move x[1,0] </>[1:,0:0] {
 
     if </> != <.> {cancel;}; // Can only move card on your turn
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
 
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
-    <.>++;
-    if <.>.id == chicken {
-        
-    };
+    move \ /;
+
+    check_for_special_cards(</>);
+    update_turn();
 };
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
 on move </>[1:,0:0] x[1, 0] {
+
+    if special >= 0 {
+        cancel; // block movement if someone has a special card to play
+    };
+
     if \.rank != /.rank {
         // Wrong card, you must take a new one
-        define int newSlot;
-        newSlot = </>[].length + 1; // length
+
+        // Find the first empty stack
+        newSlot = 1;
+        for c in </>[1:, 0:0] {
+            if c != empty {
+                newSlot = newSlot + 1;
+            } else {
+                move x[0,0] </>[newSlot, 0];
+                cancel; 
+            };
+        };
         move x[0,0] </>[newSlot, 0];
-        cancel;
+        cancel; 
     }; 
+    \..up();
+
+    move \ /;
+
+    check_for_special_cards(</>);
 };
 
 on move ? ? {
-    cancel;
+    if \ == / { // can't swap a card with itself
+        cancel;
+    };
+    if special == </> {
+        if magicCard.rank == jack {
+
+            if \ =? x[0:,0:] {
+                cancel;
+            };
+            if / =? x[0:,0:] {
+                cancel;
+            };
+
+            // swap source and dest
+            move / deck[0,0];
+            move \ /;
+            move deck[0,0] \;
+
+            // movement goes through
+            special = -1; // play returns to normal
+            log "back to normal play";
+        } else {
+            cancel;
+        };
+    } else {
+        cancel;
+    };
+};
+
+on interact <@>[1:,0:0] {
+    if <@> == special {
+        if magicCard.rank == queen {
+            show @ <@>; // Show the user the card they have clicked on
+            special = -1; // Play can continue as normal
+            log "Back to normal play";
+        };
+    };
 };
 
 on c {
-    if <.> == <@> {
-        chicken = <.>.id;
+    if chicken == -1 {
+        if <.> == <@> {
+            log "Chicken";
+            chicken = <.>;
+        };
     };
+};
+
+$config {
+    title "Chicken",
+    num_players 4
+};
+
+$style {
+    c {
+        label "Chicken"
+    },
+    player {
+        display single,
+        visibility public,
+        0 {
+            location hand,
+            visibility hidden
+        },
+        1 {
+            label "Player %a"
+        }
+    },
+    x {
+        min_display 2,
+        // location a, // centre
+        display single,
+        visibility public,
+        0 {
+            label "Draw"
+        },
+        1 {
+            label "Discard"
+        }
+    }
 };

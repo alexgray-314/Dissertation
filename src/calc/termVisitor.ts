@@ -1,15 +1,22 @@
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Primitive } from "../state/comparator";
-import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../language/dealParser";
-import { dealVisitor } from "../language/dealVisitor";
-import { dealLexer } from "../language/dealLexer";
-import { State } from "../state/state";
-import { NumberVisitor } from "./numberVisitor";
-import { CardVisitor } from "./cardVisitor";
-import { StandardCard } from "../model/card";
+import {ErrorNode} from "antlr4ts/tree/ErrorNode";
+import {ParseTree} from "antlr4ts/tree/ParseTree";
+import {RuleNode} from "antlr4ts/tree/RuleNode";
+import {TerminalNode} from "antlr4ts/tree/TerminalNode";
+import {Primitive} from "../state/comparator";
+import {
+    AreaContext,
+    PlayerContext,
+    PositionContext, PrimitivesContext,
+    StackContext,
+    TermContext,
+    VariableContext
+} from "../language/dealParser";
+import {dealVisitor} from "../language/dealVisitor";
+import {dealLexer} from "../language/dealLexer";
+import {State} from "../state/state";
+import {NumberVisitor} from "./numberVisitor";
+import {CardVisitor} from "./cardVisitor";
+import {Card, Ranks, SpecialCard, StandardCard} from "../model/card";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 
@@ -19,11 +26,27 @@ export class TermVisitor implements dealVisitor<Primitive> {
         this.state = state;
     }
 
-    visitPlayer(ctx: PlayerContext) {
-        return new NumberVisitor(this.state).visit(ctx);
+    visitPlayer(ctx: PlayerContext) : number {
+        // TODO update this, so that it just accepts child 1. Terminal symbols will account for @ and /??
+        // TODO this has to be done alongside changing the syntax for source and dest
+        const ID = ctx.getChild(1);
+        let val : number;
+        switch(ID.text) {
+            case '/':
+                val = this.state.get_move_player() ?? NaN;
+                break;
+            case '.':
+                val = this.state.get_turn_player();
+                break;
+            case '@':
+                val = this.state.get_action_player();
+                break;
+            default:
+                val = Number(ID.accept(this));
+                break;
+        }
+        return val % this.state.num_players; // account for overflow
     }
-
-    visitFunction_call?: ((ctx: Function_callContext) => Primitive) | undefined;
 
     visitVariable (ctx: VariableContext) : Primitive {
         let [type, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
@@ -34,46 +57,95 @@ export class TermVisitor implements dealVisitor<Primitive> {
         }
         return undefined;
     }
-    
-    visitArgs?: ((ctx: ArgsContext) => Primitive) | undefined;
-    visitArg?: ((ctx: ArgContext) => Primitive) | undefined;
-    visitArearef?: ((ctx: ArearefContext) => Primitive) | undefined;
-    visitArea?: ((ctx: AreaContext) => Primitive) | undefined;
-    visitStack (ctx: StackContext) {
-        const stack : number = new NumberVisitor(this.state).visit(ctx.aexpr());
+
+    visitArea (ctx: AreaContext): undefined {
+        return undefined;
+    }
+
+    /**
+     * This should only be called by visit term if the property is .length
+     */
+    visitStack (ctx: StackContext) : number {
+        const stack : number = new NumberVisitor(this.state).visit(ctx.term());
         return ((this.state.areas.get(ctx.arearef().text)?.stacks[stack])?.cards?.length) ?? 0;
     }
-    visitPosition (ctx: PositionContext) {
+
+    visitPosition (ctx: PositionContext) : Card | undefined {
         return new CardVisitor(this.state).visit(ctx);
     }
+
+    visitPrimitives(ctx: PrimitivesContext) : Primitive {
+        switch(ctx.start.type) {
+            case dealLexer.EMPTY:
+                return SpecialCard.Empty;
+            case dealLexer.ACE:
+                return Ranks.ACE; // TODO add option to $config to set ace as high or low
+            case dealLexer.KING:
+                return Ranks.KING;
+            case dealLexer.QUEEN:
+                return Ranks.QUEEN;
+            case dealLexer.JACK:
+                return Ranks.JACK;
+            case dealLexer.SPADES:
+                return "spades";
+            case dealLexer.CLUBS:
+                return "clubs";
+            case dealLexer.HEARTS:
+                return "hearts";
+            case dealLexer.DIAMONDS:
+                return "diamonds";
+        }
+    }
+
     visitTerm (ctx: TermContext) : Primitive {
 
         const property : string | undefined = ctx.property()?.ID().text;
+        let val: Primitive = undefined;
 
         // Special Cases - Consider stacks
         // For example: x[0].length
         if (ctx.stack() !== undefined) {
             if (property === "length") {
-                return this.visitStack(ctx.stack()!);
+                val = this.visitStack(ctx.stack()!);
             } else {
-                return undefined;
+                val = undefined;
+            }
+        } else {
+
+            // Normal term evaluation to get first child
+            // NOTE: this will only get primitive properties. TODO deal with complex objects
+            val = ctx.getChild(0).accept(this);
+            if (property !== undefined) {
+                if (typeof val === 'object') {
+                    val = (val as any)[property];
+                } else {
+                    // Tried to call property on something without a property
+                    val = undefined;
+                }
+            }
+
+        }
+
+        // Algebraic expressions
+        if (ctx.term() !== undefined) {
+            const expression : Primitive = ctx.term()?.accept(this);
+            if (typeof val === "number" && typeof expression === "number") {
+                switch (ctx._op.type) {
+                    case dealLexer.PLUS:
+                        return val + expression;
+                    case dealLexer.MINUS:
+                        return val - expression;
+                    case dealLexer.TIMES:
+                        return val * expression;
+                    default:
+                        return undefined;
+                }
             }
         }
 
-        // NOTE: this will only get primitive properties. TODO deal with complex objects
-        const term = ctx.getChild(0).accept(this);
-        if (property !== undefined && typeof term === 'object') {
-            return (term as any)[property];
-        }
-        return term;
+        return val;
 
     }
-    visitAexpr?: ((ctx: AexprContext) => Primitive) | undefined;
-
-    visitSet?: ((ctx: SetContext) => Primitive) | undefined;
-    visitIntset?: ((ctx: IntsetContext) => Primitive) | undefined;
-    visitPositionset?: ((ctx: PositionsetContext) => Primitive) | undefined;
-    visitPlayerset?: ((ctx: PlayersetContext) => Primitive) | undefined;
     
     visit(tree: ParseTree): Primitive {
         return tree.accept(this);

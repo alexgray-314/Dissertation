@@ -8,11 +8,14 @@ import { StmtContext } from "./dealParser";
 import { BlockContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
+import { Define_functionContext } from "./dealParser";
+import { ArgdefContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
 import { SourceContext } from "./dealParser";
 import { DestinationContext } from "./dealParser";
 import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
+import { On_interactContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
 import { CancelContext } from "./dealParser";
@@ -20,6 +23,11 @@ import { AssignContext } from "./dealParser";
 import { Function_callContext } from "./dealParser";
 import { UpdateTurnContext } from "./dealParser";
 import { LogContext } from "./dealParser";
+import { ModifyContext } from "./dealParser";
+import { ShowContext } from "./dealParser";
+import { ConfigContext } from "./dealParser";
+import { AttributeContext } from "./dealParser";
+import { AttsContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
@@ -29,8 +37,8 @@ import { StackContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
+import { PrimitivesContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
-import { AexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
 import { PositionsetContext } from "./dealParser";
@@ -82,6 +90,20 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitDefinition?: (ctx: DefinitionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `dealParser.define_function`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDefine_function?: (ctx: Define_functionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.argdef`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArgdef?: (ctx: ArgdefContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `dealParser.move`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -115,6 +137,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitOn_move?: (ctx: On_moveContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.on_interact`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitOn_interact?: (ctx: On_interactContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.for`.
@@ -164,6 +193,41 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitLog?: (ctx: LogContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.modify`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitModify?: (ctx: ModifyContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.show`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitShow?: (ctx: ShowContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.config`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConfig?: (ctx: ConfigContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.attribute`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAttribute?: (ctx: AttributeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.atts`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAtts?: (ctx: AttsContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.variable`.
@@ -229,18 +293,18 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitProperty?: (ctx: PropertyContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `dealParser.primitives`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPrimitives?: (ctx: PrimitivesContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `dealParser.bexpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitBexpr?: (ctx: BexprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `dealParser.aexpr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAexpr?: (ctx: AexprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.set`.

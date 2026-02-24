@@ -1,5 +1,7 @@
-define area a;
-move #4s a[0,0];
-move #2s a[0,0];
-move #AH <0>[0,0];
-move #kH <0>[0,0];
+define area x;
+define area y;
+define area z;
+
+move #4s x[0,0];
+move #5s y[0,0];
+move #6s z[0,0];

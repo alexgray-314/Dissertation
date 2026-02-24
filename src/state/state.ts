@@ -3,6 +3,9 @@ import { Area, Position } from "../model/area";
 import { Card, SpecialCard } from "../model/card";
 import { MoveCatch } from "./move_catch";
 import { Stack } from "../model/stack";
+import {Catch} from "./catch";
+import {ArgsContext} from "../language/dealParser";
+import {Primitive} from "./comparator";
 
 export type MoveInfo = {
     source: undefined | Position,
@@ -16,13 +19,16 @@ export type MoveInfo = {
 export class State {
 
     areas : Map<string, Area>;
-    variables : Map<string, [string, Card|number|undefined]>;
+    variables : Map<string, [string, Primitive]>;
     num_players : number;
     turn : number;
     action_player : number;
+    interaction_card : Position | undefined;
     move_catches : MoveCatch[];
+    interaction_catches : Catch[];
     action_catches : Map<string, ParseTree | undefined>;
     move_info : MoveInfo;
+    functions : Map<string, (state : State, args : ArgsContext) => void>;
 
     constructor (num_players : number) {
 
@@ -31,8 +37,11 @@ export class State {
         this.num_players = num_players;
         this.turn = 0;
         this.action_player = NaN;
+        this.interaction_card = undefined;
         this.move_catches = [];
+        this.interaction_catches = [];
         this.action_catches = new Map<string, ParseTree | undefined>();
+        this.functions = new Map<string, (state : State, args : ArgsContext) => void>();
         this.move_info = {
             source: undefined,
             dest: undefined,
@@ -45,12 +54,7 @@ export class State {
         for (let i = 0; i < num_players; i++) {
 
             this.areas.set(i.toString(), new Area(
-                i.toString(),
-                {
-                    min:1,
-                    hand:"true",
-                    text:"Player " + i + "'s hand",
-                }
+                i.toString()
             ));
 
         }
@@ -186,8 +190,7 @@ export class State {
         Object.assign(defaultArgs, args);// merge defaults with set parameters
 
         this.areas.set(id, new Area(
-            id,
-            defaultArgs
+            id
         ));
 
     }

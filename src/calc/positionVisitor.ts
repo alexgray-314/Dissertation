@@ -2,7 +2,7 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../language/dealParser";
+import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../language/dealParser";
 import { dealVisitor } from "../language/dealVisitor";
 import { Position } from "../model/area";
 import { State } from "../state/state";
@@ -24,6 +24,9 @@ export class PositionVisitor implements dealVisitor<Position | undefined> {
         }
         if (ctx.MOVE_SOURCE() !== undefined) {
             return this.state.move_info.source;
+        }
+        if (ctx.INTERACT_CARD() !== undefined) {
+            return this.state.interaction_card;
         }
         const areaID = new StringVisitor(this.state).visit(ctx.arearef()!) ?? "";
         const stack = this.numberEvaluator.visit(ctx.getChild(2));

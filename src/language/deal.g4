@@ -1,14 +1,18 @@
-grammar deal;	
+grammar deal;
 
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn | log) ';' ;
+stmt:           (definition | define_function | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
 block:          stmt* ;
 
-player:         '<' ('/' | '.' | '@' | aexpr) '>';
+player:         '<' ('/' | '.' | '@' | term) '>';
+VARTYPE:        'int' | 'card';
 
-definition:     'define' type=('area' | 'action' | 'int' | 'card') ID args? ;
+definition:     'define' type=('area' | 'action' | VARTYPE) ID ;
+
+define_function:'define' 'function' ID '(' argdef? ')' '{' block '}' ;
+argdef:         VARTYPE ID (',' VARTYPE ID)*;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
@@ -16,49 +20,72 @@ destination:    position;
 
 on_action:      'on' ID '{' block '}';
 on_move:        'on' 'move' move_catch move_catch '{' block '}';
+on_interact:    'on' 'interact' move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
 if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block '}')? ;
 cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
-updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ; 
+updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ;
 log:            'log' (term)+;
+modify:         position '..' function_call
+                | variable '..' function_call;
+show:           'show' (position | CARD | variable) player;
+
+config:         '$' ID atts;
+attribute:      (ID|NUMBER|intset) (ID | STRING | NUMBER | atts);
+atts:           '{' (attribute (',' attribute)*)? '}';
 
 variable:       ID;
 
 args:           '(' (arg (',' arg)*)? ')' ;
-arg:            ID ':' (STRING | NUMBER) ;
+arg:            term ;
 
 arearef:        ID | player;
 area:           arearef '[' ']';
-stack:          arearef '[' aexpr ']';
-position:       arearef '[' aexpr ',' aexpr ']'
-                | MOVE_SOURCE 
-                | MOVE_DEST;
+stack:          arearef '[' term ']';
+position:       arearef '[' term ',' term ']'
+                | MOVE_SOURCE
+                | MOVE_DEST
+                | INTERACT_CARD;
 
 MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
+INTERACT_CARD:  '@';
 
-term:           (CARD | STRING | variable | aexpr | player | area | stack | position) property?;
+term:           (primitives | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
 property:       '.' ID;
+primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING | ACE;
 
-bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
+bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
                         | (('=?' | '!?') set)
                         );
-aexpr:          NUMBER | variable;
+PLUS:           '+';
+MINUS:          '-';
+TIMES:          '*';
 
 set:            (intset | positionset | playerset) property?;
-intset:         aexpr ':' aexpr?;
+intset:         term ':' term?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';
 
-NUMBER:         [0-9]+ ;
-ID:             [a-zA-Z]+ ;
+EMPTY:          'empty';
+SPADES:         'spades';
+HEARTS:         'hearts';
+CLUBS:          'clubs';
+DIAMONDS:       'diamonds';
+JACK:           'jack';
+QUEEN:          'queen';
+KING:           'king';
+ACE:            'ace';
+
+NUMBER:         ('-')? [0-9]+ ;
+ID:             [a-zA-Z_]+ ;
 CARD:           '#' ('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs] ;
-STRING:         '"' [A-Za-z ]* '"';
+STRING          : '"' ~["]* '"' ;
 
 SPACES:         [\t\r\n ]+ -> skip;
 NEWLINE:        [\r\n]+ -> skip;
