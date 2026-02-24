@@ -238,7 +238,10 @@ export class Interpreter implements dealVisitor<void> {
     visitUpdateTurn (ctx: UpdateTurnContext) {
 
         if (ctx.player() !== undefined) {
-            this.state.turn = new NumberVisitor(this.state).visit(ctx.player()!);
+            const newTurn : number = new NumberVisitor(this.state).visit(ctx.player()!);
+            if (!Number.isNaN(newTurn)) {
+                this.state.turn = newTurn;
+            }
         } else {
             this.state.turn = this.state.turn + 1;
             if (this.state.turn >= this.state.num_players) {

@@ -16,7 +16,7 @@ on move </>[0:0,0:] centre[0,0] {
             // This is the first card to be placed down - VALID
 
             winningCard = \;
-            winningPlayer = </>.id;
+            winningPlayer = </>;
         
         } else {
             // The trick suit has already been established
@@ -36,7 +36,7 @@ on move </>[0:0,0:] centre[0,0] {
                 if \.rank >> winningCard.rank {
                     // Card is now the highest in the trick
                     winningCard = \;
-                    winningPlayer = </>.id;
+                    winningPlayer = </>;
                 };
 
             };
