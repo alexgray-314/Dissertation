@@ -28,7 +28,7 @@ export class CardVisitor implements dealVisitor<Card | undefined> {
     visitVariable (ctx: VariableContext) : Card | undefined {
         let [type, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
         if (type === "CARD") {
-            return value;
+            return value as Card;
         }
         return undefined;
     }
