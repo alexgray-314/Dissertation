@@ -16,7 +16,7 @@ define function determine_winner() {
         for c in <p>[1:, 0:0] {
 
             if c != empty {
-                c..up(); // display the card
+                c.up(); // display the card
                 if c.rank == ace { // 14 is an ace
                     current_score = current_score + 1;
                 } else {
@@ -66,8 +66,8 @@ define function check_for_special_cards(int p) {
 }; 
 
 define function update_turn() {
-    x[1,0]..up(); // Put the draw pile face up
-    /..down(); // Put the card you're taking face down
+    x[1,0].up(); // Put the draw pile face up
+    /.down(); // Put the card you're taking face down
     <.>++;
     if <.> == chicken {
         determine_winner();
@@ -78,7 +78,7 @@ shuffle();
 
 // Flip all the cards face down
 for c in deck[0:0, 0:] {
-    c..down();
+    c.down();
 };
 
 // Custom Dealing
@@ -89,7 +89,7 @@ for i in 1:4 { // give each player 4 cards
 };
 move deck[0:0,0:] x[0,0]; // Put the rest of the deck in the draw pile
 move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
-x[1,0]..up();
+x[1,0].up();
 
 // Take a card from draw pile
 on move x[0,0] </>[1:,0:0] {
@@ -146,7 +146,7 @@ on move </>[1:,0:0] x[1, 0] {
         move x[0,0] </>[newSlot, 0];
         cancel; 
     }; 
-    \..up();
+    \.up();
 
     move \ /;
 

@@ -24,16 +24,40 @@ on move ? ? {
 on snap {
   if a[0, 0].suit == a[0, 1].suit {
     // The cards matched
-    move a[0:0,0:52] <@>[0,0];
+    move a[0:0,0:] <@>[0,0];
   } else {
     // The cards did not match.
     if <@> == <0> {
       // Give the cards to the player who did not snap
-      move a[0:0,0:52] <1>[0,0];
+      move a[0:0,0:] <1>[0,0];
     } else {
-      move a[0:0,0:52] <0>[0,0];
+      move a[0:0,0:] <0>[0,0];
     };
   };
 };
 
 deal();
+
+$config {
+  num_players 2,
+  title "Snap"
+};
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Your Hand",
+            visibility private,
+            display single,
+            location hand
+        }
+    },
+    a {
+        visibility public,
+        location north,
+        0 {
+            label "Discard Pile"
+        }
+    }
+};

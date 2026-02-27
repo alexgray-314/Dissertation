@@ -1,7 +1,41 @@
 define area x;
-define area y;
-define area z;
 
 move #4s x[0,0];
-move #5s y[0,0];
-move #6s z[0,0];
+move #kh x[2,0];
+move #8c x[1,0];
+
+move #2D <0>[4,0];
+
+deal();
+
+$config {
+    num_players 10
+};
+
+$style {
+    player {
+        location hand,
+        visibility hidden,
+        0 { 
+            visibility private,
+            label "Your hand",
+            display spread
+        },
+        4 {
+            visibility private,
+            label "Bonus Card"
+        }
+    },
+    x {
+        location north,
+        0 {
+            label "Discard"
+        },
+        1 {
+            label "Draw"
+        },
+        2 {
+            label "Magic"
+        }
+    }
+};
