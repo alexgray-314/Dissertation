@@ -28,8 +28,7 @@ export function deal(state : State, args : TermContext[]) {
     // Deal out the cards until done
     let player = 0;
     for (let i= 0; deck.length > 0; i++) {
-
-        console.log("deck moving");
+        
         // Check for hand_max
         const hand : Card[] = state.areas.get(player.toString())?.stacks[0]?.cards ?? [];
         if (hand.length >= hand_max) {

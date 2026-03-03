@@ -43,7 +43,6 @@ import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
 import { PositionsetContext } from "./dealParser";
 import { PlayersetContext } from "./dealParser";
-import { ObjectContext } from "./dealParser";
 import { Move_catchContext } from "./dealParser";
 
 
@@ -334,13 +333,6 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPlayerset?: (ctx: PlayersetContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `dealParser.object`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitObject?: (ctx: ObjectContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.move_catch`.

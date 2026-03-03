@@ -1,16 +1,21 @@
 define area centre; // 0 draw      1 discard
 
 deal("even", 7);
+for c in deck[0:0, 0:] {
+    c.down();
+};
+move deck[0:0, 0:] centre[0,0];
+move centre[0,0] centre[1,0];
+centre[1,0].up();
 
-on move </>[0:0, 0:] centre[1,0] {
+on move <.>[0:0, 0:] centre[1,0] {
+    log "discarding a card";
     if <.> != </> {
         cancel;
     };
-    if centre[1].length >> 0 {
-        if \.rank != centre[0,0].rank {
-            if \.suit != centre[0,0].suit {
-                cancel;
-            };
+    if \.rank != centre[1,0].rank {
+        if \.suit != centre[1,0].suit {
+            cancel;
         };
     };
 

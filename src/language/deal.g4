@@ -82,8 +82,6 @@ intset:         term ':' term?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
-object:         primitives | CARD | STRING | variable | NUMBER | player | area | stack | position | intset | positionset | playerset;
-
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';
 
