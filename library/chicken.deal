@@ -202,11 +202,6 @@ on c {
     };
 };
 
-$config {
-    title "Chicken",
-    num_players 4
-};
-
 $style {
     c {
         label "Chicken"

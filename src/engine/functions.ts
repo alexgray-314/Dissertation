@@ -1,5 +1,8 @@
 import {State} from "../state/state";
 import {Card} from "../model/card";
+import {TermContext} from "../language/dealParser";
+import {NumberVisitor} from "../calc/numberVisitor";
+import {StringVisitor} from "../calc/stringVisitor";
 
 export function shuffle(state : State) {
 
@@ -13,36 +16,39 @@ export function shuffle(state : State) {
     });
 }
 
-export function deal(state : State, args: Record<string, number | string>) {
-    const deck = state.areas.get("deck")?.stacks[0].cards;
+export function deal(state : State, args : TermContext[]) {
+    const deck = state.areas.get("deck")?.stacks[0]?.cards;
     if (!deck) {
         return;
     }
 
-    const defaultArgs = {
-        jokers:"false",
-        distribute:"all",
-        shuffle:"true",
-        hand_max:52
-    };
-    Object.assign(defaultArgs, args); // merge defaults with set parameters
-
-    // ---- Shuffle the deck
-    if (defaultArgs.shuffle === "true") {
-        shuffle(state);
-    }
-
-    // TODO actually consider the args
+    const distribute : string = args[0]?.accept(new StringVisitor(state)) ?? "all";
+    const hand_max : number = args[1]?.accept(new NumberVisitor(state)) ?? Infinity;
 
     // Deal out the cards until done
     let player = 0;
     for (let i= 0; deck.length > 0; i++) {
+
+        console.log("deck moving");
+        // Check for hand_max
+        const hand : Card[] = state.areas.get(player.toString())?.stacks[0]?.cards ?? [];
+        if (hand.length >= hand_max) {
+            return;
+        }
         state.add_card(deck[0], [player.toString(), 0, 0]);
         state.remove_card(["deck", 0, 0]);
+
         player++;
         if (player >= state.num_players) {
             player = 0;
+            // check for distribute
+            if (distribute === "even") {
+                if (deck.length < state.num_players) {
+                    return; // don't deal out any more cards if there's not enough to give everyone 1 more
+                }
+            }
         }
+
     }
 
 }

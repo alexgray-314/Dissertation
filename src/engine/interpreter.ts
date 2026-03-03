@@ -295,7 +295,8 @@ export class Interpreter implements dealVisitor<void> {
         const id : string = ctx.ID().text;
         switch(id) {
             case "deal":
-                deal(this.state, {});
+                const args : TermContext[] = ctx.args().arg().map((argCtx : ArgContext) => {return argCtx.term()});
+                deal(this.state, args);
                 break;
             case "shuffle":
                 shuffle(this.state);

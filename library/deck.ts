@@ -55,4 +55,6 @@ move #JC deck[0,0];
 move #QC deck[0,0];
 move #KC deck[0,0];
 move #AC deck[0,0];
+
+shuffle();
 `;

@@ -1,0 +1,57 @@
+define area centre; // 0 draw      1 discard
+
+deal("even", 7);
+
+on move </>[0:0, 0:] centre[1,0] {
+    if <.> != </> {
+        cancel;
+    };
+    if centre[1].length >> 0 {
+        if \.rank != centre[0,0].rank {
+            if \.suit != centre[0,0].suit {
+                cancel;
+            };
+        };
+    };
+
+    if </>[0].length == 0 {
+        log "player" </> "wins";
+    } else {
+        <.>++;
+    };
+};
+
+on move centre[0,0] <@>[0:0,0:] {
+    if <.> != </> {
+        cancel;
+    };
+    <.>++;
+};
+
+$config {
+    jokers 0,
+    num_players 4,
+    title "Uno"
+};
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Your Hand",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    centre {
+        visibility public,
+        location north,
+        0 {
+            label "Draw"
+        },
+        1 {
+            label "Discard"
+        }
+    }
+};
