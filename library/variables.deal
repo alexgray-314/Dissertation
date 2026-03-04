@@ -3,4 +3,4 @@ define area x;
 
 if x.rank == spades {
     x[0]
-};
+}

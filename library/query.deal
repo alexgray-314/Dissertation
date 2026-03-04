@@ -10,7 +10,7 @@ deal();
 
 $config {
     num_players 10
-};
+}
 
 $style {
     player {
@@ -38,4 +38,4 @@ $style {
             label "Magic"
         }
     }
-};
+}

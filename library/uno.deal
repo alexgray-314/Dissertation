@@ -17,7 +17,7 @@ shuffle();
 deal("even", 7);
 for c in deck[0:0, 0:] {
     c.down();
-};
+}
 move deck[0:0, 0:] centre[0,0];
 move centre[0,0] centre[1,0];
 centre[1,0].up();
@@ -25,15 +25,15 @@ lastCard = centre[1,0];
 
 define function changeSuit() {
 
-};
+}
 
 on move </>[0:0, 0:] centre[1,0] {
     if powerPlayer >= 0 {
         cancel;
-    };
+    }
     if <.> != </> {
         cancel;
-    };
+    }
 
     if \ == #joker {
         powerPlayer = </>;
@@ -41,9 +41,9 @@ on move </>[0:0, 0:] centre[1,0] {
         if \.rank != lastCard.rank {
             if \.suit != lastCard.suit {
                 cancel;
-            };
-        };
-    };
+            }
+        }
+    }
 
     lastCard = \;
 
@@ -51,23 +51,23 @@ on move </>[0:0, 0:] centre[1,0] {
         log "player" </> "wins";
     } else {
         <.>++;
-    };
-};
+    }
+}
 
 on move centre[0,0] </>[0:0,0:] {
     if powerPlayer >= 0 {
         cancel;
-    };
+    }
     if <.> != </> {
         cancel;
-    };
+    }
     \.up();
     <.>++;
-};
+}
 
 on move ? ? {
     cancel;
-};
+}
 
 define function usePowerup(card crd) {
     if powerPlayer == <@> {
@@ -75,27 +75,27 @@ define function usePowerup(card crd) {
         lastCard = crd;
     } else {
         log "You have not played a joker";
-    };
-};
+    }
+}
 
 on c {
     usePowerup(#4C);
-};
+}
 on d {
     usePowerup(#4D);
-};
+}
 on h {
     usePowerup(#4H);
-};
+}
 on s {
     usePowerup(#4S);
-};
+}
 
 $config {
     num_jokers 0,
     num_players 4,
     title "Uno"
-};
+}
 
 $style {
     player {
@@ -129,4 +129,4 @@ $style {
     h {
         label "Hearts"
     }
-};
+}

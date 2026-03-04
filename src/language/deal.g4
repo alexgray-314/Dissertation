@@ -3,21 +3,21 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (
-                'define' (definition | define_function)
-                | move
+
+stmt:           'define' ((definition ';') | define_function)
+                | move ';'
                 | 'on' (on_action | on_move | on_interact)
                 | for
                 | if
-                | cancel
-                | assign
-                | function_call
-                | updateTurn
-                | log
-                | modify
-                | show
-                | config
-                ) ';' ;
+                | cancel ';'
+                | assign ';'
+                | function_call ';'
+                | updateTurn ';'
+                | log ';'
+                | modify ';'
+                | show ';'
+                | config ;
+
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | term) '>';
@@ -81,6 +81,8 @@ set:            (intset | positionset | playerset) property?;
 intset:         term ':' term?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
+
+object:         primitives | CARD | STRING | variable | NUMBER | player | area | stack | position | intset | positionset | playerset;
 
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';

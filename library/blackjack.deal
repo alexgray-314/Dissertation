@@ -7,8 +7,8 @@ define int a;
 define function f(card c) {
     if c == #4s {
         
-    };
-};
+    }
+}
 
 
 
@@ -16,7 +16,7 @@ define function start() {
     deck[0,0].down();
     move deck[0:0,0:1] dealer[0,0];
     move deck[0:0,0:1] <0>[0,0];
-};
+}
 
 shuffle();
 start();
@@ -25,20 +25,20 @@ on hit {
     move deck[0,0] <0>[0,0];
     
     
-};
+}
 
 on stand {
 
-};
+}
 
 on move ? ? {
     cancel;
-};
+}
 
 $config {
     num_players 1,
     title "Blackjack"
-};
+}
 
 $style {
     player {
@@ -63,4 +63,4 @@ $style {
     stand {
         label "Stand"
     }
-};
+}

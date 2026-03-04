@@ -43,6 +43,7 @@ import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
 import { PositionsetContext } from "./dealParser";
 import { PlayersetContext } from "./dealParser";
+import { ObjectContext } from "./dealParser";
 import { Move_catchContext } from "./dealParser";
 
 
@@ -490,6 +491,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitPlayerset?: (ctx: PlayersetContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.object`.
+	 * @param ctx the parse tree
+	 */
+	enterObject?: (ctx: ObjectContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.object`.
+	 * @param ctx the parse tree
+	 */
+	exitObject?: (ctx: ObjectContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.move_catch`.

@@ -12,14 +12,14 @@ on move ? ? {
         <.>++;
       } else {
         cancel;
-      };
+      }
     } else {
       cancel;
-    };
+    }
   } else {
     cancel;
-  };
-};
+  }
+}
 
 on snap {
   if a[0, 0].suit == a[0, 1].suit {
@@ -32,16 +32,16 @@ on snap {
       move a[0:0,0:] <1>[0,0];
     } else {
       move a[0:0,0:] <0>[0,0];
-    };
-  };
-};
+    }
+  }
+}
 
 deal();
 
 $config {
   num_players 2,
   title "Snap"
-};
+}
 
 $style {
     player {
@@ -60,4 +60,4 @@ $style {
             label "Discard Pile"
         }
     }
-};
+}

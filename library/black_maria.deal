@@ -27,7 +27,7 @@ on move </>[0:0,0:] centre[0,0] {
                 if winningCard.suit =? </>[0:0, 0:].suit {
                     // The player has a card in-suit that they could have played - INVALID
                     cancel;
-                };
+                }
                 // Card can be "thrown away"
 
             } else {
@@ -37,11 +37,11 @@ on move </>[0:0,0:] centre[0,0] {
                     // Card is now the highest in the trick
                     winningCard = \;
                     winningPlayer = </>;
-                };
+                }
 
-            };
+            }
 
-        };
+        }
 
         // Execute move early
         move \ /;
@@ -57,18 +57,18 @@ on move </>[0:0,0:] centre[0,0] {
             // It's the next players turn
             
             <.>++;
-        };
+        }
 
     } else {
         cancel;
-    };
+    }
 
-};
+}
 
 // block all other card movements
 on move ? ? {
 	cancel;
-};
+}
 
 winningPlayer = 0;
 deal();
@@ -77,7 +77,7 @@ $config {
     num_players 4,
     title "Black Maria",
     ace_weight high
-};
+}
 
 $style {
     player {
@@ -96,4 +96,4 @@ $style {
             label "Discard Pile"
         }
     }
-};
+}
