@@ -219,8 +219,8 @@ export class Interpreter implements dealVisitor<void> {
     visitOn_move (ctx: On_moveContext) : void {
 
         this.state.move_catches.push(new MoveCatch(
-            ctx.getChild(2) as Move_catchContext,
-            ctx.getChild(3) as Move_catchContext,
+            ctx.move_catch()[0],
+            ctx.move_catch()[1],
             ctx.block()
         ));
 
