@@ -1,5 +1,19 @@
 define area centre; // 0 draw      1 discard
 
+define action s;
+define action d;
+define action c;
+define action h;
+define card lastCard;
+define int powerPlayer;
+powerPlayer = -1;
+
+// ------- Deal out the cards
+move #joker deck[0,0];
+move #joker deck[0,0];
+move #joker deck[0,0];
+move #joker deck[0,0];
+shuffle();
 deal("even", 7);
 for c in deck[0:0, 0:] {
     c.down();
@@ -7,20 +21,31 @@ for c in deck[0:0, 0:] {
 move deck[0:0, 0:] centre[0,0];
 move centre[0,0] centre[1,0];
 centre[1,0].up();
+lastCard = centre[1,0];
 
-move #joker centre[1,0];
+define function changeSuit() {
+
+};
 
 on move </>[0:0, 0:] centre[1,0] {
+    if powerPlayer >= 0 {
+        cancel;
+    };
     if <.> != </> {
         cancel;
     };
-    if \.rank != centre[1,0].rank {
-        if \.suit != centre[1,0].suit {
-            cancel;
+
+    if \ == #joker {
+        powerPlayer = </>;
+    } else {
+        if \.rank != lastCard.rank {
+            if \.suit != lastCard.suit {
+                cancel;
+            };
         };
     };
 
-    log "length of player" </> "top card" </>[0,0] "length" </>[0].length;
+    lastCard = \;
 
     if </>[0].length == 1 {
         log "player" </> "wins";
@@ -29,11 +54,41 @@ on move </>[0:0, 0:] centre[1,0] {
     };
 };
 
-on move centre[0,0] <@>[0:0,0:] {
+on move centre[0,0] </>[0:0,0:] {
+    if powerPlayer >= 0 {
+        cancel;
+    };
     if <.> != </> {
         cancel;
     };
+    \.up();
     <.>++;
+};
+
+on move ? ? {
+    cancel;
+};
+
+define function usePowerup(card crd) {
+    if powerPlayer == <@> {
+        powerPlayer = -1;
+        lastCard = crd;
+    } else {
+        log "You have not played a joker";
+    };
+};
+
+on c {
+    usePowerup(#4C);
+};
+on d {
+    usePowerup(#4D);
+};
+on h {
+    usePowerup(#4H);
+};
+on s {
+    usePowerup(#4S);
 };
 
 $config {
@@ -61,5 +116,17 @@ $style {
         1 {
             label "Discard"
         }
+    },
+    s {
+        label "Spades"
+    },
+    d {
+        label "Diamonds"
+    },
+    c {
+        label "Clubs"
+    },
+    h {
+        label "Hearts"
     }
 };
