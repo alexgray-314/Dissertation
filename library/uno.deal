@@ -9,10 +9,6 @@ define int powerPlayer;
 powerPlayer = -1;
 
 // ------- Deal out the cards
-move #joker deck[0,0];
-move #joker deck[0,0];
-move #joker deck[0,0];
-move #joker deck[0,0];
 shuffle();
 deal("even", 7);
 for c in deck[0:0, 0:] {
@@ -92,24 +88,17 @@ on s {
 }
 
 $config {
-    num_jokers 0,
-    num_players 4,
-    title "Uno"
+    title "Uno",
+    num_players 4
 }
 
 $style {
     player {
-        visibility hidden,
         0 {
-            label "Your Hand",
-            visibility private,
-            display spread,
-            location hand
+            label "Your Hand"
         }
     },
     centre {
-        visibility public,
-        location north,
         0 {
             label "Draw"
         },

@@ -102,9 +102,9 @@ function init(sourceCode : string) {
 
   render();
 
-  console.log("state",state);
-  console.log("style",);
-  console.log("canvas", canvas);
+  // console.log("state",state);
+  // console.log("style",);
+  // console.log("canvas", canvas);
 
 }
 

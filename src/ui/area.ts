@@ -17,7 +17,7 @@ export class Area {
   config : Config;
 
   // Will generate a UI area from a state area
-  constructor(area : model.Area, yDefault : number, hitBoxes : Hitbox[], config : Config) {
+  constructor(area : model.Area, yDefault : number, hitBoxes : Hitbox[], config : Config, usedY : number[]) {
     this.child = area;
     this.config = config;
 
@@ -27,9 +27,9 @@ export class Area {
     for (let x = 0; x < Math.max(min, area.stacks.length); x++) {
 
       // Attributes
-      const label : string | undefined = this.format_string(config.get("style", area.id, x.toString(), "label"), area.id, x.toString());
-      const display : string = config.get("style", area.id, x.toString(), "display") ?? "single";
-      const visibility : string = config.get("style", area.id, x.toString(), "visibility") ?? "public";
+      const label : string = this.format_string(config.get("style", area.id, x.toString(), "label"), area.id, x.toString()) ?? (x == 0 ? area.id.toString() : "");
+      const display : string = config.get("style", area.id, x.toString(), "display") ?? ((!Number.isNaN(Number(area.id)) && x == 0) ? "spread" : "single");
+      const visibility : string = config.get("style", area.id, x.toString(), "visibility") ?? ((!Number.isNaN(Number(area.id)) && x == 0) ? "private" : "public");
       const visible : boolean = visibility === "public" || (visibility === "private" && activePlayer === Number(area.id));
       const y: number = this.map_location_to_y(config.get("style", area.id, x.toString(), "location")) ?? yDefault;
 
@@ -37,6 +37,7 @@ export class Area {
       this.stacks.push(stack);
 
       if (visible) {
+        usedY.push(y);
         // Hitboxes
         if (display === "single") {
           // Users can only take the top card
