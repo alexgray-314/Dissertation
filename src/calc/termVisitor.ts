@@ -17,6 +17,7 @@ import {State} from "../state/state";
 import {NumberVisitor} from "./numberVisitor";
 import {CardVisitor} from "./cardVisitor";
 import {Card, Ranks, SpecialCard, StandardCard} from "../model/card";
+import {StringVisitor} from "./stringVisitor";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 
@@ -67,7 +68,8 @@ export class TermVisitor implements dealVisitor<Primitive> {
      */
     visitStack (ctx: StackContext) : number {
         const stack : number = new NumberVisitor(this.state).visit(ctx.term());
-        return ((this.state.areas.get(ctx.arearef().text)?.stacks[stack])?.cards?.length) ?? 0;
+        const areaID = new StringVisitor(this.state).visit(ctx.arearef()) ?? "";
+        return ((this.state.areas.get(areaID)?.stacks[stack])?.cards?.length) ?? NaN;
     }
 
     visitPosition (ctx: PositionContext) : Card | undefined {

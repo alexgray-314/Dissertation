@@ -19,9 +19,8 @@ on move </>[0:0, 0:] centre[1,0] {
     };
 
     log "length of player" </> "top card" </>[0,0] "length" </>[0].length;
-    log "length" </>[0];
 
-    if </>[0].length == 0 {
+    if </>[0].length == 1 {
         log "player" </> "wins";
     } else {
         <.>++;
@@ -36,7 +35,7 @@ on move centre[0,0] <@>[0:0,0:] {
 };
 
 $config {
-    jokers 0,
+    num_jokers 0,
     num_players 4,
     title "Uno"
 };
