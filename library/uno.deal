@@ -8,6 +8,8 @@ move deck[0:0, 0:] centre[0,0];
 move centre[0,0] centre[1,0];
 centre[1,0].up();
 
+move #joker centre[1,0];
+
 on move </>[0:0, 0:] centre[1,0] {
     if <.> != </> {
         cancel;
