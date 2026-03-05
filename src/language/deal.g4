@@ -20,7 +20,7 @@ stmt:           'define' ((definition ';') | define_function)
 
 block:          stmt* ;
 
-player:         '<' ('/' | '.' | '@' | term) '>';
+player:         '<' ('.' | '@' | term) '>';
 VARTYPE:        'int' | 'card';
 
 definition:     type=('area' | 'action' | VARTYPE) ID ;

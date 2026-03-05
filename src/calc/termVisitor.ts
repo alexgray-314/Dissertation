@@ -28,25 +28,7 @@ export class TermVisitor implements dealVisitor<Primitive> {
     }
 
     visitPlayer(ctx: PlayerContext) : number {
-        // TODO update this, so that it just accepts child 1. Terminal symbols will account for @ and /??
-        // TODO this has to be done alongside changing the syntax for source and dest
-        const ID = ctx.getChild(1);
-        let val : number;
-        switch(ID.text) {
-            case '/':
-                val = this.state.get_move_player() ?? NaN;
-                break;
-            case '.':
-                val = this.state.get_turn_player();
-                break;
-            case '@':
-                val = this.state.get_action_player();
-                break;
-            default:
-                val = Number(ID.accept(this));
-                break;
-        }
-        return val % this.state.num_players; // account for overflow
+        return ctx.accept(new NumberVisitor(this.state))
     }
 
     visitVariable (ctx: VariableContext) : Primitive {

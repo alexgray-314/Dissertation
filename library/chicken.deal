@@ -92,25 +92,25 @@ move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
 x[1,0].up();
 
 // Take a card from draw pile
-on move x[0,0] </>[1:,0:0] {
+on move x[0,0] <@>[1:,0:0] {
 
-    if </> != <.> {cancel;} // Can only move card on your turn
+    if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
         cancel; // block movement if someone has a special card to play
     }
 
     move / x[1,0]; // move your card to discard pile
-    show \ </>; // This card was previsouly invisible. Display it to that player
+    show \ <@>; // This card was previsouly invisible. Display it to that player
     move \ /;
 
-    check_for_special_cards(</>);
+    check_for_special_cards(<@>);
     update_turn();
 }
 
 // Take a card from discard pile
-on move x[1,0] </>[1:,0:0] {
+on move x[1,0] <@>[1:,0:0] {
 
-    if </> != <.> {cancel;} // Can only move card on your turn
+    if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
         cancel; // block movement if someone has a special card to play
     }
@@ -118,13 +118,13 @@ on move x[1,0] </>[1:,0:0] {
     move / x[1,1]; // move your card to discard pile, just below the card you're about to take
     move \ /;
 
-    check_for_special_cards(</>);
+    check_for_special_cards(<@>);
     update_turn();
 }
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
-on move </>[1:,0:0] x[1, 0] {
+on move <@>[1:,0:0] x[1, 0] {
 
     if special >= 0 {
         cancel; // block movement if someone has a special card to play
@@ -135,29 +135,29 @@ on move </>[1:,0:0] x[1, 0] {
 
         // Find the first empty stack
         newSlot = 1;
-        for c in </>[1:, 0:0] {
+        for c in <@>[1:, 0:0] {
             if c != empty {
                 newSlot = newSlot + 1;
             } else {
-                move x[0,0] </>[newSlot, 0];
+                move x[0,0] <@>[newSlot, 0];
                 cancel; 
             }
         }
-        move x[0,0] </>[newSlot, 0];
+        move x[0,0] <@>[newSlot, 0];
         cancel; 
     } 
     \.up();
 
     move \ /;
 
-    check_for_special_cards(</>);
+    check_for_special_cards(<@>);
 }
 
 on move ? ? {
     if \ == / { // can't swap a card with itself
         cancel;
     }
-    if special == </> {
+    if special == <@> {
         if magicCard.rank == jack {
 
             if \ =? x[0:,0:] {
@@ -202,6 +202,12 @@ on c {
     }
 }
 
+$config {
+    title "Chicken",
+    num_players 4
+}
+
+// Completely optional
 $style {
     c {
         label "Chicken"

@@ -10,7 +10,6 @@ import {Primitive} from "./comparator";
 export type MoveInfo = {
     source: undefined | Position,
     dest: undefined | Position,
-    player: undefined | number,
     card: undefined | Card,
     cancelled: boolean
 }
@@ -45,7 +44,6 @@ export class State {
         this.move_info = {
             source: undefined,
             dest: undefined,
-            player: undefined,
             card: undefined,
             cancelled: false
         };
@@ -66,16 +64,12 @@ export class State {
         return this.action_player;
     }
 
-    get_move_player() {
-        return this.move_info.player;
-    }
-
     get_turn_player() {
         return this.turn;
     }
 
     reset_move_info() {
-        this.move_info.player = undefined;
+        this.action_player = NaN;
         this.move_info.source = undefined;
         this.move_info.dest = undefined;
         this.move_info.card = undefined;

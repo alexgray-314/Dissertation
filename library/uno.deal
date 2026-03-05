@@ -23,16 +23,16 @@ define function changeSuit() {
 
 }
 
-on move </>[0:0, 0:] centre[1,0] {
+on move <@>[0:0, 0:] centre[1,0] {
     if powerPlayer >= 0 {
         cancel;
     }
-    if <.> != </> {
+    if <.> != <@> {
         cancel;
     }
 
     if \ == #joker {
-        powerPlayer = </>;
+        powerPlayer = <@>;
     } else {
         if \.rank != lastCard.rank {
             if \.suit != lastCard.suit {
@@ -43,18 +43,18 @@ on move </>[0:0, 0:] centre[1,0] {
 
     lastCard = \;
 
-    if </>[0].length == 1 {
-        log "player" </> "wins";
+    if <@>[0].length == 1 {
+        log "player" <@> "wins";
     } else {
         <.>++;
     }
 }
 
-on move centre[0,0] </>[0:0,0:] {
+on move centre[0,0] <@>[0:0,0:] {
     if powerPlayer >= 0 {
         cancel;
     }
-    if <.> != </> {
+    if <.> != <@> {
         cancel;
     }
     \.up();
