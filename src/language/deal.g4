@@ -70,7 +70,7 @@ term:           (primitives | CARD | STRING | variable | NUMBER | player | area 
 property:       '.' ID;
 primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING | ACE;
 
-bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
+bexpr:          term (  (('=='|'!='|'<'|'<='|'>='|'>') term)
                         | (('=?' | '!?') set)
                         );
 PLUS:           '+';

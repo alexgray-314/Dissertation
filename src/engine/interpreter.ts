@@ -143,13 +143,13 @@ export class Interpreter implements dealVisitor<void> {
                     return;
                 }
                 break;
-            case "<<":
+            case "<":
                 if (this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
                     ctx._consequent.accept(this);
                     return;
                 }
                 break;
-            case ">>":
+            case ">":
                 if (this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
                     ctx._consequent.accept(this); 
                     return;
@@ -323,7 +323,7 @@ export class Interpreter implements dealVisitor<void> {
 
     visitModify (ctx: ModifyContext) : void {
         const card : Card = this.cardVisitor.visit(ctx.getChild(0)) ?? SpecialCard.Empty;
-        if (card !== SpecialCard.Empty && card !== SpecialCard.Joker) {
+        if (card !== SpecialCard.Empty) {
             const method : string = ctx.function_call().ID().text;
             if (method === "up" || method === "down") {
                 card[method]();

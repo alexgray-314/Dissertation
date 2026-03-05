@@ -69,7 +69,7 @@ export class TermVisitor implements dealVisitor<Primitive> {
     visitStack (ctx: StackContext) : number {
         const stack : number = new NumberVisitor(this.state).visit(ctx.term());
         const areaID = new StringVisitor(this.state).visit(ctx.arearef()) ?? "";
-        return ((this.state.areas.get(areaID)?.stacks[stack])?.cards?.length) ?? NaN;
+        return ((this.state.areas.get(areaID)?.stacks[stack])?.cards?.length) ?? 0;
     }
 
     visitPosition (ctx: PositionContext) : Card | undefined {

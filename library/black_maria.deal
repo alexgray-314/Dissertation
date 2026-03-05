@@ -33,7 +33,7 @@ on move </>[0:0,0:] centre[0,0] {
             } else {
                 // The card is in-suit                
 
-                if \.rank >> winningCard.rank {
+                if \.rank > winningCard.rank {
                     // Card is now the highest in the trick
                     winningCard = \;
                     winningPlayer = </>;
@@ -74,25 +74,18 @@ winningPlayer = 0;
 deal();
 
 $config {
-    num_players 4,
     title "Black Maria",
-    ace_weight high
+    num_players 4
 }
 
 $style {
     player {
-        visibility hidden,
-        0 {
-            label "Your Hand",
-            visibility private,
-            display spread,
-            location hand
+        0 { // Assign label to stack 0 of all player areas
+            label "Your Hand"
         }
     },
     centre {
-        visibility public,
-        location north,
-        0 {
+        0 { // Assign label to stack 0 of area centre
             label "Discard Pile"
         }
     }

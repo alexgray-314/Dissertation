@@ -39,7 +39,7 @@ define function determine_winner() {
         }
         log p "has score" current_score;
         // Update winner
-        if current_score >> winning_score{
+        if current_score > winning_score{
             // Doing it this way means that an undefined winning score will also be updated
         } else {
             winning_score = current_score;
