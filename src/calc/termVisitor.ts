@@ -37,6 +37,8 @@ export class TermVisitor implements dealVisitor<Primitive> {
             return Number(value);
         } else if (type === "CARD") {
             return value;
+        } else if (type === "STRING") {
+            return value?.toString();
         }
         return undefined;
     }

@@ -34,6 +34,7 @@ import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
 import {Catch} from "../state/catch";
+import {StringVisitor} from "../calc/stringVisitor";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -65,6 +66,7 @@ export class Interpreter implements dealVisitor<void> {
                 this.state.define_action(ctx.ID().text, {});
                 break;
             case "INT":
+            case "STRING":
             case "CARD":
                 this.state.define_variable(type, ctx.ID().text);
                 break;
@@ -357,6 +359,8 @@ export class Interpreter implements dealVisitor<void> {
             case "CARD":
                 this.state.variables.get(id)![1] = term.accept(this.cardVisitor);
                 break;
+            case "STRING":
+                this.state.variables.get(id)![1] = term.accept(new StringVisitor(this.state));
         }
     }
 
