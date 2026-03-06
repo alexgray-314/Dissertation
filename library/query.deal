@@ -1,7 +1,0 @@
-define area x;
-define area y;
-define area z;
-
-move #4s x[0,0];
-move #5s y[0,0];
-move #6s z[0,0];

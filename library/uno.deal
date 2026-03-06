@@ -1,0 +1,124 @@
+define area centre; // 0 draw      1 discard
+
+define action s;
+define action d;
+define action c;
+define action h;
+define card lastCard;
+define int powerPlayer;
+powerPlayer = -1;
+
+// ------- Deal out the cards
+shuffle();
+deal("even", 7);
+for c in deck[0:0, 0:] {
+    c.down();
+}
+move deck[0:0, 0:] centre[0,0];
+move centre[0,0] centre[1,0];
+centre[1,0].up();
+lastCard = centre[1,0];
+
+define function changeSuit() {
+
+}
+
+on move <@>[0:0, 0:] centre[1,0] {
+    if powerPlayer >= 0 {
+        cancel;
+    }
+    if <.> != <@> {
+        cancel;
+    }
+
+    if \ == #joker {
+        powerPlayer = <@>;
+    } else {
+        if \.rank != lastCard.rank {
+            if \.suit != lastCard.suit {
+                cancel;
+            }
+        }
+    }
+
+    lastCard = \;
+
+    if <@>[0].length == 1 {
+        log "player" <@> "wins";
+    } else {
+        if \.rank == ace {
+            <.>++; // skip another turn if it's an ace
+        }
+        <.>++;
+    }
+}
+
+on move centre[0,0] <@>[0:0,0:] {
+    if powerPlayer >= 0 {
+        cancel;
+    }
+    if <.> != <@> {
+        cancel;
+    }
+    \.up();
+    <.>++;
+}
+
+on move ? ? {
+    cancel;
+}
+
+define function usePowerup(card crd) {
+    if powerPlayer == <@> {
+        powerPlayer = -1;
+        lastCard = crd;
+    } else {
+        log "You have not played a joker";
+    }
+}
+
+on c {
+    usePowerup(#4C);
+}
+on d {
+    usePowerup(#4D);
+}
+on h {
+    usePowerup(#4H);
+}
+on s {
+    usePowerup(#4S);
+}
+
+$config {
+    title "Uno",
+    num_players 4
+}
+
+$style {
+    player {
+        0 {
+            label "Your Hand"
+        }
+    },
+    centre {
+        0 {
+            label "Draw"
+        },
+        1 {
+            label "Discard"
+        }
+    },
+    s {
+        label "Spades"
+    },
+    d {
+        label "Diamonds"
+    },
+    c {
+        label "Clubs"
+    },
+    h {
+        label "Hearts"
+    }
+}

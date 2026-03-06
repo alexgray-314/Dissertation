@@ -34,6 +34,7 @@ import {MoveCatch} from "../state/move_catch";
 import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
 import {Catch} from "../state/catch";
+import {StringVisitor} from "../calc/stringVisitor";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -65,6 +66,7 @@ export class Interpreter implements dealVisitor<void> {
                 this.state.define_action(ctx.ID().text, {});
                 break;
             case "INT":
+            case "STRING":
             case "CARD":
                 this.state.define_variable(type, ctx.ID().text);
                 break;
@@ -143,13 +145,13 @@ export class Interpreter implements dealVisitor<void> {
                     return;
                 }
                 break;
-            case "<<":
+            case "<":
                 if (this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
                     ctx._consequent.accept(this);
                     return;
                 }
                 break;
-            case ">>":
+            case ">":
                 if (this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
                     ctx._consequent.accept(this); 
                     return;
@@ -219,8 +221,8 @@ export class Interpreter implements dealVisitor<void> {
     visitOn_move (ctx: On_moveContext) : void {
 
         this.state.move_catches.push(new MoveCatch(
-            ctx.getChild(2) as Move_catchContext,
-            ctx.getChild(3) as Move_catchContext,
+            ctx.move_catch()[0],
+            ctx.move_catch()[1],
             ctx.block()
         ));
 
@@ -295,7 +297,8 @@ export class Interpreter implements dealVisitor<void> {
         const id : string = ctx.ID().text;
         switch(id) {
             case "deal":
-                deal(this.state, {});
+                const args : TermContext[] = ctx.args().arg().map((argCtx : ArgContext) => {return argCtx.term()});
+                deal(this.state, args);
                 break;
             case "shuffle":
                 shuffle(this.state);
@@ -322,7 +325,7 @@ export class Interpreter implements dealVisitor<void> {
 
     visitModify (ctx: ModifyContext) : void {
         const card : Card = this.cardVisitor.visit(ctx.getChild(0)) ?? SpecialCard.Empty;
-        if (card !== SpecialCard.Empty && card !== SpecialCard.Joker) {
+        if (card !== SpecialCard.Empty) {
             const method : string = ctx.function_call().ID().text;
             if (method === "up" || method === "down") {
                 card[method]();
@@ -356,6 +359,8 @@ export class Interpreter implements dealVisitor<void> {
             case "CARD":
                 this.state.variables.get(id)![1] = term.accept(this.cardVisitor);
                 break;
+            case "STRING":
+                this.state.variables.get(id)![1] = term.accept(new StringVisitor(this.state));
         }
     }
 

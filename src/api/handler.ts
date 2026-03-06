@@ -47,7 +47,7 @@ export class Handler {
     call(request : Request) {
         switch(request.type) {
         case "MOVE":
-            this.state.move_info.player = request.player;
+            this.state.action_player = request.player;
             this.state.move_info.source = [request.source.area, request.source.stack, request.source.position];
             this.state.move_info.dest = [request.destination.area, request.destination.stack, request.destination.position];
             this.state.move_info.card = this.state.get_card(this.state.move_info.source);

@@ -1,12 +1,6 @@
-define card x;
-define int me;
+define area x;
 
-me = 0;
 
-deal();
-
-x = <me>[0,0];
-
-on move {
-
-};
+if x.rank == spades {
+    x[0]
+}

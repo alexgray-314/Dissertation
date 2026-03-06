@@ -36,13 +36,20 @@ export class Canvas implements UI{
 
   update(state : State, player : number) {
     // Convert all the state "areas" into UI "Areas"
-    let y = 0;
     this.hitBoxes.splice(0, this.hitBoxes.length); // clear hitBoxes
 
+    const usedY : number[] = [];
     state.areas.forEach((area : model.Area, id : string) => {
+      let y = 0;
+      for (let i = 0; i < 20; i++) {
+        if (!usedY.includes(i)) {
+          y = i;
+          break;
+        }
+      }
       if (id !== "deck") { // Do not display the deck
-          this.areas[id] = new Area(area, y, this.hitBoxes, this.config);
-          y++;
+          this.areas[id] = new Area(area, y, this.hitBoxes, this.config, usedY);
+          y++
       }
     })
   }

@@ -1,4 +1,4 @@
-type Suit = "hearts" | "diamonds" | "clubs" | "spades";
+type Suit = "hearts" | "diamonds" | "clubs" | "spades" | "joker";
 type Rank = Ranks | -1;
 
 export enum Ranks {
@@ -15,6 +15,7 @@ export enum Ranks {
     QUEEN=12,
     KING=13,
     ACE=14,
+    JOKER=0
 }
 
 const SUIT_MAP = {
@@ -24,9 +25,9 @@ const SUIT_MAP = {
     "diamonds": "♦"
 }
 
-export type Card = StandardCard | SpecialCard.Empty | SpecialCard.Joker;
+export type Card = StandardCard | SpecialCard.Empty;
 
-export enum SpecialCard {Empty, Joker}
+export enum SpecialCard {Empty = -1}
 
 export class StandardCard {
     rank : Rank; // TODO make rank and suit an enum so that it can be converted to a number
@@ -37,46 +38,53 @@ export class StandardCard {
     // Value #<rank><suit>
     // E.g. #4S == the 4 of spades
     constructor(value : string) {
-        const rank : string = value.slice(1, -1).toUpperCase();
-        const suit : string = value.slice(-1);
 
-        if (!Number.isNaN(Number(rank))) {
-            this.rank = Number(rank);
+        if (value.toUpperCase() === "#JOKER") {
+            this.rank = Ranks.JOKER;
+            this.suit = "joker";
+            this.display = "joker";
         } else {
-            switch (rank) {
-                case "J":
-                    this.rank = Ranks.JACK;
-                    break;
-                case "Q":
-                    this.rank= Ranks.QUEEN;
-                    break;
-                case "K":
-                    this.rank= Ranks.KING;
-                    break;
-                case "A":
-                    this.rank= Ranks.ACE;
-                    break;
-                default:
-                    console.error("Invalid rank: " + rank);
-                    this.rank = -1;
-                    break;
+            const rank: string = value.slice(1, -1).toUpperCase();
+            const suit: string = value.slice(-1);
+
+            if (!Number.isNaN(Number(rank))) {
+                this.rank = Number(rank);
+            } else {
+                switch (rank) {
+                    case "J":
+                        this.rank = Ranks.JACK;
+                        break;
+                    case "Q":
+                        this.rank = Ranks.QUEEN;
+                        break;
+                    case "K":
+                        this.rank = Ranks.KING;
+                        break;
+                    case "A":
+                        this.rank = Ranks.ACE;
+                        break;
+                    default:
+                        console.error("Invalid rank: " + rank);
+                        this.rank = -1;
+                        break;
+                }
             }
-        }
 
-        // Convert the suit from a single digit to the full name
-        if (/[hH]/.test(suit)) {
-            this.suit = "hearts";
-        } else if (/[dD]/.test(suit)) {
-            this.suit = "diamonds";
-        } else if (/[cC]/.test(suit)) {
-            this.suit = "clubs";
-        } else if (/[sS]/.test(suit)) {
-            this.suit = "spades";
-        } else {
-            throw new Error("Invalid suit: " + value);
-        }
+            // Convert the suit from a single digit to the full name
+            if (/[hH]/.test(suit)) {
+                this.suit = "hearts";
+            } else if (/[dD]/.test(suit)) {
+                this.suit = "diamonds";
+            } else if (/[cC]/.test(suit)) {
+                this.suit = "clubs";
+            } else if (/[sS]/.test(suit)) {
+                this.suit = "spades";
+            } else {
+                throw new Error("Invalid suit: " + value);
+            }
 
-        this.display = rank + SUIT_MAP[this.suit];
+            this.display = rank + SUIT_MAP[this.suit];
+        }
 
     }
 

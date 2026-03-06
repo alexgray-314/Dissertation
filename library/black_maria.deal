@@ -7,16 +7,16 @@ define int winningPlayer;
 define card winningCard;
 
 // Card moved from turn player's hand to centre
-on move </>[0:0,0:] centre[0,0] {
+on move <@>[0:0,0:] centre[0,0] {
 
 	// block movement if it's not the players turn
-	if </> == <.> {
+	if <@> == <.> {
 
         if centre[0].length == 0 {
             // This is the first card to be placed down - VALID
 
             winningCard = \;
-            winningPlayer = </>;
+            winningPlayer = <@>;
         
         } else {
             // The trick suit has already been established
@@ -24,24 +24,24 @@ on move </>[0:0,0:] centre[0,0] {
             if \.suit != winningCard.suit {
                 // The card is not in-suit
 
-                if winningCard.suit =? </>[0:0, 0:].suit {
+                if winningCard.suit =? <@>[0:0, 0:].suit {
                     // The player has a card in-suit that they could have played - INVALID
                     cancel;
-                };
+                }
                 // Card can be "thrown away"
 
             } else {
                 // The card is in-suit                
 
-                if \.rank >> winningCard.rank {
+                if \.rank > winningCard.rank {
                     // Card is now the highest in the trick
                     winningCard = \;
-                    winningPlayer = </>;
-                };
+                    winningPlayer = <@>;
+                }
 
-            };
+            }
 
-        };
+        }
 
         // Execute move early
         move \ /;
@@ -57,43 +57,38 @@ on move </>[0:0,0:] centre[0,0] {
             // It's the next players turn
             
             <.>++;
-        };
+        }
 
     } else {
         cancel;
-    };
+    }
 
-};
+}
 
 // block all other card movements
 on move ? ? {
 	cancel;
-};
+}
 
 winningPlayer = 0;
 deal();
 
+// Completely optional
 $config {
-    num_players 4,
     title "Black Maria",
-    ace_weight high
-};
+    num_players 4
+}
 
+// Completely optional
 $style {
     player {
-        visibility hidden,
-        0 {
-            label "Your Hand",
-            visibility private,
-            display spread,
-            location hand
+        0 { // Assign label to stack 0 of all player areas
+            label "Your Hand"
         }
     },
     centre {
-        visibility public,
-        location north,
-        0 {
+        0 { // Assign label to stack 0 of area centre
             label "Discard Pile"
         }
     }
-};
+}
