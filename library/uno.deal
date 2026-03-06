@@ -46,6 +46,9 @@ on move <@>[0:0, 0:] centre[1,0] {
     if <@>[0].length == 1 {
         log "player" <@> "wins";
     } else {
+        if \.rank == ace {
+            <.>++; // skip another turn if it's an ace
+        }
         <.>++;
     }
 }
