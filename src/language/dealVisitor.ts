@@ -29,6 +29,7 @@ import { ConfigContext } from "./dealParser";
 import { AttributeContext } from "./dealParser";
 import { AttsContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
+import { Action_refContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
@@ -236,6 +237,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitVariable?: (ctx: VariableContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.action_ref`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAction_ref?: (ctx: Action_refContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.args`.

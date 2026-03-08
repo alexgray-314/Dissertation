@@ -32,7 +32,7 @@ move:           'move' source destination;
 source:         (CARD | position | positionset) ;
 destination:    position;
 
-on_action:      ID '{' block '}';
+on_action:      action_ref '{' block '}';
 on_move:        'move' move_catch move_catch '{' block '}';
 on_interact:    'interact' move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
@@ -50,6 +50,7 @@ attribute:      (ID|NUMBER|intset) (ID | STRING | NUMBER | atts);
 atts:           '{' (attribute (',' attribute)*)? '}';
 
 variable:       ID;
+action_ref:     ID;
 
 args:           '(' (arg (',' arg)*)? ')' ;
 arg:            term ;

@@ -29,6 +29,7 @@ import { ConfigContext } from "./dealParser";
 import { AttributeContext } from "./dealParser";
 import { AttsContext } from "./dealParser";
 import { VariableContext } from "./dealParser";
+import { Action_refContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
@@ -337,6 +338,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitVariable?: (ctx: VariableContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.action_ref`.
+	 * @param ctx the parse tree
+	 */
+	enterAction_ref?: (ctx: Action_refContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.action_ref`.
+	 * @param ctx the parse tree
+	 */
+	exitAction_ref?: (ctx: Action_refContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.args`.

@@ -231,7 +231,7 @@ export class Interpreter implements dealVisitor<void> {
     visitOn_action (ctx: On_actionContext) {
 
         this.state.action_catches.set(
-            ctx.ID().text,
+            ctx.action_ref().text,
             ctx.block()
         );
 

@@ -1,6 +1,7 @@
-define area x;
+define action helloWorld;
 
-
-if x.rank == spades {
-    x[0]
+on helloWorld {
+    if 0 == 0 {
+        log "hello has been worlded";
+    }
 }
