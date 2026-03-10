@@ -1,7 +1,7 @@
-define action helloWorld;
+if 0 == 1 || 2 == 2 {
+    log "or works";
+}
 
-on helloWorld {
-    if 0 == 0 {
-        log "hello has been worlded";
-    }
+if 3 == 3 && 2 != 1 {
+    log "and works";
 }

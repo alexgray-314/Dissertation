@@ -35,6 +35,7 @@ import {deal, shuffle} from "./functions";
 import {activePlayer} from "../app";
 import {Catch} from "../state/catch";
 import {StringVisitor} from "../calc/stringVisitor";
+import {BooleanVisitor} from "../calc/booleanVisitor";
 
 export class Interpreter implements dealVisitor<void> {
 
@@ -128,64 +129,13 @@ export class Interpreter implements dealVisitor<void> {
 
     visitIf (ctx: IfContext) : void {
 
-        const symbol : string = ctx.bexpr().getChild(1).text;
-        const termA = ctx.bexpr().getChild(0);
-        const termB = ctx.bexpr().getChild(2);
-
-        switch(symbol) {
-            case "==": 
-                if (this.comparator.equals(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this); 
-                    return;
-                }
-                break;
-            case "!=":
-                if (!this.comparator.equals(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this); 
-                    return;
-                }
-                break;
-            case "<":
-                if (this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this);
-                    return;
-                }
-                break;
-            case ">":
-                if (this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this); 
-                    return;
-                }
-                break;
-            case ">=":
-                if (!this.comparator.less_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this);
-                    return;
-                }
-                break;
-            case "<=":
-                if (!this.comparator.greater_than(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
-                    ctx._consequent.accept(this);
-                    return;
-                }
-                break;
-            case "=?":
-                if (this.comparator.contains(termA.accept(this.termVisitor), termB)) {
-                    ctx._consequent.accept(this); 
-                    return;
-                }
-                break;
-            case "!?":
-                if (!this.comparator.contains(termA.accept(this.termVisitor), termB)) {
-                    ctx._consequent.accept(this); 
-                    return;
-                }
-                break;
-        }
-
-        // Accounts for else statement
-        if (ctx.childCount > 5) { // this accounts for if statements with no else clause
-            ctx._antecedent.accept(this);
+        if (ctx.bexpr().accept(new BooleanVisitor(this.state))) {
+            ctx._consequent.accept(this);
+        } else {
+            // Accounts for else statement
+            if (ctx.childCount > 5) { // this accounts for if statements with no else clause
+                ctx._antecedent.accept(this);
+            }
         }
 
     }

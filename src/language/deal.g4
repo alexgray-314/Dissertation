@@ -73,7 +73,7 @@ primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING
 
 bexpr:          term (  (('=='|'!='|'<'|'<='|'>='|'>') term)
                         | (('=?' | '!?') set)
-                        );
+                        ) (('||' | '&&') bexpr)?;
 PLUS:           '+';
 MINUS:          '-';
 TIMES:          '*';
