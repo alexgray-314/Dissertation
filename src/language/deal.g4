@@ -79,7 +79,7 @@ MINUS:          '-';
 TIMES:          '*';
 
 set:            (intset | positionset | playerset) property?;
-intset:         term ':' term?;
+intset:         term (':' term?)?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 

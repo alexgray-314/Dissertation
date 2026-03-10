@@ -13,7 +13,7 @@ define function determine_winner() {
     define int current_score;
     for p in <*> {
         current_score = 0;
-        for c in <p>[1:, 0:0] {
+        for c in <p>[1:, 0] {
 
             if c != empty {
                 c.up(); // display the card
@@ -77,7 +77,7 @@ define function update_turn() {
 shuffle();
 
 // Flip all the cards face down
-for c in deck[0:0, 0:] {
+for c in deck[0, 0:] {
     c.down();
 }
 
@@ -87,12 +87,12 @@ for i in 1:4 { // give each player 4 cards
         move deck[0,0] <p>[i,0];
     }
 }
-move deck[0:0,0:] x[0,0]; // Put the rest of the deck in the draw pile
+move deck[0,0:] x[0,0]; // Put the rest of the deck in the draw pile
 move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
 x[1,0].up();
 
 // Take a card from draw pile
-on move x[0,0] <@>[1:,0:0] {
+on move x[0,0] <@>[1:,0] {
 
     if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
@@ -108,7 +108,7 @@ on move x[0,0] <@>[1:,0:0] {
 }
 
 // Take a card from discard pile
-on move x[1,0] <@>[1:,0:0] {
+on move x[1,0] <@>[1:,0] {
 
     if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
@@ -124,7 +124,7 @@ on move x[1,0] <@>[1:,0:0] {
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
-on move <@>[1:,0:0] x[1, 0] {
+on move <@>[1:,0] x[1, 0] {
 
     if special >= 0 {
         cancel; // block movement if someone has a special card to play
@@ -135,7 +135,7 @@ on move <@>[1:,0:0] x[1, 0] {
 
         // Find the first empty stack
         newSlot = 1;
-        for c in <@>[1:, 0:0] {
+        for c in <@>[1:, 0] {
             if c != empty {
                 newSlot = newSlot + 1;
             } else {
@@ -183,7 +183,7 @@ on move ? ? {
     }
 }
 
-on interact <@>[1:,0:0] {
+on interact <@>[1:,0] {
     if <@> == special {
         if magicCard.rank == queen {
             show @ <@>; // Show the user the card they have clicked on

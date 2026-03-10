@@ -27,12 +27,14 @@ export class IntSetVisitor implements dealVisitor<void> {
     }
     visitIntset (ctx: IntsetContext) {
         const start : number = ctx.getChild(0).accept(this.numberVisitor);
-        const end : number = ctx.childCount > 2 ? ctx.getChild(2).accept(this.numberVisitor) : Infinity;
+        const end : number = ctx.childCount > 2 ? ctx.getChild(2).accept(this.numberVisitor) : // If there is an end, use that
+                            (ctx.childCount == 1 ? start // If there's no colon, the end is the start
+                                : Infinity); // If there is a colon, the end of the set is infinity
 
         for (let i = start; i <= end; i++) {
             if (!this.task(i)) {
                 return;
-            };
+            }
         }
     }
 
