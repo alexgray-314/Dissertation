@@ -1,7 +1,9 @@
-if 0 == 1 || 2 == 2 {
-    log "or works";
-}
+define card q;
+q = #4h;
+<.> = q.rank - 1;
 
-if 3 == 3 && 2 != 1 {
-    log "and works";
+define action a;
+
+on a {
+    <.> = 6;
 }

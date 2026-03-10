@@ -40,7 +40,7 @@ if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block
 cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
-updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ;
+updateTurn:     '<' '.' '>'  ( '++' | '=' term)  ;
 log:            'log' (term)+;
 modify:         (position | variable) '.' function_call;
 show:           'show' (position | CARD | variable) player;
