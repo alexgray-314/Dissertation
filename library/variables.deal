@@ -1,6 +1,9 @@
-define area x;
+define card q;
+q = #4h;
+<.> = q.rank - 1;
 
+define action a;
 
-if x.rank == spades {
-    x[0]
+on a {
+    <.> = 6;
 }

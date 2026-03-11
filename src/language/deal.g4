@@ -32,7 +32,7 @@ move:           'move' source destination;
 source:         (CARD | position | positionset) ;
 destination:    position;
 
-on_action:      ID '{' block '}';
+on_action:      action_ref '{' block '}';
 on_move:        'move' move_catch move_catch '{' block '}';
 on_interact:    'interact' move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
@@ -40,7 +40,7 @@ if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block
 cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
-updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ;
+updateTurn:     '<' '.' '>'  ( '++' | '=' term)  ;
 log:            'log' (term)+;
 modify:         (position | variable) '.' function_call;
 show:           'show' (position | CARD | variable) player;
@@ -50,6 +50,7 @@ attribute:      (ID|NUMBER|intset) (ID | STRING | NUMBER | atts);
 atts:           '{' (attribute (',' attribute)*)? '}';
 
 variable:       ID;
+action_ref:     ID;
 
 args:           '(' (arg (',' arg)*)? ')' ;
 arg:            term ;
@@ -72,13 +73,13 @@ primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING
 
 bexpr:          term (  (('=='|'!='|'<'|'<='|'>='|'>') term)
                         | (('=?' | '!?') set)
-                        );
+                        ) (('||' | '&&') bexpr)?;
 PLUS:           '+';
 MINUS:          '-';
 TIMES:          '*';
 
 set:            (intset | positionset | playerset) property?;
-intset:         term ':' term?;
+intset:         term (':' term?)?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
