@@ -63,8 +63,8 @@ position:       arearef '[' term ',' term ']'
                 | MOVE_DEST
                 | INTERACT_CARD;
 
-MOVE_DEST:      '/';
-MOVE_SOURCE:    '\\';
+MOVE_DEST:      'dest';
+MOVE_SOURCE:    'source';
 INTERACT_CARD:  '@';
 
 term:           (primitives | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
