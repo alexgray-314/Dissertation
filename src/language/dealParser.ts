@@ -149,9 +149,9 @@ export class dealParser extends Parser {
 		"'function'", "'('", "')'", "'{'", "'}'", "','", "'move'", "'interact'", 
 		"'for'", "'in'", "'if'", "'else'", "'cancel'", "'='", "'++'", "'log'", 
 		"'show'", "'$'", "'['", "']'", "'=='", "'!='", "'<='", "'>='", "'=?'", 
-		"'!?'", "'||'", "'&&'", "':'", undefined, undefined, "'/'", "'\\'", "'@'", 
-		"'+'", "'-'", "'*'", "'?'", "'empty'", "'spades'", "'hearts'", "'clubs'", 
-		"'diamonds'", "'jack'", "'queen'", "'king'", "'ace'",
+		"'!?'", "'||'", "'&&'", "':'", undefined, undefined, "'dest'", "'source'", 
+		"'@'", "'+'", "'-'", "'*'", "'?'", "'empty'", "'spades'", "'hearts'", 
+		"'clubs'", "'diamonds'", "'jack'", "'queen'", "'king'", "'ace'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 

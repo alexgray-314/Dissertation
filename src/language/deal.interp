@@ -39,8 +39,8 @@ null
 ':'
 null
 null
-'/'
-'\\'
+'dest'
+'source'
 '@'
 '+'
 '-'

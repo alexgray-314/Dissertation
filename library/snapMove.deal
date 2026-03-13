@@ -5,9 +5,9 @@ on move ? ? {
   // Can only move cards on your turn
   if <@> == <.> {
     // Can only take a card from your hand
-    if \ == <.>[0,0] {
+    if source == <.>[0,0] {
       // Can only put cards down in area a
-      if / == a[0,0] {
+      if dest == a[0,0] {
         // next turn
         <.>++;
       } else {

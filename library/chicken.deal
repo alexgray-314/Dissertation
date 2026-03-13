@@ -67,7 +67,7 @@ define function check_for_special_cards(int p) {
 
 define function update_turn() {
     x[1,0].up(); // Put the draw pile face up
-    /.down(); // Put the card you're taking face down
+    dest.down(); // Put the card you're taking face down
     <.>++;
     if <.> == chicken {
         determine_winner();
@@ -99,9 +99,9 @@ on move x[0,0] <@>[1:,0] {
         cancel; // block movement if someone has a special card to play
     }
 
-    move / x[1,0]; // move your card to discard pile
-    show \ <@>; // This card was previsouly invisible. Display it to that player
-    move \ /;
+    move dest x[1,0]; // move your card to discard pile
+    show source <@>; // This card was previsouly invisible. Display it to that player
+    move source dest;
 
     check_for_special_cards(<@>);
     update_turn();
@@ -115,8 +115,8 @@ on move x[1,0] <@>[1:,0] {
         cancel; // block movement if someone has a special card to play
     }
 
-    move / x[1,1]; // move your card to discard pile, just below the card you're about to take
-    move \ /;
+    move dest x[1,1]; // move your card to discard pile, just below the card you're about to take
+    move source dest;
 
     check_for_special_cards(<@>);
     update_turn();
@@ -130,7 +130,7 @@ on move <@>[1:,0] x[1, 0] {
         cancel; // block movement if someone has a special card to play
     }
 
-    if \.rank != /.rank {
+    if source.rank != dest.rank {
         // Wrong card, you must take a new one
 
         // Find the first empty stack
@@ -146,31 +146,31 @@ on move <@>[1:,0] x[1, 0] {
         move x[0,0] <@>[newSlot, 0];
         cancel; 
     } 
-    \.up();
+    source.up();
 
-    move \ /;
+    move source dest;
 
     check_for_special_cards(<@>);
 }
 
 on move ? ? {
-    if \ == / { // can't swap a card with itself
+    if source == dest { // can't swap a card with itself
         cancel;
     }
     if special == <@> {
         if magicCard.rank == jack {
 
-            if \ =? x[0:,0:] {
+            if source =? x[0:,0:] {
                 cancel;
             }
-            if / =? x[0:,0:] {
+            if dest =? x[0:,0:] {
                 cancel;
             }
 
             // swap source and dest
-            move / deck[0,0];
-            move \ /;
-            move deck[0,0] \;
+            move dest deck[0,0];
+            move source dest;
+            move deck[0,0] source;
 
             // movement goes through
             special = -1; // play returns to normal

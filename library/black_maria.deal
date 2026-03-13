@@ -15,13 +15,13 @@ on move <@>[0,0:] centre[0,0] {
         if centre[0].length == 0 {
             // This is the first card to be placed down - VALID
 
-            winningCard = \;
+            winningCard = source;
             winningPlayer = <@>;
         
         } else {
             // The trick suit has already been established
 
-            if \.suit != winningCard.suit {
+            if source.suit != winningCard.suit {
                 // The card is not in-suit
 
                 if winningCard.suit =? <@>[0, 0:].suit {
@@ -33,9 +33,9 @@ on move <@>[0,0:] centre[0,0] {
             } else {
                 // The card is in-suit                
 
-                if \.rank > winningCard.rank {
+                if source.rank > winningCard.rank {
                     // Card is now the highest in the trick
-                    winningCard = \;
+                    winningCard = source;
                     winningPlayer = <@>;
                 }
 
@@ -44,7 +44,7 @@ on move <@>[0,0:] centre[0,0] {
         }
 
         // Execute move early
-        move \ /;
+        move source dest;
 
         if centre[0].length == 4 {
             // this is the last card to be played
