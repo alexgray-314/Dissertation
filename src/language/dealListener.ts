@@ -39,6 +39,8 @@ import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
 import { PrimitivesContext } from "./dealParser";
+import { SuitsContext } from "./dealParser";
+import { Picture_cardsContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
@@ -448,6 +450,28 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitPrimitives?: (ctx: PrimitivesContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.suits`.
+	 * @param ctx the parse tree
+	 */
+	enterSuits?: (ctx: SuitsContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.suits`.
+	 * @param ctx the parse tree
+	 */
+	exitSuits?: (ctx: SuitsContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.picture_cards`.
+	 * @param ctx the parse tree
+	 */
+	enterPicture_cards?: (ctx: Picture_cardsContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.picture_cards`.
+	 * @param ctx the parse tree
+	 */
+	exitPicture_cards?: (ctx: Picture_cardsContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.bexpr`.

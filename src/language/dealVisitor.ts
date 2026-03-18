@@ -39,6 +39,8 @@ import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
 import { PrimitivesContext } from "./dealParser";
+import { SuitsContext } from "./dealParser";
+import { Picture_cardsContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
@@ -307,6 +309,20 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPrimitives?: (ctx: PrimitivesContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.suits`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSuits?: (ctx: SuitsContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.picture_cards`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPicture_cards?: (ctx: Picture_cardsContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.bexpr`.

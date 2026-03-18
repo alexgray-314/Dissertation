@@ -69,7 +69,9 @@ INTERACT_CARD:  '@';
 
 term:           (primitives | CARD | STRING | variable | NUMBER | player | area | stack | position) property? (op=(PLUS|MINUS|TIMES) term)?;
 property:       '.' ID;
-primitives:     EMPTY | SPADES | HEARTS | CLUBS | DIAMONDS | JACK | QUEEN | KING | ACE;
+primitives:     EMPTY | suits | picture_cards;
+suits:          SPADES | HEARTS | CLUBS | DIAMONDS;
+picture_cards:  JACK | QUEEN | KING | ACE;
 
 bexpr:          term (  (('=='|'!='|'<'|'<='|'>='|'>') term)
                         | (('=?' | '!?') set)
@@ -78,7 +80,7 @@ PLUS:           '+';
 MINUS:          '-';
 TIMES:          '*';
 
-set:            (intset | positionset | playerset) property?;
+set:            (positionset | playerset | intset) property?;
 intset:         term (':' term?)?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';

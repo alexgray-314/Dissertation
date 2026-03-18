@@ -1,9 +1,7 @@
-define card q;
-q = #4h;
-<.> = q.rank - 1;
+if jack == 11 {
+    log "jacks";
+}
 
-define action a;
-
-on a {
-    <.> = 6;
+if spades == "spades" {
+    log "spades";
 }

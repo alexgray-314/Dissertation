@@ -31,22 +31,22 @@ on move <@>[0:0, 0:] centre[1,0] {
         cancel;
     }
 
-    if \ == #joker {
+    if source == #joker {
         powerPlayer = <@>;
     } else {
-        if \.rank != lastCard.rank {
-            if \.suit != lastCard.suit {
+        if source.rank != lastCard.rank {
+            if source.suit != lastCard.suit {
                 cancel;
             }
         }
     }
 
-    lastCard = \;
+    lastCard = source;
 
     if <@>[0].length == 1 {
         log "player" <@> "wins";
     } else {
-        if \.rank == ace {
+        if source.rank == ace {
             <.>++; // skip another turn if it's an ace
         }
         <.>++;
@@ -60,7 +60,7 @@ on move centre[0,0] <@>[0:0,0:] {
     if <.> != <@> {
         cancel;
     }
-    \.up();
+    source.up();
     <.>++;
 }
 
