@@ -1,10 +1,55 @@
 // Area where players put cards they want to play in tricks
 define area centre;
-// Area where cards go after a trick finishes
-define area discard;
 
+// Tricks
 define int winningPlayer;
 define card winningCard;
+
+// Scoring
+define int score;
+define int bestScore;
+define int bestPlayer;
+
+define function total_score(int p) {
+    score = 0;
+    for c in <p>[1,0:] {
+        // Loop through all cards in player p's discard stack
+        if c == #QS {
+            // ...The Black Mariah
+            score = score + 13;
+        }
+        if c.suit == hearts {
+            if c.rank == ace {
+                score = score + 5;
+            }
+            if c.rank == king {
+                score = score + 4;
+            }
+            if c.rank == queen {
+                score = score + 3;
+            }
+            if c.rank == jack {
+                score = score + 2;
+            }
+            if c.rank <= 10 {
+                score = score + 1;
+            }
+        }
+    }
+}
+
+define function determine_winner() {
+    bestScore = 1000000;
+    bestPlayer = 0;
+    for p in <*> {
+        total_score(p);
+        if score < bestScore {
+            bestPlayer = p;
+            bestScore = score;
+        }
+    }
+    log "Player" bestPlayer "wins with score" bestScore;
+}
 
 // Card moved from turn player's hand to centre
 on move <@>[0,0:] centre[0,0] {
@@ -50,9 +95,11 @@ on move <@>[0,0:] centre[0,0] {
             // this is the last card to be played
 
             <.> = <winningPlayer>;
-            // TODO count scores
-            move centre[0,0:3] discard[0,0];
-            log "Player" winningPlayer "wins with" winningCard;
+            move centre[0,0:3] <winningPlayer>[1,0];
+            log "Player" winningPlayer "wins the trick with" winningCard;
+            if <.>[0].length == 0 {
+                determine_winner();
+            }
         } else {
             // It's the next players turn
             
