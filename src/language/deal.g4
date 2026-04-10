@@ -16,7 +16,8 @@ stmt:           'define' ((definition ';') | define_function)
                 | log ';'
                 | modify ';'
                 | show ';'
-                | config ;
+                | config
+                | win ';';
 
 block:          stmt* ;
 
@@ -44,6 +45,7 @@ updateTurn:     '<' '.' '>'  ( '++' | '=' term)  ;
 log:            'log' (term)+;
 modify:         (position | variable) '.' function_call;
 show:           'show' (position | CARD | variable) player;
+win:            'win' player;
 
 config:         '$' ID atts;
 attribute:      (ID|NUMBER|intset) (ID | STRING | NUMBER | atts);

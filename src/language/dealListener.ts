@@ -25,6 +25,7 @@ import { UpdateTurnContext } from "./dealParser";
 import { LogContext } from "./dealParser";
 import { ModifyContext } from "./dealParser";
 import { ShowContext } from "./dealParser";
+import { WinContext } from "./dealParser";
 import { ConfigContext } from "./dealParser";
 import { AttributeContext } from "./dealParser";
 import { AttsContext } from "./dealParser";
@@ -296,6 +297,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitShow?: (ctx: ShowContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.win`.
+	 * @param ctx the parse tree
+	 */
+	enterWin?: (ctx: WinContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.win`.
+	 * @param ctx the parse tree
+	 */
+	exitWin?: (ctx: WinContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.config`.

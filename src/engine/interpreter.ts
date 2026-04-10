@@ -15,7 +15,7 @@ import {
     MoveContext,
     On_actionContext, On_interactContext,
     On_moveContext, ShowContext, TermContext,
-    UpdateTurnContext,
+    UpdateTurnContext, WinContext,
 } from "../language/dealParser";
 import {Card, SpecialCard} from "../model/card";
 import {State} from "../state/state";
@@ -295,6 +295,12 @@ export class Interpreter implements dealVisitor<void> {
 
     visitOn_interact (ctx: On_interactContext) : void {
         this.state.interaction_catches.push(new Catch(ctx.move_catch(), ctx.block()));
+    }
+
+    visitWin(ctx: WinContext) : void {
+        const player : number = ctx.player().accept(this.numberVisitor);
+        window.alert("Player " + player + " wins!!!");
+        this.running = false;
     }
 
     private update_variable(id: string, term: TermContext) {
