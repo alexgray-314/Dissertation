@@ -131,6 +131,9 @@ $style {
     player {
         0 { // Assign label to stack 0 of all player areas
             label "Your Hand"
+        },
+        1 {
+            visibility hidden
         }
     },
     centre {

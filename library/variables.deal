@@ -1,7 +1,1 @@
-if jack == 11 {
-    log "jacks";
-}
-
-if spades == "spades" {
-    log "spades";
-}
+win <0>;

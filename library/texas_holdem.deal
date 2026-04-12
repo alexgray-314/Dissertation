@@ -1,0 +1,299 @@
+// Texas Hold'em Poker
+// Areas:
+//   <p>[0] = hole cards (private hand)
+//   community[0] = community cards (flop/turn/river)
+//   community[1] = burn pile
+//   pot[0] = pot (symbolic card store — chip tracking via ints)
+
+define area community;  // [0] = board, [1] = burn pile
+define area pot;        // symbolic area; chips tracked with ints below
+
+// --- Betting & game state ---
+define int street;          // 0=preflop, 1=flop, 2=turn, 3=river, 4=showdown
+define int currentBet;      // the current bet level this street
+define int minRaise;        // minimum raise amount
+define int potTotal;        // total chips in pot
+define int lastAggressor;   // player who made the last bet/raise
+define int playersLeft;     // number of players still in the hand
+define int actionsThisStreet; // used to detect when betting round is over
+
+// Per-player state (stored as arrays indexed by player number)
+// We use flat int variables for up to 4 players (p0..p3)
+define int chipsA; define int chipsB; define int chipsC; define int chipsD;
+define int betA;   define int betB;   define int betC;   define int betD;
+define int foldedA; define int foldedB; define int foldedC; define int foldedD;
+define int allinA;  define int allinB;  define int allinC;  define int allinD;
+
+define int dealer;      // index of dealer button
+define int smallBlind;
+define int bigBlind;
+define int sbAmount;    // small blind size
+define int bbAmount;    // big blind size
+
+// Actions
+define action fold;
+define action check;
+define action call;
+define action raise;
+
+// -------------------------------------------------------
+// HELPER: get chip count for player p (via street variable trick)
+// We log state since the language doesn't have arrays —
+// chip management is handled by direct variable updates per player.
+// -------------------------------------------------------
+
+define function post_blinds() {
+    sbAmount = 10;
+    bbAmount = 20;
+    minRaise = 20;
+    currentBet = bbAmount;
+
+    smallBlind = dealer + 1;
+    bigBlind   = dealer + 2;
+
+    log "Player" smallBlind "posts small blind" sbAmount;
+    log "Player" bigBlind   "posts big blind"   bbAmount;
+
+    // Deduct blinds from chip counts (4-player specific)
+    if smallBlind == 0 { chipsA = chipsA - sbAmount; betA = sbAmount; }
+    if smallBlind == 1 { chipsB = chipsB - sbAmount; betB = sbAmount; }
+    if smallBlind == 2 { chipsC = chipsC - sbAmount; betC = sbAmount; }
+    if smallBlind == 3 { chipsD = chipsD - sbAmount; betD = sbAmount; }
+
+    if bigBlind == 0 { chipsA = chipsA - bbAmount; betA = bbAmount; }
+    if bigBlind == 1 { chipsB = chipsB - bbAmount; betB = bbAmount; }
+    if bigBlind == 2 { chipsC = chipsC - bbAmount; betC = bbAmount; }
+    if bigBlind == 3 { chipsD = chipsD - bbAmount; betD = bbAmount; }
+
+    potTotal = sbAmount + bbAmount;
+    lastAggressor = bigBlind;
+
+    // Action starts left of big blind (UTG)
+    <.> = dealer + 3;
+}
+
+define function deal_hole_cards() {
+    shuffle();
+    // Deal 2 hole cards to each player, face down
+    for p in <*> {
+        move deck[0,0] <p>[0,0];
+        move deck[0,0] <p>[0,1];
+        <p>[0,0].down();
+        <p>[0,1].down();
+    }
+    // Show each player their own cards privately
+    for p in <*> {
+        show <p>[0,0] <p>;
+        show <p>[0,1] <p>;
+    }
+}
+
+define function burn_and_deal(int count) {
+    // Burn one card
+    move deck[0,0] community[1,0];
+    // Deal 'count' community cards face up
+    for i in 0:count {
+        move deck[0,0] community[0,0];
+        community[0,0].up();
+    }
+}
+
+define function advance_street() {
+    street = street + 1;
+    // Reset per-player bets for new street
+    betA = 0; betB = 0; betC = 0; betD = 0;
+    currentBet = 0;
+    minRaise = bbAmount;
+    actionsThisStreet = 0;
+    // Action starts left of dealer post-flop
+    <.> = dealer + 1;
+    // Skip folded players
+    if foldedA == 1 { if <.> == 0 { <.>++; } }
+    if foldedB == 1 { if <.> == 1 { <.>++; } }
+    if foldedC == 1 { if <.> == 2 { <.>++; } }
+    if foldedD == 1 { if <.> == 3 { <.>++; } }
+
+    if street == 1 {
+        log "--- FLOP ---";
+        burn_and_deal(3);
+    }
+    if street == 2 {
+        log "--- TURN ---";
+        burn_and_deal(1);
+    }
+    if street == 3 {
+        log "--- RIVER ---";
+        burn_and_deal(1);
+    }
+    if street == 4 {
+        log "--- SHOWDOWN ---";
+        // Reveal all hole cards
+        for p in <*> {
+            if foldedA == 0 { <0>[0,0].up(); <0>[0,1].up(); }
+            if foldedB == 0 { <1>[0,0].up(); <1>[0,1].up(); }
+            if foldedC == 0 { <2>[0,0].up(); <2>[0,1].up(); }
+            if foldedD == 0 { <3>[0,0].up(); <3>[0,1].up(); }
+        }
+        log "Showdown! Pot is" potTotal "chips. Evaluate hands manually.";
+    }
+}
+
+define function check_betting_over() {
+    // Betting is over when all active players have matched currentBet
+    // and at least one full orbit has passed since the last aggression.
+    define int done;
+    done = 1;
+    if foldedA == 0 { if allinA == 0 { if betA != currentBet { done = 0; } } }
+    if foldedB == 0 { if allinB == 0 { if betB != currentBet { done = 0; } } }
+    if foldedC == 0 { if allinC == 0 { if betC != currentBet { done = 0; } } }
+    if foldedD == 0 { if allinD == 0 { if betD != currentBet { done = 0; } } }
+
+    if done == 1 {
+        if playersLeft == 1 {
+            // Everyone else folded — award pot
+            log "All others folded. Pot:" potTotal;
+            if foldedA == 0 { log "Player 0 wins" potTotal "chips"; chipsA = chipsA + potTotal; }
+            if foldedB == 0 { log "Player 1 wins" potTotal "chips"; chipsB = chipsB + potTotal; }
+            if foldedC == 0 { log "Player 2 wins" potTotal "chips"; chipsC = chipsC + potTotal; }
+            if foldedD == 0 { log "Player 3 wins" potTotal "chips"; chipsD = chipsD + potTotal; }
+        } else {
+            advance_street();
+        }
+    }
+}
+
+// -------------------------------------------------------
+// ACTION HANDLERS
+// -------------------------------------------------------
+
+on fold {
+    if <@> != <.> { cancel; }
+
+    log "Player" <@> "folds";
+    if <@> == 0 { foldedA = 1; <0>[0,0].down(); <0>[0,1].down(); }
+    if <@> == 1 { foldedB = 1; <1>[0,0].down(); <1>[0,1].down(); }
+    if <@> == 2 { foldedC = 1; <2>[0,0].down(); <2>[0,1].down(); }
+    if <@> == 3 { foldedD = 1; <3>[0,0].down(); <3>[0,1].down(); }
+    playersLeft = playersLeft - 1;
+    <.>++;
+    check_betting_over();
+}
+
+on check {
+    if <@> != <.> { cancel; }
+    // Can only check if no bet to call
+    if <@> == 0 { if betA != currentBet { log "You must call or raise"; cancel; } }
+    if <@> == 1 { if betB != currentBet { log "You must call or raise"; cancel; } }
+    if <@> == 2 { if betC != currentBet { log "You must call or raise"; cancel; } }
+    if <@> == 3 { if betD != currentBet { log "You must call or raise"; cancel; } }
+
+    log "Player" <@> "checks";
+    actionsThisStreet = actionsThisStreet + 1;
+    <.>++;
+    check_betting_over();
+}
+
+on call {
+    if <@> != <.> { cancel; }
+
+    define int toCall;
+    if <@> == 0 { toCall = currentBet - betA; chipsA = chipsA - toCall; betA = currentBet; potTotal = potTotal + toCall; }
+    if <@> == 1 { toCall = currentBet - betB; chipsB = chipsB - toCall; betB = currentBet; potTotal = potTotal + toCall; }
+    if <@> == 2 { toCall = currentBet - betC; chipsC = chipsC - toCall; betC = currentBet; potTotal = potTotal + toCall; }
+    if <@> == 3 { toCall = currentBet - betD; chipsD = chipsD - toCall; betD = currentBet; potTotal = potTotal + toCall; }
+
+    log "Player" <@> "calls" toCall "— pot:" potTotal;
+    actionsThisStreet = actionsThisStreet + 1;
+    <.>++;
+    check_betting_over();
+}
+
+// For raises, player selects a raise amount via an interact on the pot area
+// Since the language has no numeric input, we use a fixed pot-sized raise as an example.
+on raise {
+    if <@> != <.> { cancel; }
+
+    define int raiseTotal;   // total chips committed by this player this street after raising
+    define int raiseAmount;  // the raise increment above currentBet
+    raiseAmount = minRaise;  // pot-sized raise approximation; adjust as needed
+    raiseTotal = currentBet + raiseAmount;
+
+    define int toPut;
+    if <@> == 0 { toPut = raiseTotal - betA; chipsA = chipsA - toPut; betA = raiseTotal; }
+    if <@> == 1 { toPut = raiseTotal - betB; chipsB = chipsB - toPut; betB = raiseTotal; }
+    if <@> == 2 { toPut = raiseTotal - betC; chipsC = chipsC - toPut; betC = raiseTotal; }
+    if <@> == 3 { toPut = raiseTotal - betD; chipsD = chipsD - toPut; betD = raiseTotal; }
+
+    potTotal = potTotal + toPut;
+    currentBet = raiseTotal;
+    minRaise = raiseAmount;          // next min-raise is at least this size
+    lastAggressor = <@>;
+    actionsThisStreet = actionsThisStreet + 1;
+
+    log "Player" <@> "raises to" currentBet "— pot:" potTotal;
+    <.>++;
+    check_betting_over();
+}
+
+// Block all card movements except what the engine deals
+on move ? ? {
+    cancel;
+}
+
+// -------------------------------------------------------
+// INITIALISE
+// -------------------------------------------------------
+
+// Starting chip counts
+chipsA = 1000; chipsB = 1000; chipsC = 1000; chipsD = 1000;
+betA = 0; betB = 0; betC = 0; betD = 0;
+foldedA = 0; foldedB = 0; foldedC = 0; foldedD = 0;
+allinA  = 0; allinB  = 0; allinC  = 0; allinD  = 0;
+playersLeft = 4;
+dealer = 0;
+street = 0;   // preflop
+actionsThisStreet = 0;
+
+log "--- Texas Hold'em starting. Dealer is Player" dealer "---";
+post_blinds();
+deal_hole_cards();
+log "Pre-flop betting — Player" <.> "to act";
+
+// -------------------------------------------------------
+
+$config {
+    title "Texas Hold'em Poker",
+    num_players 4
+}
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Hole Cards",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    community {
+        visibility public,
+        location centre,
+        0 {
+            label "Board",
+            display spread
+        },
+        1 {
+            label "Burn",
+            visibility hidden
+        }
+    },
+    deck {
+        visibility hidden,
+        location centre
+    },
+    fold   { label "Fold"  },
+    check  { label "Check" },
+    call   { label "Call"  },
+    raise  { label "Raise (min)" }
+}

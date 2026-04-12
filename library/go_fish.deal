@@ -1,0 +1,238 @@
+// Go Fish
+// Each player's area:
+//   <p>[0] = hand (private)
+//   <p>[1:] = completed books (one stack per book, face up)
+//
+// Actions represent asking for a rank:
+//   2-9 are numeric, then ten, jack, queen, king, ace
+
+define action r2;
+define action r3;
+define action r4;
+define action r5;
+define action r6;
+define action r7;
+define action r8;
+define action r9;
+define action r10;
+define action rJ;
+define action rQ;
+define action rK;
+define action rA;
+
+define area pool;   // [0] = draw pile (the "ocean")
+
+define int askedRank;   // rank being asked for this turn (2-14, ace=14)
+define int askedPlayer; // the player being asked (we ask the next player for simplicity)
+define int bookCount0;  define int bookCount1;
+define int bookCount2;  define int bookCount3;
+define int totalBooks;
+
+// -------------------------------------------------------
+// HELPERS
+// -------------------------------------------------------
+
+define function check_for_book(int p) {
+    // Count how many cards of askedRank are in player p's hand
+    define int count;
+    count = 0;
+    for c in <p>[0, 0:] {
+        if c.rank == askedRank {
+            count = count + 1;
+        }
+    }
+    if count == 4 {
+        // Move all 4 cards to a new book stack
+        define int bookSlot;
+        if p == 0 { bookSlot = bookCount0 + 1; bookCount0 = bookCount0 + 1; }
+        if p == 1 { bookSlot = bookCount1 + 1; bookCount1 = bookCount1 + 1; }
+        if p == 2 { bookSlot = bookCount2 + 1; bookCount2 = bookCount2 + 1; }
+        if p == 3 { bookSlot = bookCount3 + 1; bookCount3 = bookCount3 + 1; }
+        for c in <p>[0, 0:] {
+            if c.rank == askedRank {
+                move c <p>[bookSlot, 0];
+                c.up();
+            }
+        }
+        totalBooks = totalBooks + 1;
+        log "Player" p "completes a book of" askedRank "! Total books:" totalBooks;
+        if totalBooks == 13 {
+            determine_winner();
+        }
+    }
+}
+
+define function go_fish(int p) {
+    // Draw top card from the ocean
+    if pool[0].length == 0 {
+        log "The ocean is empty!";
+        <.>++;
+    } else {
+        move pool[0,0] <p>[0,0];
+        show pool[0,0] p;  // show only to the drawing player
+        log "Player" p "goes fish!";
+        // Lucky dip — if drawn card matches the rank asked, player gets another turn
+        if pool[0,0].rank == askedRank {
+            log "Lucky! Player" p "drew the card they asked for — play again!";
+            // turn stays with p
+            check_for_book(p);
+        } else {
+            check_for_book(p);
+            <.>++;
+        }
+    }
+}
+
+define function transfer_cards(int from, int to) {
+    // Move all cards of askedRank from player 'from' to player 'to'
+    define int found;
+    found = 0;
+    for c in <from>[0, 0:] {
+        if c.rank == askedRank {
+            move c <to>[0,0];
+            found = found + 1;
+        }
+    }
+    if found == 0 {
+        log "Player" from "says: Go Fish!";
+        go_fish(to);
+    } else {
+        log "Player" from "gives" found "card(s) to Player" to;
+        check_for_book(to);
+        // Player who received cards gets another turn
+    }
+}
+
+define function determine_winner() {
+    define int best;
+    define int winner;
+    best = 0;
+    winner = 0;
+    if bookCount0 > best { best = bookCount0; winner = 0; }
+    if bookCount1 > best { best = bookCount1; winner = 1; }
+    if bookCount2 > best { best = bookCount2; winner = 2; }
+    if bookCount3 > best { best = bookCount3; winner = 3; }
+    log "Game over! Player" winner "wins with" best "books!";
+    log "Books — P0:" bookCount0 "P1:" bookCount1 "P2:" bookCount2 "P3:" bookCount3;
+}
+
+// -------------------------------------------------------
+// ASK-FOR-RANK ACTIONS
+// The current player asks the NEXT player for a rank.
+// Each action sets askedRank then calls transfer_cards.
+// -------------------------------------------------------
+
+define function ask(int rank) {
+    askedRank = rank;
+    askedPlayer = <.> + 1; // ask the next player (wraps via modulo in engine)
+    log "Player" <.> "asks Player" askedPlayer "for rank" rank;
+    // Check the asking player actually holds at least one of that rank
+    define int has;
+    has = 0;
+    for c in <.>[0, 0:] {
+        if c.rank == askedRank {
+            has = 1;
+        }
+    }
+    if has == 0 {
+        log "Player" <.> "— you must hold at least one card of the rank you ask for!";
+    } else {
+        transfer_cards(askedPlayer, <.>);
+    }
+}
+
+on r2  { if <@> == <.> { ask(2);  } }
+on r3  { if <@> == <.> { ask(3);  } }
+on r4  { if <@> == <.> { ask(4);  } }
+on r5  { if <@> == <.> { ask(5);  } }
+on r6  { if <@> == <.> { ask(6);  } }
+on r7  { if <@> == <.> { ask(7);  } }
+on r8  { if <@> == <.> { ask(8);  } }
+on r9  { if <@> == <.> { ask(9);  } }
+on r10 { if <@> == <.> { ask(10); } }
+on rJ  { if <@> == <.> { ask(11); } }
+on rQ  { if <@> == <.> { ask(12); } }
+on rK  { if <@> == <.> { ask(13); } }
+on rA  { if <@> == <.> { ask(14); } }
+
+// Block all manual card movements
+on move ? ? {
+    cancel;
+}
+
+// -------------------------------------------------------
+// INITIALISE
+// -------------------------------------------------------
+
+bookCount0 = 0; bookCount1 = 0; bookCount2 = 0; bookCount3 = 0;
+totalBooks = 0;
+askedRank  = 0;
+askedPlayer = 0;
+
+shuffle();
+
+// Deal 7 cards to each player, face down then shown privately
+for i in 0:7 {
+    for p in <*> {
+        move deck[0,0] <p>[0,0];
+    }
+}
+for p in <*> {
+    for c in <p>[0, 0:] {
+        c.down();
+        show c p;
+    }
+}
+
+// Remaining deck goes to the ocean (draw pile)
+move deck[0,0:] pool[0,0];
+
+// Check if any player starts with a book
+for p in <*> {
+    for rank in 2:14 {
+        askedRank = rank;
+        check_for_book(p);
+    }
+}
+
+log "Go Fish! Player 0 goes first.";
+
+// -------------------------------------------------------
+
+$config {
+    title "Go Fish",
+    num_players 4
+}
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Hand",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    pool {
+        visibility public,
+        location centre,
+        display single,
+        0 {
+            label "Ocean"
+        }
+    },
+    r2  { label "Ask for 2s"   },
+    r3  { label "Ask for 3s"   },
+    r4  { label "Ask for 4s"   },
+    r5  { label "Ask for 5s"   },
+    r6  { label "Ask for 6s"   },
+    r7  { label "Ask for 7s"   },
+    r8  { label "Ask for 8s"   },
+    r9  { label "Ask for 9s"   },
+    r10 { label "Ask for 10s"  },
+    rJ  { label "Ask for Jacks"  },
+    rQ  { label "Ask for Queens" },
+    rK  { label "Ask for Kings"  },
+    rA  { label "Ask for Aces"   }
+}

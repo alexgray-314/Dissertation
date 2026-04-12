@@ -51,17 +51,17 @@ define function determine_winner() {
 
 }
 
-define function check_for_special_cards(int p) {
+define function check_for_special_cards(int player) {
     // Check for special cards
     if x[1,0].rank == jack {
-        special = p;
+        special = player;
         magicCard = x[1,0];
-        log "Player" p "swap two cards";
+        log "Player" player "swap two cards";
     }
     if x[1,0].rank == queen {
-        special = p;
+        special = player;
         magicCard = x[1,0];
-        log "Player" p "double click on a card in your hand to reveal it";
+        log "Player" player "double click on a card in your hand to reveal it";
     }
 } 
 
@@ -186,7 +186,7 @@ on move ? ? {
 on interact <@>[1:,0] {
     if <@> == special {
         if magicCard.rank == queen {
-            show @ <@>; // Show the user the card they have clicked on
+            show source <@>; // Show the user the card they have clicked on
             special = -1; // Play can continue as normal
             log "Back to normal play";
         }
@@ -209,30 +209,29 @@ $config {
 
 // Completely optional
 $style {
-    c {
-        label "Chicken"
-    },
     player {
-        display single,
-        visibility public,
+        visibility hidden,
         0 {
-            location hand,
-            visibility hidden
-        },
-        1 {
-            label "Player %a"
+            label "Your Hand",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    deck {
+        visibility public,
+        location centre,
+        display single,
+        0 {
+            label "%a"
         }
     },
     x {
-        min_display 2,
-        // location a, // centre
-        display single,
         visibility public,
+        location centre,
+        display single,
         0 {
-            label "Draw"
-        },
-        1 {
-            label "Discard"
+            label "%a"
         }
     }
 }
