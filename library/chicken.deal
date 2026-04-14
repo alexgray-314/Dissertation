@@ -13,7 +13,7 @@ define function determine_winner() {
     define int current_score;
     for p in <*> {
         current_score = 0;
-        for c in <p>[1:, 0] {
+        for c in <p>[0:, 0] {
 
             if c != empty {
                 c.up(); // display the card
@@ -82,7 +82,7 @@ for c in deck[0, 0:] {
 }
 
 // Custom Dealing
-for i in 1:4 { // give each player 4 cards
+for i in 0:3 { // give each player 4 cards
     for p in <*> { // loop through all players
         move deck[0,0] <p>[i,0];
     }
@@ -92,7 +92,7 @@ move x[0,0] x[1,0]; // Put 1 card on top of the discard pile#
 x[1,0].up();
 
 // Take a card from draw pile
-on move x[0,0] <@>[1:,0] {
+on move x[0,0] <@>[0:,0] {
 
     if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
@@ -108,7 +108,7 @@ on move x[0,0] <@>[1:,0] {
 }
 
 // Take a card from discard pile
-on move x[1,0] <@>[1:,0] {
+on move x[1,0] <@>[0:,0] {
 
     if <@> != <.> {cancel;} // Can only move card on your turn
     if special >= 0 {
@@ -124,7 +124,7 @@ on move x[1,0] <@>[1:,0] {
 
 // Moving one of your cards to the discard pile
 // "Jumping in"
-on move <@>[1:,0] x[1, 0] {
+on move <@>[0:,0] x[1, 0] {
 
     if special >= 0 {
         cancel; // block movement if someone has a special card to play
@@ -134,8 +134,8 @@ on move <@>[1:,0] x[1, 0] {
         // Wrong card, you must take a new one
 
         // Find the first empty stack
-        newSlot = 1;
-        for c in <@>[1:, 0] {
+        newSlot = 0;
+        for c in <@>[0:, 0] {
             if c != empty {
                 newSlot = newSlot + 1;
             } else {
@@ -183,10 +183,10 @@ on move ? ? {
     }
 }
 
-on interact <@>[1:,0] {
+on interact <@>[0:,0] {
     if <@> == special {
         if magicCard.rank == queen {
-            show source <@>; // Show the user the card they have clicked on
+            show @ <@>; // Show the user the card they have clicked on
             special = -1; // Play can continue as normal
             log "Back to normal play";
         }
@@ -210,28 +210,23 @@ $config {
 // Completely optional
 $style {
     player {
-        visibility hidden,
-        0 {
-            label "Your Hand",
-            visibility private,
-            display spread,
-            location hand
-        }
-    },
-    deck {
         visibility public,
-        location centre,
         display single,
         0 {
-            label "%a"
+            label "Player %a"
         }
     },
     x {
         visibility public,
-        location centre,
         display single,
         0 {
-            label "%a"
+            label "Draw"
+        },
+        1 {
+            label "Discard"
         }
+    },
+    c {
+        label "Chicken!"
     }
 }
