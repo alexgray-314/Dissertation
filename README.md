@@ -1,1 +1,3 @@
-The website is available here: [url](https://alexgray-314.github.io/Dissertation/)
+- The website is available [here](https://alexgray-314.github.io/Dissertation/)
+- [Consent Form](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MH_ksn3NTkql2rGM8aQVG5LW0Iia3TVJnSZpwn5TWlZUNkFCSzBVSkFHODc2Q1JVOVZKWTczR0tHTS4u)
+- [Feedback](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MH_ksn3NTkql2rGM8aQVG5LW0Iia3TVJnSZpwn5TWlZURUwwT0xYQk45RjRQMFlJMDlBWEJJNVpTVS4u)
