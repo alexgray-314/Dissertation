@@ -8,6 +8,14 @@ import * as model from "../model/area";
 import {Position} from "../model/area";
 import {Config} from "../engine/config";
 
+export const SCALE = 4;
+export const AREA_SPACING_Y = 120*SCALE;
+export const AREA_MARGIN = 20*SCALE;
+export const FAN_SPACING = 40*SCALE;
+export const CARD_WIDTH = 70*SCALE;
+export const CARD_HEIGHT = 95*SCALE;
+export const STACK_SPACING_X = 80*SCALE;
+
 export class Canvas implements UI{
 
   canvas : HTMLCanvasElement;
@@ -17,6 +25,14 @@ export class Canvas implements UI{
 
   constructor(initialState : State, config : Config) {
     this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
+
+    const displayWidth = 500;
+    const displayHeight = 300;
+    this.canvas.style.width = displayWidth + 'px';
+    this.canvas.style.height = displayHeight + 'px';
+    this.canvas.width = displayWidth * SCALE;
+    this.canvas.height = displayHeight * SCALE;
+
 
     this.config = config;
     this.areas = {};

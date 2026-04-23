@@ -1,6 +1,7 @@
 import {UI} from "../../api/ui";
 import {Handler} from "../../api/handler";
-import {Card, CARD_HEIGHT, CARD_WIDTH} from "../card";
+import {Card} from "../card";
+import {CARD_HEIGHT, CARD_WIDTH} from "../canvas";
 import {Position} from "../../model/area";
 import {Canvas} from "../canvas";
 import {activePlayer} from "../../app";
@@ -27,8 +28,8 @@ export class MouseHandler {
 
     ui.canvas.addEventListener("mousedown", (e) => {
       const rect = ui.canvas.getBoundingClientRect();
-      this.mouseX = e.clientX - rect.left;
-      this.mouseY = e.clientY - rect.top;
+      this.mouseX = (e.clientX - rect.left)*4;
+      this.mouseY = (e.clientY - rect.top)*4;
 
       for (const box of this.ui.hitBoxes) {
 
@@ -44,8 +45,15 @@ export class MouseHandler {
 
     ui.canvas.addEventListener("mousemove", (e) => {
       const rect = ui.canvas.getBoundingClientRect();
-      this.mouseX = e.clientX - rect.left;
-      this.mouseY = e.clientY - rect.top;
+      this.mouseX = (e.clientX - rect.left)*4;
+      this.mouseY = (e.clientY - rect.top)*4;
+      // if (this.ui.hitBoxes.some((hitBox) => {
+      //   hitBox.contains(this.mouseX, this.mouseY)
+      // })) {
+      //   ui.canvas.style.cursor = "pointer";
+      // } else {
+      //   ui.canvas.style.cursor = "default";
+      // }
     });
 
     ui.canvas.addEventListener("mouseup", () => {
@@ -89,8 +97,8 @@ export class MouseHandler {
 
     ui.canvas.addEventListener("dblclick", (e) => {
       const rect = ui.canvas.getBoundingClientRect();
-      this.mouseX = e.clientX - rect.left;
-      this.mouseY = e.clientY - rect.top;
+      this.mouseX = (e.clientX - rect.left)*4;
+      this.mouseY = (e.clientY - rect.top)*4;
 
       for (const box of this.ui.hitBoxes) {
 

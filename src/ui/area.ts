@@ -1,14 +1,13 @@
 import {Stack} from "./stack";
 
-export const AREA_SPACING_Y = 120;
-export const AREA_MARGIN = 20;
-export const FAN_SPACING = 40;
+
 
 import * as model from "../model/area";
 import {Hitbox, Rect} from "./hitbox";
-import {CARD_HEIGHT, CARD_WIDTH} from "./card";
+import {CARD_HEIGHT, CARD_WIDTH} from "./canvas";
 import {Config} from "../engine/config";
 import {activePlayer} from "../app";
+import {AREA_MARGIN, AREA_SPACING_Y, FAN_SPACING, SCALE} from "./canvas";
 
 export class Area {
 

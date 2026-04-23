@@ -1,9 +1,8 @@
-import {Card, CARD_HEIGHT, CARD_WIDTH} from "./card";
-
-const STACK_SPACING_X = 80;
+import {Card} from "./card";
+import {CARD_HEIGHT, CARD_WIDTH, STACK_SPACING_X} from "./canvas";
 
 import * as model from "../model/stack";
-import {AREA_MARGIN, AREA_SPACING_Y, FAN_SPACING} from "./area";
+import {AREA_MARGIN, AREA_SPACING_Y, FAN_SPACING} from "./canvas";
 import {Rect} from "./hitbox";
 
 export class Stack {
@@ -54,7 +53,7 @@ export class Stack {
       // Draw label
       if (this.label !== undefined) {
         ctx.fillStyle = "black";
-        ctx.font = "12px Arial";
+        ctx.font = `${12*4}px Arial`;
         ctx.fillText(this.label, this.rect.x, this.rect.y - 5);
       }
 

@@ -1,9 +1,5 @@
 import * as model from "../model/card";
 import {Rect} from "./hitbox";
-import {Canvas} from "./canvas";
-
-export const CARD_WIDTH = 70;
-export const CARD_HEIGHT = 95;
 
 export class Card {
 
@@ -34,7 +30,7 @@ export class Card {
             ctx.fillStyle = "black";
           }
 
-          ctx.font = "16px Arial";
+          ctx.font = `${16*4}px Arial`;
           ctx.fillText(this.child.toString(), rect.x + rect.width / 8, rect.y + rect.height / 4);
 
         }
