@@ -4,6 +4,7 @@ define area centre;
 on move <.>[0,0] centre[0,0] {
   // Can only move cards on your turn
   if <@> == <.> {
+    source.up();
     <.>++;
   } else {
     cancel;
@@ -29,6 +30,11 @@ on snap {
   }
 }
 
+
+for crd in deck[0,0:] {
+  crd.down();
+}
+
 deal();
 
 $config {
@@ -46,7 +52,7 @@ $style {
             location hand
         }
     },
-    a {
+    centre {
         visibility public,
         location north,
         0 {
