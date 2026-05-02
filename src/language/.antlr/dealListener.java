@@ -227,6 +227,16 @@ public interface dealListener extends ParseTreeListener {
 	 */
 	void exitShow(dealParser.ShowContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link dealParser#win}.
+	 * @param ctx the parse tree
+	 */
+	void enterWin(dealParser.WinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link dealParser#win}.
+	 * @param ctx the parse tree
+	 */
+	void exitWin(dealParser.WinContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link dealParser#config}.
 	 * @param ctx the parse tree
 	 */
@@ -266,6 +276,16 @@ public interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariable(dealParser.VariableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link dealParser#action_ref}.
+	 * @param ctx the parse tree
+	 */
+	void enterAction_ref(dealParser.Action_refContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link dealParser#action_ref}.
+	 * @param ctx the parse tree
+	 */
+	void exitAction_ref(dealParser.Action_refContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link dealParser#args}.
 	 * @param ctx the parse tree
@@ -356,6 +376,26 @@ public interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrimitives(dealParser.PrimitivesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link dealParser#suits}.
+	 * @param ctx the parse tree
+	 */
+	void enterSuits(dealParser.SuitsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link dealParser#suits}.
+	 * @param ctx the parse tree
+	 */
+	void exitSuits(dealParser.SuitsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link dealParser#picture_cards}.
+	 * @param ctx the parse tree
+	 */
+	void enterPicture_cards(dealParser.Picture_cardsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link dealParser#picture_cards}.
+	 * @param ctx the parse tree
+	 */
+	void exitPicture_cards(dealParser.Picture_cardsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link dealParser#bexpr}.
 	 * @param ctx the parse tree

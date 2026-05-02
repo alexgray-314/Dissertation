@@ -280,6 +280,18 @@ public class dealBaseListener implements dealListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWin(dealParser.WinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWin(dealParser.WinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConfig(dealParser.ConfigContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -323,6 +335,18 @@ public class dealBaseListener implements dealListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVariable(dealParser.VariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAction_ref(dealParser.Action_refContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAction_ref(dealParser.Action_refContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -431,6 +455,30 @@ public class dealBaseListener implements dealListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimitives(dealParser.PrimitivesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSuits(dealParser.SuitsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSuits(dealParser.SuitsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPicture_cards(dealParser.Picture_cardsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPicture_cards(dealParser.Picture_cardsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
