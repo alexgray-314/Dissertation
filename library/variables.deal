@@ -1,5 +1,32 @@
 define area centre;
 
-on move <.>[0,0] centre[0,0] {
+deal("all", 5);
+move #QC centre[1,0];
+move #8S centre[2,0];
+move deck[0,0:] centre[0,0];
 
+for crd in centre[0,0:] {
+    crd.down();
+}
+
+$config {
+    title "My Game",
+    num_players 4
+}
+
+$style {
+    player {
+        visibility hidden,
+        0 {
+            label "Your Hand",
+            visibility private,
+            display spread,
+            location hand
+        }
+    },
+    centre {
+        0 {
+            label "Centre"
+        }
+    }
 }

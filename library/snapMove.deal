@@ -18,16 +18,17 @@ on move ? ? {
 on snap {
   if centre[0, 0].suit == centre[0, 1].suit {
     // The cards matched
-    move centre[0,0:] <@>[0,0];
     <.> = <@>;
   } else {
     // The cards did not match.
     // Give the cards to the player who did not snap
-    define int nextPlayer;
-    nextPlayer = <@> + 1;
-    move centre[0,0:] <nextPlayer>[0,0];
     <.> = <@> + 1;
   }
+
+  for crd in centre[0,0:] {
+    crd.down();
+  }
+  move centre[0,0:] <.>[0,0];
 }
 
 
