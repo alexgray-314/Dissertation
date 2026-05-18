@@ -16,7 +16,7 @@ on move ? ? {
 }
 
 on snap {
-  if centre[0, 0].suit == centre[0, 1].suit {
+  if centre[0, 0].rank == centre[0, 1].rank {
     // The cards matched
     <.> = <@>;
   } else {
